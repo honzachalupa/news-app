@@ -1,0 +1,35 @@
+[data-component="Page_Articles"] {
+    width: 100vw;
+    overflow: hidden;
+
+    .header {
+        width: 100%;
+        margin-top: env(safe-area-inset-top);
+        position: absolute;
+        z-index: 9;
+
+        .aligned-left {
+            float: left;
+        }
+
+        .aligned-right {
+            float: right;
+        }
+
+        .button {
+            padding: 10px;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.5);
+            }
+
+            .icon {
+                width: 25px;
+            }
+
+            &.back {
+                padding-left: 5px;
+            }
+        }
+    }
+}

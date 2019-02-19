@@ -1,0 +1,32 @@
+[data-component="LoadingScreen"] {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: static;
+
+    .content {
+        transition: transform 250ms;
+
+        .progress-indicator {
+            width: 60px;
+            height: 60px;
+            animation: animation 2s linear infinite;
+
+            @keyframes animation {
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 10px;
+        }
+    }
+}

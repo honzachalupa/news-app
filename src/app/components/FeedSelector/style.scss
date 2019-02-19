@@ -1,0 +1,31 @@
+[data-component="FeedSelector"] {
+    padding: 12px 0;
+
+    .group {
+        margin-bottom: 20px;
+
+        & > button {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .grid {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 8px 0;
+
+            .feed {
+                width: 30vw;
+                height: 30vw;
+                display: flex;
+                margin-bottom: 2vw;
+
+                button {
+                    width: 100%;
+                    background-color: rgba(0, 0, 0, 0.1);
+                }
+            }
+        }
+    }
+}
