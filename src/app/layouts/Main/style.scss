@@ -4,4 +4,11 @@
     h3 {
         color: $accent-color;
     }
+
+    & > div > .headline {
+        color: black;
+        font-size: 30px;
+        font-weight: 700;
+        display: block;
+    }
 }

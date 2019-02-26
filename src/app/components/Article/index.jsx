@@ -6,20 +6,17 @@ import Gallery from './blocks/Gallery';
 
 export default class Article extends Component {
     render() {
-        const { images, title, date, paragraphs, url, source } = this.props;
+        const { images, videos, title, date, paragraphs, url, feedName } = this.props;
 
         return (
             <article>
-                <Header image={images[0]} title={title} source={source} date={date} />
+                <Header images={images} title={title} feedName={feedName} date={date} />
 
                 <Text paragraphs={paragraphs} />
-                <Gallery images={images} />
+                <Gallery images={images} videos={videos} />
 
                 <footer className="footer">
-                    <p className="source">
-                        <span className="label">Zdroj:</span>
-                        <a className="value" href={url}>{url}</a>
-                    </p>
+                    <a className="source-button" href={url}>Původní článek</a>
                 </footer>
             </article>
         );

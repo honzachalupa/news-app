@@ -1,26 +1,31 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { _d } from '@honzachalupa/helpers';
 import HeaderImage from './HeaderImage';
+import Date from './Date';
 
 export default class Header extends Component {
     render() {
-        const { image, title, date, source } = this.props;
+        const { images, title, date, feedName } = this.props;
 
-        return _d.isValid(image) ? (
+        const block = (
+            <Fragment>
+                <p className="source">{feedName}</p>
+                <h3 className="title">{title}</h3>
+                <Date date={date} />
+            </Fragment>
+        );
+
+        return _d.isValid(images) ? (
             <header>
-                <HeaderImage image={image} />
+                <HeaderImage image={images[0]} />
 
                 <div className="position-helper">
-                    <p className="source">{source}</p>
-                    <h3 className="title">{title}</h3>
-                    <date className="date">{date}</date>
+                    {block}
                 </div>
             </header>
         ) : (
             <header className="no-image">
-                <p className="source">{source}</p>
-                <h3 className="title">{title}</h3>
-                <date className="date">{date}</date>
+                {block}
             </header>
         );
     }

@@ -6,24 +6,25 @@ import { render } from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { autobind } from 'core-decorators';
 import { _a, Context } from '@honzachalupa/helpers';
-import { getAvailableEndpoints } from 'Helpers/api';
+import { getAvailableFeeds } from 'Helpers/api';
 import config from 'app-config';
 import './App.scss';
 import Page_Home from 'Pages/Home';
 import Page_Articles from 'Pages/Articles';
+import Page_FeedsSettings from 'Pages/FeedsSettings';
+import Page_SavedArticles from 'Pages/SavedArticles';
 import Page_NotFound from 'Pages/NotFound';
 
 
 class App extends Component {
     state = {
-        availableEndpoints: {},
-        testValue: 'I\'m a testValue and I live in the AppContext - let\'s update me...',
+        availableFeeds: [],
         _updateContextProperty: this.updateContextProperty
     }
 
     async componentDidMount() {
         this.setState({
-            availableEndpoints: await getAvailableEndpoints()
+            availableFeeds: await getAvailableFeeds()
         });
 
         if (config.caching) {
@@ -46,14 +47,19 @@ class App extends Component {
     }
 
     render() {
+        console.log(this.state.availableFeeds);
+
         return (
             <Context.Provider value={this.state}>
-                <Router>
+                <Router basename={__BASENAME__}>
                     <Switch>
                         <Route component={Page_Home} path="/" exact />
+                        <Route component={Page_Home} path="/zdroje" exact />
                         <Route component={Page_Home} path="/index.html" />
-                        <Route component={Page_Articles} path="/articles/:apiGroup/:feedId" exact />
-                        <Route component={Page_Articles} path="/articles/:apiGroup" exact />
+                        <Route component={Page_Articles} path="/clanky/:apiGroup/:feedId" exact />
+                        <Route component={Page_Articles} path="/clanky/:apiGroup" exact />
+                        <Route component={Page_FeedsSettings} path="/zdroje/moznosti" exact />
+                        <Route component={Page_SavedArticles} path="/ulozene-clanky" exact />
                         <Route component={Page_NotFound} exact />
                     </Switch>
                 </Router>

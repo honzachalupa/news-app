@@ -1,8 +1,7 @@
 $padding: 12px;
 
 [data-component="Article"] {
-    max-width: 100vw;
-    min-height: 100vh;
+    max-width: 100%;
     overflow: hidden;
 
     [data-component="Header"] {
@@ -12,7 +11,7 @@ $padding: 12px;
 
         [data-component="HeaderImage"] {
             width: 100%;
-            height: 70vw;
+            height: 300px;
             background-position: center;
             background-size: cover;
             filter: brightness(0.5);
@@ -92,6 +91,7 @@ $padding: 12px;
 
         [data-component="GalleryItem"] {
             width: 100%;
+            min-height: 60vw;
             margin-top: 10px;
 
             .image {
@@ -111,20 +111,18 @@ $padding: 12px;
     .footer {
         width: 100%;
         font-size: 12px;
+        text-align: center;
+        padding: 40px;
         float: left;
-        padding-bottom: 30px;
 
-        .source {
-            padding: $padding;
-
-            .label {
-                margin-right: 3px;
-            }
-
-            .value[href] {
-                color: $accent-color;
-                word-break: break-all;
-            }
+        .source-button {
+            background-color: rgba(0, 0, 0, 0.06);
+            color: $accent-color;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 12px 25px;
         }
     }
 }

@@ -1,4 +1,7 @@
 export default {
     NEWS: 'Zpravodajství',
-    TECHNOLOGY: 'Technologie'
+    TECHNOLOGY: 'Technologie',
+    LIFESTYLE: 'Lifestyle',
+    MAGAZINES: 'Magazíny',
+    REGIONAL: 'Regionální'
 };

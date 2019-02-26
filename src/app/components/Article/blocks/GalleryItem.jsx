@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 export default class GalleryItem extends Component {
     render() {
-        const { url, description } = this.props;
+        const { url, description, type } = this.props;
 
-        return (
+        return type === 'image' ? (
             <div>
                 <img className="image" src={url} title={description} alt="" />
 
@@ -12,6 +12,8 @@ export default class GalleryItem extends Component {
                     <p className="description">{description}</p>
                 )}
             </div>
+        ) : (
+            <iframe src={url} title={url} />
         );
     }
 }

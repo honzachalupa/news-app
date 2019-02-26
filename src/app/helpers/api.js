@@ -1,18 +1,15 @@
-// const host = 'https://news-engine.now.sh';
-const host = 'http://192.168.1.106:5000';
+import { apiUrl } from 'app-config';
 
-export async function getAvailableEndpoints() {
-    return fetch(`${host}/feeds`).then(response => {
+export async function getAvailableFeeds() {
+    return fetch(`${apiUrl}/api/feeds`).then(response => {
         return response.json();
     }).catch(error => {
         console.error(error);
     });
 }
 
-export function getEndpoint(apiGroup, feedId, paramsObject) {
-    const params = paramsObject ? `?${Object.entries(paramsObject).map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val)}`).join('&')}` : '';
-
+export function getEndpoint(apiGroup, feedId) {
     return feedId ?
-        `${host}/api/${apiGroup}/${feedId}${params}` :
-        `${host}/api/${apiGroup}/${params}`;
+        `${apiUrl}/api/${apiGroup}/${feedId}` :
+        `${apiUrl}/api/${apiGroup}/`;
 }
