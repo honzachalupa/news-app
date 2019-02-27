@@ -8,7 +8,7 @@ import ArrowDownIcon from 'Icons/arrow-down';
 // import HeartIcon from 'Icons/heart';
 import LoadingScreen from 'Components/LoadingScreen';
 
-class FeedSettings extends Component {
+class FeedOptions extends Component {
     static contextType = Context;
 
     state = {
@@ -135,4 +135,4 @@ class FeedSettings extends Component {
     }
 }
 
-export default withRouter(FeedSettings);
+export default withRouter(FeedOptions);

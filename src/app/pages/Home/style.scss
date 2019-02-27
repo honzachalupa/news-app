@@ -1,5 +1,5 @@
 [data-component="Page_Home"] {
-    padding: 35px 15px 15px 15px;
+    padding: 35px 0 15px 0;
 
     .date {
         color: gray;
@@ -9,7 +9,7 @@
         padding-bottom: 5px;
         position: relative;
         top: env(safe-area-inset-top);
-        left: env(safe-area-inset-left);
+        left: calc(env(safe-area-inset-left) + 12px);
         display: block;
     }
 

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './style';
 import Layout from 'Layouts/Main';
-import SavedArticles from 'Components/SavedArticles';
+import FeedOptions from 'Components/FeedOptions';
 
-export default class Page_SavedArticles extends Component {
+export default class Page_FeedOptions extends Component {
     state = {
         page: {
-            title: 'Uložené články',
+            title: 'Možnosti zdrojů',
             hasBackButton: true
         }
     }
@@ -17,7 +17,7 @@ export default class Page_SavedArticles extends Component {
         return (
             <section>
                 <Layout page={page}>
-                    <SavedArticles />
+                    <FeedOptions />
                 </Layout>
             </section>
         );

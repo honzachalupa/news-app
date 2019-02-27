@@ -1,21 +1,38 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import { _d } from '@honzachalupa/helpers';
+import { getArticleById } from 'Helpers/api';
 import './style';
 
-class SavedArticles extends Component {
+export default class SavedArticles extends Component {
     state = {
-        savedTitles: []
+        article: null
     };
 
     componentDidMount() {
-        let savedTitles = localStorage.getItem('savedTitles');
+        this.getArticles();
+    }
 
-        if (savedTitles) {
-            savedTitles = JSON.parse(savedTitles);
+    componentDidUpdate() {
+        if (this.state.articles === null) {
+            this.getArticles();
+        }
+    }
+
+    getArticles() {
+        const savedArticlesIDsRaw = localStorage.getItem('savedArticlesIDs');
+
+        if (savedArticlesIDsRaw) {
+            const savedArticlesIDs = JSON.parse(savedArticlesIDsRaw);
+
+            const articles = [];
+            savedArticlesIDs.forEach(async articleId => {
+                const article = await getArticleById(articleId);
+
+                articles.push(article);
+            });
 
             this.setState({
-                savedTitles
+                articles
             });
         }
     }
@@ -25,16 +42,14 @@ class SavedArticles extends Component {
     }
 
     render() {
-        const { savedTitles } = this.state;
+        const { articles } = this.state;
 
-        return _d.isValid(savedTitles) ? (
+        return _d.isValid(articles) ? (
             <div>
-                {savedTitles.map(title => (
-                    <p>{title}</p>
+                {articles.map(article => (
+                    <p key={article.id}>{article.title}</p>
                 ))}
             </div>
         ) : null;
     }
 }
-
-export default withRouter(SavedArticles);

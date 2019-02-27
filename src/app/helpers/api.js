@@ -8,6 +8,14 @@ export async function getAvailableFeeds() {
     });
 }
 
+export async function getArticleById(id) {
+    return fetch(`${apiUrl}/api/article/${id}`).then(response => {
+        return response.json();
+    }).catch(error => {
+        console.error(error);
+    });
+}
+
 export function getEndpoint(apiGroup, feedId) {
     return feedId ?
         `${apiUrl}/api/${apiGroup}/${feedId}` :

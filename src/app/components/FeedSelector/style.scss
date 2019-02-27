@@ -1,6 +1,4 @@
 [data-component="FeedSelector"] {
-    padding: 12px 0;
-
     .feeds {
         margin-top: 20px;
 
@@ -47,6 +45,7 @@
 
                     button {
                         width: 100%;
+                        background-color: white;
                         box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
                         border-radius: 10px;
                         display: flex;

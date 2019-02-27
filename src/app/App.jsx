@@ -11,8 +11,9 @@ import config from 'app-config';
 import './App.scss';
 import Page_Home from 'Pages/Home';
 import Page_Articles from 'Pages/Articles';
-import Page_FeedsSettings from 'Pages/FeedsSettings';
+import Page_FeedOptions from 'Pages/FeedOptions';
 import Page_SavedArticles from 'Pages/SavedArticles';
+import Page_Settings from 'Pages/Settings';
 import Page_NotFound from 'Pages/NotFound';
 
 
@@ -56,8 +57,9 @@ class App extends Component {
                         <Route component={Page_Home} path="/index.html" />
                         <Route component={Page_Articles} path="/clanky/:apiGroup/:feedId" exact />
                         <Route component={Page_Articles} path="/clanky/:apiGroup" exact />
-                        <Route component={Page_FeedsSettings} path="/zdroje/moznosti" exact />
+                        <Route component={Page_FeedOptions} path="/zdroje/moznosti" exact />
                         <Route component={Page_SavedArticles} path="/ulozene-clanky" exact />
+                        <Route component={Page_Settings} path="/nastaveni" exact />
                         <Route component={Page_NotFound} exact />
                     </Switch>
                 </Router>
