@@ -16,6 +16,10 @@ class FeedSettings extends Component {
         groups: []
     };
 
+    componentDidMount() {
+        this.prepareFeeds();
+    }
+
     componentDidUpdate(prevProps, prevState) {
         if (!_d.isValid(prevState.availableFeedsGrouped)) {
             this.prepareFeeds();
@@ -87,8 +91,6 @@ class FeedSettings extends Component {
         if (_d.isValid(availableFeedsGrouped)) {
             return (
                 <div>
-                    <h2 className="headline">Možnosti</h2>
-
                     <ul className="feeds">
                         {groups.map((group, i) => (
                             <li key={group} className="group" data-component="">

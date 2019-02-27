@@ -4,14 +4,11 @@ import Layout from 'Layouts/Main';
 import FeedSettings from 'Components/FeedSettings';
 
 export default class Page_FeedsSettings extends Component {
-    constructor() {
-        super();
-
-        this.state = {
-            page: {
-                label: 'Možnosti'
-            }
-        };
+    state = {
+        page: {
+            title: 'Možnosti zdrojů',
+            hasBackButton: true
+        }
     }
 
     render() {

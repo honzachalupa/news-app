@@ -47,8 +47,6 @@ class App extends Component {
     }
 
     render() {
-        console.log(this.state.availableFeeds);
-
         return (
             <Context.Provider value={this.state}>
                 <Router basename={__BASENAME__}>

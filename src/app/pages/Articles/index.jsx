@@ -8,7 +8,7 @@ import BackIcon from 'Icons/back';
 import StarIcon from 'Icons/star';
 import StarFilledIcon from 'Icons/star-filled';
 import ReloadIcon from 'Icons/reload';
-import Layout from 'Layouts/Main';
+import Layout from 'Layouts/Blank';
 import LoadingScreen from 'Components/LoadingScreen';
 import Article from 'Components/Article';
 import { autobind } from 'core-decorators';
@@ -16,22 +16,19 @@ import { autobind } from 'core-decorators';
 
 class Page_Articles extends Component {
     state = {
-        page: {
-            label: 'Articles'
-        },
         articles: [],
-        selectedArticle: null,
+        selectedArticleID: null,
         isSaved: false,
         errorMessage: null
     }
 
     componentDidMount() {
-        this.getFeed();
+        this.getArticles();
         this.checkSaveState();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const articleChanged = prevState.selectedArticle !== this.state.selectedArticle;
+        const articleChanged = prevState.selectedArticleID !== this.state.selectedArticleID;
 
         if (articleChanged) {
             this.checkSaveState();
@@ -39,38 +36,31 @@ class Page_Articles extends Component {
     }
 
     checkSaveState() {
-        const { selectedArticle } = this.state;
+        const { selectedArticleID } = this.state;
 
-        let savedArticles = localStorage.getItem('savedArticles');
+        let savedArticlesIDs = localStorage.getItem('savedArticlesIDs');
 
-        if (savedArticles && selectedArticle) {
-            savedArticles = JSON.parse(savedArticles);
+        if (savedArticlesIDs && selectedArticleID) {
+            savedArticlesIDs = JSON.parse(savedArticlesIDs);
 
-            let matchIndex = -1;
-            savedArticles.forEach((article, i) => {
-                if (article.id === selectedArticle.id) {
-                    matchIndex = i;
-                }
-            });
+            const matchIndex = savedArticlesIDs.findIndex(id => id === selectedArticleID);
 
             this.setState({
-                isSaved: matchIndex > -1
+                isSaved: matchIndex > 0
             });
         }
     }
 
-    async getFeed() {
+    async getArticles() {
         const { apiGroup, feedId } = this.props.match.params;
         const endpoint = getEndpoint(apiGroup, feedId);
-
-        console.log(endpoint);
 
         fetch(endpoint).then(async response => {
             const articles = await response.json();
 
             this.setState({
                 articles,
-                selectedArticle: articles[0]
+                selectedArticleID: articles[0].id
             });
         }).catch(error => {
             if (navigator.onLine) {
@@ -91,49 +81,46 @@ class Page_Articles extends Component {
         window.scrollTo(0, 0);
 
         this.setState({
-            selectedArticle: articles[i]
+            selectedArticleID: articles[i].id
         });
     }
 
     @autobind
     handleChangeSave() {
-        const savedArticlesRaw = localStorage.getItem('savedArticles');
+        const savedArticlesIDsRaw = localStorage.getItem('savedArticlesIDs');
 
-        if (savedArticlesRaw) {
-            let savedArticles = JSON.parse(savedArticlesRaw);
+        if (savedArticlesIDsRaw) {
+            let savedArticlesIDs = JSON.parse(savedArticlesIDsRaw);
 
             this.setState(prevState => {
-                const { selectedArticle, isSaved: isSaved_prev } = prevState;
+                const { selectedArticleID, isSaved: isSaved_prev } = prevState;
 
                 const isSaved = !isSaved_prev;
 
-                if (!savedArticles) {
-                    savedArticles = [];
+                if (!savedArticlesIDs) {
+                    savedArticlesIDs = [];
                 }
 
-                let matchIndex = -1;
-                savedArticles.forEach((article, i) => {
-                    if (article.id === selectedArticle.id) {
-                        matchIndex = i;
-                    }
-                });
+                const matchIndex = savedArticlesIDs.findIndex(id => id === selectedArticleID);
+
+                console.log(matchIndex, selectedArticleID, savedArticlesIDs);
 
                 if (matchIndex > -1) {
-                    savedArticles.splice(matchIndex, 1);
+                    savedArticlesIDs.splice(matchIndex - 1, 1);
                 } else {
-                    savedArticles.push(selectedArticle);
+                    savedArticlesIDs.push(selectedArticleID);
                 }
 
-                localStorage.setItem('savedArticles', JSON.stringify(savedArticles));
+                localStorage.setItem('savedArticlesIDs', JSON.stringify(savedArticlesIDs));
 
                 return {
                     isSaved
                 };
             });
         } else {
-            const { selectedArticle } = this.state;
+            const { selectedArticleID } = this.state;
 
-            localStorage.setItem('savedArticles', JSON.stringify([selectedArticle]));
+            localStorage.setItem('savedArticlesIDs', JSON.stringify([selectedArticleID]));
         }
     }
 
@@ -146,11 +133,11 @@ class Page_Articles extends Component {
     }
 
     render() {
-        const { page, articles, isSaved, errorMessage } = this.state;
+        const { articles, isSaved, errorMessage } = this.state;
 
         return (
             <section>
-                <Layout page={page}>
+                <Layout>
                     {_d.isValid(articles) ? (
                         <Fragment>
                             <header className="header">

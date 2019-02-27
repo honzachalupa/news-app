@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
 import { _b, _d, Context } from '@honzachalupa/helpers';
 import enumerator from '../../enumerator';
 import './style';
@@ -56,6 +55,20 @@ class FeedSelector extends Component {
         return grouped;
     }
 
+    getIcon(imageDefinition) {
+        if (imageDefinition) {
+            const { url, svg, isInverted } = imageDefinition;
+
+            return svg ? (
+                <div className="icon" style={{ width: this.state.feedContainerHeight - 60 }} dangerouslySetInnerHTML={{ __html: svg }} />
+            ) : url ? (
+                <img className={`icon ${isInverted ? 'inverted' : ''}`} src={url} alt="" />
+            ) : null;
+        } else {
+            return null;
+        }
+    }
+
     @autobind
     handleWindowResize() {
         if (this.feedContainer) {
@@ -79,9 +92,7 @@ class FeedSelector extends Component {
 
             return (
                 <div>
-                    <time className="date" dateTime={moment()}>{moment().locale('cs-CZ').format('dddd D.M.')}</time>
 
-                    <h2 className="headline">Zdroje</h2>
 
                     <ul className="feeds">
                         {groups.map(group => (
@@ -92,9 +103,7 @@ class FeedSelector extends Component {
                                     {availableFeedsGrouped[group].map(feed => (
                                         <li key={feed.id} className="feed" data-component="" style={{ height: feedContainerHeight }} ref={control => this.feedContainer = control}>
                                             <button onClick={() => this.handleRedirection(`clanky/${group}/${feed.id}`)} type="button">
-                                                {feed.image && (
-                                                    <img className="icon" src={feed.image.url} alt="" />
-                                                )}
+                                                {this.getIcon(feed.image)}
 
                                                 {!feed.useImageOnly && (
                                                     <span className="name">
