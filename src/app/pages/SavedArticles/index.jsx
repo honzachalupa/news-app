@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './style';
-import Layout from 'Layouts/Main';
+import Layout from 'Layouts/SubPage';
 import SavedArticles from 'Components/SavedArticles';
 
 export default class Page_SavedArticles extends Component {

@@ -1,6 +1,4 @@
 [data-component="Page_Home"] {
-    padding: 35px 0 15px 0;
-
     .date {
         color: gray;
         font-size: 13px;
@@ -8,7 +6,7 @@
         text-transform: uppercase;
         padding-bottom: 5px;
         position: relative;
-        top: env(safe-area-inset-top);
+        top: calc(env(safe-area-inset-top) + 15px);
         left: calc(env(safe-area-inset-left) + 12px);
         display: block;
     }

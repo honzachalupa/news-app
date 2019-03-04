@@ -1,0 +1,45 @@
+[data-component="Layout_SubPage"] {
+    padding: 15px;
+    margin: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+
+    h1,
+    h2,
+    h3 {
+        color: $accent-color;
+    }
+
+    & > header {
+        display: flex;
+        align-items: center;
+
+        .back-button {
+            margin-right: 3px;
+
+            img {
+                width: 22px;
+            }
+        }
+
+        .title {
+            color: black;
+            font-size: 18px;
+            display: block;
+            position: relative;
+            top: -1px;
+        }
+
+        .actions {
+            margin-left: auto;
+
+            .action {
+                width: 35px;
+                height: 35px;
+                background-color: rgba(0, 0, 0, 0.1);
+                border-radius: 50%;
+                float: left;
+                padding: 8px;
+                margin-left: 10px;
+            }
+        }
+    }
+}

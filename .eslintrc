@@ -75,6 +75,7 @@
         "strict": 0,
         "radix": 0,
         "function-paren-newline": 0,
-        "implicit-arrow-linebreak": 0
+        "implicit-arrow-linebreak": 0,
+        "no-unused-vars": 1
     }
 }

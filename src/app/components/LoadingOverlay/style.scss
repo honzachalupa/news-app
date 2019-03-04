@@ -1,13 +1,17 @@
-[data-component="LoadingScreen"] {
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(10px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: static;
+[data-component="LoadingOverlay"] {
+    &.is-unloading {
+        pointer-events: none;
+
+        [data-component="FullScreenMessage"] {
+            opacity: 0;
+            transition: opacity 2s;
+
+            .content {
+                transform: scale(0);
+                transform-origin: center;
+            }
+        }
+    }
 
     .content {
         transition: transform 250ms;

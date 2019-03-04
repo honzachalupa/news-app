@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.jsx",
   "scripts": {
-    "dev": "clear && webpack-dev-server --mode development --hot --inline --env.buildTarget=dev --env.baseName=/",
-    "build": "clear && webpack --mode production --env.buildTarget=prod --env.baseName=/",
-    "build-dev": "clear && webpack --mode production --env.buildTarget=prod --env.baseName=/zpravodajstvi/"
+    "dev": "clear && webpack-dev-server --mode development --hot --inline --env.buildTarget=dev --env.baseName=/ --env.platform=web",
+    "build-web": "clear && webpack --mode production --env.buildTarget=prod --env.baseName=/zpravodajstvi/ --env.platform=web",
+    "build-xcode": "clear && webpack --mode development --env.buildTarget=dev --env.baseName= --env.platform=ios && npx cap sync && npx cap open ios",
+    "build-electron": "clear && webpack --mode development --env.buildTarget=dev --env.baseName=./ --env.platform=electron && npx cap copy && cd electron && npm run electron:start && cd .."
   },
   "keywords": [],
   "author": "Jan Chalupa <janchalupa@outlook.cz> (https://www.honzachalupa.cz/)",
@@ -26,6 +27,9 @@
     "react-swipeable-views-utils": "^0.13.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^1.0.0-beta.17",
+    "@capacitor/core": "^1.0.0-beta.17",
+    "@capacitor/ios": "^1.0.0-beta.17",
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.2.3",

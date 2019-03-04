@@ -1,14 +1,15 @@
-/* globals __BASENAME__ */
+/* globals __BASENAME__, __PLATFORM__ */
 
 import '@babel/polyfill';
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
 import { autobind } from 'core-decorators';
-import { _a, Context } from '@honzachalupa/helpers';
+import { _a, _d, Context } from '@honzachalupa/helpers';
 import { getAvailableFeeds } from 'Helpers/api';
 import config from 'app-config';
 import './App.scss';
+import LoadingOverlay from 'Components/LoadingOverlay';
 import Page_Home from 'Pages/Home';
 import Page_Articles from 'Pages/Articles';
 import Page_FeedOptions from 'Pages/FeedOptions';
@@ -16,10 +17,15 @@ import Page_SavedArticles from 'Pages/SavedArticles';
 import Page_Settings from 'Pages/Settings';
 import Page_NotFound from 'Pages/NotFound';
 
-
 class App extends Component {
     state = {
         availableFeeds: [],
+        isLoading: false,
+        loadingMessage: null,
+        _showMessageBox: this.showMessageBox,
+        _hideMessageBox: this.hideMessageBox,
+        _showLoading: this.showLoading,
+        _hideLoading: this.hideLoading,
         _updateContextProperty: this.updateContextProperty
     }
 
@@ -31,6 +37,40 @@ class App extends Component {
         if (config.caching) {
             _a.initServiceWorker('/sw.js', __BASENAME__);
         }
+    }
+
+    @autobind
+    showMessageBox(message) {
+        if (message) {
+            this.setState({
+                isMessageShown: true,
+                messageBoxContent: message
+            });
+        }
+    }
+
+    @autobind
+    hideMessageBox() {
+        this.setState({
+            isMessageShown: false,
+            messageBoxContent: null
+        });
+    }
+
+    @autobind
+    showLoading(message = null) {
+        this.setState({
+            isLoading: true,
+            loadingMessage: message
+        });
+    }
+
+    @autobind
+    hideLoading() {
+        this.setState({
+            isLoading: false,
+            loadingMessage: null
+        });
     }
 
     /**
@@ -48,13 +88,19 @@ class App extends Component {
     }
 
     render() {
-        return (
+        const { isLoading, availableFeeds } = this.state;
+
+        console.log(window.location.href);
+
+        const Router = __PLATFORM__ === 'electron' ? HashRouter : BrowserRouter;
+
+        return (!isLoading && _d.isValid(availableFeeds) ? (
             <Context.Provider value={this.state}>
                 <Router basename={__BASENAME__}>
                     <Switch>
                         <Route component={Page_Home} path="/" exact />
-                        <Route component={Page_Home} path="/zdroje" exact />
                         <Route component={Page_Home} path="/index.html" />
+                        <Route component={Page_Home} path="/zdroje" exact />
                         <Route component={Page_Articles} path="/clanky/:apiGroup/:feedId" exact />
                         <Route component={Page_Articles} path="/clanky/:apiGroup" exact />
                         <Route component={Page_FeedOptions} path="/zdroje/moznosti" exact />
@@ -64,7 +110,9 @@ class App extends Component {
                     </Switch>
                 </Router>
             </Context.Provider>
-        );
+        ) : (
+            <LoadingOverlay context={this.state} />
+        ));
     }
 }
 

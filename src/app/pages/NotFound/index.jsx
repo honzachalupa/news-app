@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import Layout from 'Layouts/Main';
+import Layout from 'Layouts/SubPage';
 
 export default class Page_NotFound extends Component {
-    constructor() {
-        super();
-
-        this.state = {
-            page: {
-                label: 'Not Found'
-            }
-        };
+    state = {
+        page: {
+            title: 'Stránka nenalezena',
+            hasBackButton: true
+        }
     }
 
     render() {

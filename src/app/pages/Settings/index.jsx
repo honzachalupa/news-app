@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './style';
-import Layout from 'Layouts/Main';
+import Layout from 'Layouts/SubPage';
 
 export default class Page_Settings extends Component {
     state = {

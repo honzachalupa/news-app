@@ -1,20 +1,23 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
-import { _d } from '@honzachalupa/helpers';
-import { getEndpoint } from 'Helpers/api';
+import { _d, Context } from '@honzachalupa/helpers';
+import { timeoutFetch } from 'Helpers/app';
+import { getEndpointUrl } from 'Helpers/api';
 import './style';
 import BackIcon from 'Icons/back';
 import StarIcon from 'Icons/star';
 import StarFilledIcon from 'Icons/star-filled';
 import ReloadIcon from 'Icons/reload';
 import Layout from 'Layouts/Blank';
-import LoadingScreen from 'Components/LoadingScreen';
+import LoadingOverlay from 'Components/LoadingOverlay';
 import Article from 'Components/Article';
 import { autobind } from 'core-decorators';
 
 
 class Page_Articles extends Component {
+    static contextType = Context;
+
     state = {
         articles: [],
         selectedArticleID: null,
@@ -23,15 +26,24 @@ class Page_Articles extends Component {
     }
 
     componentDidMount() {
+        const { _hideLoading } = this.context;
+
         this.getArticles();
         this.checkSaveState();
+
+        _hideLoading();
     }
 
     componentDidUpdate(prevProps, prevState) {
+        const { _hideLoading } = this.context;
         const articleChanged = prevState.selectedArticleID !== this.state.selectedArticleID;
 
         if (articleChanged) {
             this.checkSaveState();
+        }
+
+        if (!_d.isValid(prevState.articles) && _d.isValid(this.state.articles)) {
+            // _hideLoading();
         }
     }
 
@@ -52,16 +64,24 @@ class Page_Articles extends Component {
     }
 
     async getArticles() {
+        const { _showLoading, _hideLoading } = this.context;
         const { apiGroup, feedId } = this.props.match.params;
-        const endpoint = getEndpoint(apiGroup, feedId);
 
-        fetch(endpoint).then(async response => {
+        _showLoading('Stahují se články.');
+
+        console.log('getArticles()');
+
+        timeoutFetch(fetch(getEndpointUrl(apiGroup, feedId)), 10000).then(async response => {
+            console.log('fetch()');
+
             const articles = await response.json();
 
             this.setState({
                 articles,
                 selectedArticleID: articles[0].id
             });
+
+            _hideLoading();
         }).catch(error => {
             if (navigator.onLine) {
                 throw new Error(error);
@@ -167,7 +187,7 @@ class Page_Articles extends Component {
                     ) : errorMessage ? (
                         <div className="error">{errorMessage}</div>
                     ) : (
-                        <LoadingScreen />
+                        <LoadingOverlay />
                     )}
                 </Layout>
             </section>

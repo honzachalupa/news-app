@@ -1,5 +1,7 @@
 .vscode
 /node_modules/
 /dist/
+/ios/
+/electron/
 npm-debug.log
 package-lock.json

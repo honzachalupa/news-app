@@ -4,7 +4,7 @@ import './style';
 import OrderIcon from 'Icons/order';
 import HeartIcon from 'Icons/heart';
 import SettingsIcon from 'Icons/settings';
-import Layout from 'Layouts/Main';
+import Layout from 'Layouts/MainPage';
 import FeedSelector from 'Components/FeedSelector';
 
 export default class Page_Home extends Component {
@@ -25,6 +25,7 @@ export default class Page_Home extends Component {
     }
 
     handleRedirection(url) {
+        console.log(url);
         this.props.history.push(url);
     }
 

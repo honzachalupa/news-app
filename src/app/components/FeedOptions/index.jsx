@@ -6,7 +6,7 @@ import './style';
 import ArrowUpIcon from 'Icons/arrow-up';
 import ArrowDownIcon from 'Icons/arrow-down';
 // import HeartIcon from 'Icons/heart';
-import LoadingScreen from 'Components/LoadingScreen';
+import LoadingOverlay from 'Components/LoadingOverlay';
 
 class FeedOptions extends Component {
     static contextType = Context;
@@ -129,7 +129,7 @@ class FeedOptions extends Component {
             );
         } else {
             return (
-                <LoadingScreen />
+                <LoadingOverlay />
             );
         }
     }

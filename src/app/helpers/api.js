@@ -1,22 +1,25 @@
+import { showModal, timeoutFetch } from 'Helpers/app';
 import { apiUrl } from 'app-config';
 
 export async function getAvailableFeeds() {
-    return fetch(`${apiUrl}/api/feeds`).then(response => {
-        return response.json();
-    }).catch(error => {
-        console.error(error);
+    return timeoutFetch(
+        fetch(`${apiUrl}/api/feeds`),
+        10000
+    ).then(response => response.json()).catch(() => {
+        showModal('Vyskytla se chyba při načítání zdrojů.');
     });
 }
 
 export async function getArticleById(id) {
-    return fetch(`${apiUrl}/api/article/${id}`).then(response => {
-        return response.json();
-    }).catch(error => {
-        console.error(error);
+    return timeoutFetch(
+        fetch(`${apiUrl}/api/article/${id}`),
+        10000
+    ).then(response => response.json()).catch(() => {
+        showModal('Vyskytla se chyba při načítání článku.');
     });
 }
 
-export function getEndpoint(apiGroup, feedId) {
+export function getEndpointUrl(apiGroup, feedId) {
     return feedId ?
         `${apiUrl}/api/${apiGroup}/${feedId}` :
         `${apiUrl}/api/${apiGroup}/`;

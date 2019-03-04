@@ -13,8 +13,9 @@ module.exports = env => {
     console.log('Build started with following arguments:', env || 'NONE');
 
     const buildDate = moment().format('D.M.YYYY');
-    const buildTarget = (env) ? env.buildTarget : '';
-    const baseName = (env) ? env.baseName : '/';
+    const buildTarget = env ? env.buildTarget : '';
+    const baseName = env ? env.baseName : '/';
+    const platform = env ? env.platform : '';
 
     return {
         entry: {
@@ -42,8 +43,9 @@ module.exports = env => {
             }),
             new WebappWebpackPlugin({
                 logo: './src/images/icon.png',
-                inject: true,
                 prefix: 'images/favicons',
+                inject: true,
+                cache: false,
                 ios: { 'apple-mobile-web-app-status-bar-style': 'black-translucent' },
                 favicons: {
                     appName: config.nameShort,
@@ -54,7 +56,11 @@ module.exports = env => {
                     background: config.accentColor,
                     theme_color: config.accentColor,
                     orientation: 'portrait',
-                    start_url: `${baseName}index.html?pwa=true`
+                    start_url: `${baseName}index.html?pwa=true`,
+                    icons: {
+                        coast: false,
+                        yandex: false
+                    }
                 }
             }),
             new StyleLintPlugin(),
@@ -65,7 +71,8 @@ module.exports = env => {
             new webpack.DefinePlugin({
                 __BUILDDATE__: `'${buildDate}'`,
                 __BUILDTARGET__: `'${buildTarget}'`,
-                __BASENAME__: `'${baseName}'`
+                __BASENAME__: `'${baseName}'`,
+                __PLATFORM__: `'${platform}'`
             })
         ],
         module: {
