@@ -5,7 +5,7 @@
   "main": "index.jsx",
   "scripts": {
     "dev": "clear && webpack-dev-server --mode development --hot --inline --env.buildTarget=dev --env.baseName=/ --env.platform=web",
-    "build-web": "clear && webpack --mode production --env.buildTarget=prod --env.baseName=/zpravodajstvi/ --env.platform=web",
+    "build-web": "clear && webpack --mode production --env.buildTarget=prod --env.baseName=/zpravy/ --env.platform=web",
     "build-xcode": "clear && webpack --mode development --env.buildTarget=dev --env.baseName= --env.platform=ios && npx cap sync && npx cap open ios",
     "build-electron": "clear && webpack --mode development --env.buildTarget=dev --env.baseName=./ --env.platform=electron && npx cap copy && cd electron && npm run electron:start && cd .."
   },
@@ -22,6 +22,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-ga": "^2.5.6",
+    "react-ios-switch": "^0.1.19",
     "react-pull-to-refresh": "^1.1.2",
     "react-swipeable-views": "^0.13.1",
     "react-swipeable-views-utils": "^0.13.1"

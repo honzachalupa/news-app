@@ -4,14 +4,9 @@
 import { _log } from 'Helpers/app';
 import { getAvailableFeeds } from 'Helpers/api';
 
-const endpoints = {};
-
 (async () => {
-    const x = await getAvailableFeeds();
-
-    Object.keys(x).forEach(groupKey => {
-        endpoints[groupKey] = x[groupKey].map(feed => feed.id);
-    });
+    const endpoints = await getAvailableFeeds();
+    const feeds = endpoints.map(feed => `${feed.groupId}/${feed.id}`);
 
     const cacheFilesObject = {
         _root: [
@@ -77,7 +72,7 @@ const endpoints = {};
             ]
         },
         api: {
-            ...endpoints
+            ...feeds
         }
     };
 

@@ -1,3 +1,5 @@
+@import './../../styles/constants.scss';
+
 $padding: 12px;
 
 [data-component="Article"] {
@@ -36,7 +38,6 @@ $padding: 12px;
 
         .title {
             width: 100%;
-            color: white;
             font-size: 20px;
             font-weight: 400;
             line-height: 120%;
@@ -45,7 +46,7 @@ $padding: 12px;
 
         .date {
             width: 100%;
-            color: white;
+            color: $accent-color;
             font-size: 11px;
             margin-top: 6px;
             float: left;
@@ -57,14 +58,6 @@ $padding: 12px;
 
             .source {
                 margin: 35px 0 10px 0;
-            }
-
-            .title {
-                color: $accent-color;
-            }
-
-            .date {
-                color: black;
             }
         }
     }
@@ -83,6 +76,16 @@ $padding: 12px;
                 padding-bottom: 0;
             }
         }
+
+        &.no-image {
+            .title {
+                color: $accent-color;
+            }
+
+            .date {
+                color: $foreground-color-light;
+            }
+        }
     }
 
     [data-component="Gallery"] {
@@ -99,7 +102,6 @@ $padding: 12px;
             }
 
             .description {
-                background-color: rgba(0, 0, 0, 0.1);
                 font-size: 12px;
                 padding: 5px $padding;
                 position: relative;
@@ -116,13 +118,81 @@ $padding: 12px;
         float: left;
 
         .source-button {
-            background-color: rgba(0, 0, 0, 0.06);
-            color: $accent-color;
             font-size: 13px;
             font-weight: 500;
             text-decoration: none;
             border-radius: 10px;
             padding: 12px 25px;
+        }
+    }
+}
+
+[data-theme="light"] {
+    [data-component="Article"] {
+        [data-component="Header"] {
+            .title {
+                color: $foreground-color-dark;
+            }
+
+            &.no-image {
+                .title {
+                    color: $accent-color;
+                }
+
+                .date {
+                    color: $foreground-color-light;
+                }
+            }
+        }
+
+        [data-component="Gallery"] {
+            [data-component="GalleryItem"] {
+                .description {
+                    background-color: $button-background-color-light;
+                }
+            }
+        }
+
+        .footer {
+            .source-button {
+                background-color: $button-background-color-light;
+                color: $accent-color;
+            }
+        }
+    }
+}
+
+[data-theme="dark"] {
+    [data-component="Article"] {
+        [data-component="Header"] {
+            .title {
+                color: $foreground-color-dark;
+            }
+
+            &.no-image {
+                .title {
+                    color: $accent-color;
+                }
+
+                .date {
+                    color: $foreground-color-dark;
+                }
+            }
+        }
+
+        [data-component="Gallery"] {
+            [data-component="GalleryItem"] {
+                .description {
+                    background-color: $button-background-color-dark;
+                }
+            }
+        }
+
+        .footer {
+            .source-button {
+                background-color: $button-background-color-dark;
+                color: $accent-color;
+            }
         }
     }
 }

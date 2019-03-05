@@ -26,24 +26,15 @@ class Page_Articles extends Component {
     }
 
     componentDidMount() {
-        const { _hideLoading } = this.context;
-
         this.getArticles();
         this.checkSaveState();
-
-        _hideLoading();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { _hideLoading } = this.context;
         const articleChanged = prevState.selectedArticleID !== this.state.selectedArticleID;
 
         if (articleChanged) {
             this.checkSaveState();
-        }
-
-        if (!_d.isValid(prevState.articles) && _d.isValid(this.state.articles)) {
-            // _hideLoading();
         }
     }
 
@@ -64,16 +55,12 @@ class Page_Articles extends Component {
     }
 
     async getArticles() {
-        const { _showLoading, _hideLoading } = this.context;
+        // const { _showLoading, _hideLoading } = this.context;
         const { apiGroup, feedId } = this.props.match.params;
 
-        _showLoading('Stahují se články.');
-
-        console.log('getArticles()');
+        // _showLoading('Stahují se články.');
 
         timeoutFetch(fetch(getEndpointUrl(apiGroup, feedId)), 10000).then(async response => {
-            console.log('fetch()');
-
             const articles = await response.json();
 
             this.setState({
@@ -81,7 +68,7 @@ class Page_Articles extends Component {
                 selectedArticleID: articles[0].id
             });
 
-            _hideLoading();
+            // _hideLoading();
         }).catch(error => {
             if (navigator.onLine) {
                 throw new Error(error);
@@ -91,6 +78,8 @@ class Page_Articles extends Component {
                     errorMessage: 'Zkontrolujte prosím připojení k internetu.'
                 });
             }
+
+            // _hideLoading();
         });
     }
 

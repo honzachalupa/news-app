@@ -22,6 +22,9 @@ class App extends Component {
         availableFeeds: [],
         isLoading: false,
         loadingMessage: null,
+        settings: {
+            isDarkThemeOn: false
+        },
         _showMessageBox: this.showMessageBox,
         _hideMessageBox: this.hideMessageBox,
         _showLoading: this.showLoading,
@@ -31,12 +34,27 @@ class App extends Component {
 
     async componentDidMount() {
         this.setState({
-            availableFeeds: await getAvailableFeeds()
+            availableFeeds: await getAvailableFeeds(),
+            settings: this.getSettings()
         });
 
         if (config.caching) {
             _a.initServiceWorker('/sw.js', __BASENAME__);
         }
+    }
+
+    getSettings() {
+        const settingsRaw = localStorage.getItem('settings');
+
+        return settingsRaw ?
+            JSON.parse(settingsRaw) :
+            this.state.settings;
+    }
+
+    setTheme() {
+        const { isDarkThemeOn } = this.state.settings;
+
+        document.body.dataset.theme = isDarkThemeOn ? 'dark' : 'light';
     }
 
     @autobind
@@ -90,7 +108,7 @@ class App extends Component {
     render() {
         const { isLoading, availableFeeds } = this.state;
 
-        console.log(window.location.href);
+        this.setTheme();
 
         const Router = __PLATFORM__ === 'electron' ? HashRouter : BrowserRouter;
 

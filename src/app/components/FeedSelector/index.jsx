@@ -75,10 +75,10 @@ class FeedSelector extends Component {
             const { url, svg, isInverted } = imageDefinition;
 
             return svg ? (
-                <div className="icon" style={{ width: this.state.feedContainerHeight - 60 }} dangerouslySetInnerHTML={{ __html: svg }} />
-            ) : url ? (
+                <div className="icon" style={{ width: this.state.feedContainerHeight - 40 }} dangerouslySetInnerHTML={{ __html: svg }} />
+            ) : (
                 <img className={`icon ${isInverted ? 'inverted' : ''}`} src={url} alt="" />
-            ) : null;
+            );
         } else {
             return null;
         }

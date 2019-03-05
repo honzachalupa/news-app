@@ -1,3 +1,5 @@
+@import './../../styles/constants.scss';
+
 [data-component="FeedOptions"] {
     padding: 12px 0;
 
@@ -8,7 +10,6 @@
         .group {
             width: 100%;
             border-radius: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             padding: 15px 20px 10px 20px;
             float: left;
@@ -18,7 +19,6 @@
                 float: left;
 
                 .headline {
-                    color: gray;
                     font-size: 13px;
                     font-weight: 600;
                     text-transform: uppercase;
@@ -35,7 +35,6 @@
                     button {
                         width: 30px;
                         height: 30px;
-                        background-color: rgba(0, 0, 0, 0.1);
                         border-radius: 50%;
                         padding: 6px;
                         margin-left: 10px;
@@ -58,14 +57,52 @@
                         font-size: 14px;
                         padding: 5px 0;
                     }
+                }
+            }
+        }
+    }
+}
 
-                    .favorite-button {
-                        img {
-                            width: 30px;
-                            height: 30px;
-                            background-color: rgba(0, 0, 0, 0.1);
-                            border-radius: 50%;
-                            padding: 6px;
+[data-theme="light"] {
+    [data-component="FeedOptions"] {
+        .feeds {
+            .group {
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+
+                header {
+                    .headline {
+                        color: gray;
+                    }
+
+                    .actions {
+                        button {
+                            background-color: $button-background-color-light;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+[data-theme="dark"] {
+    [data-component="FeedOptions"] {
+        .feeds {
+            .group {
+                border: 2px dotted $button-background-color-dark;
+
+                header {
+                    .headline {
+                        color: gray;
+                    }
+
+                    .actions {
+                        button {
+                            background-color: $button-background-color-dark;
+
+                            img {
+                                filter: invert(100%)
+                            }
                         }
                     }
                 }

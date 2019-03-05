@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './style';
 import Layout from 'Layouts/SubPage';
 import FeedOptions from 'Components/FeedOptions';
 

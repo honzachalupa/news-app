@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { Context } from '@honzachalupa/helpers';
 import './style';
 import BackIcon from 'Icons/back';
 
 class Layout_SubPage extends Component {
+    static contextType = Context;
+
     handleRedirection(url) {
         this.props.history.push(url);
     }
 
     render() {
+        const { settings } = this.context;
         const { page, children: content } = this.props;
         const { title, actions = [], hasBackButton } = page;
 
         return (
-            <div>
+            <div className={settings.isDarkThemeOn ? 'dark-theme' : 'light-theme'}>
                 <header>
                     {hasBackButton && (
                         <button className="back-button" type="button" onClick={() => this.handleRedirection('/')}>

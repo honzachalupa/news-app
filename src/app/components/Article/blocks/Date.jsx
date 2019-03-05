@@ -6,17 +6,23 @@ export default class Date extends Component {
         const { date } = this.props;
 
         const daysIntoPast = moment().diff(moment(date), 'days');
+        const minutesIntoPast = moment().diff(moment(date), 'minutes');
         let dateFormatted;
 
-
         if (daysIntoPast === 0) {
-            dateFormatted = moment(date).format('HH:mm');
+            if (minutesIntoPast < 10) {
+                dateFormatted = 'právě teď';
+            } else if (minutesIntoPast < 60) {
+                dateFormatted = `před ${minutesIntoPast} minutami`;
+            } else {
+                dateFormatted = `dnes v ${moment(date).format('H:mm')}`;
+            }
         } else if (daysIntoPast === 1) {
-            dateFormatted = `včera ${moment(date).format('HH:mm')}`;
+            dateFormatted = `včera v ${moment(date).format('H:mm')}`;
         } else if (daysIntoPast === 2) {
-            dateFormatted = `předvčírem ${moment(date).format('HH:mm')}`;
+            dateFormatted = `předvčírem v ${moment(date).format('H:mm')}`;
         } else {
-            dateFormatted = moment(date).format('DD.MM.YYYY HH:mm');
+            dateFormatted = moment(date).format('DD.MM.YYYY');
         }
 
         return (

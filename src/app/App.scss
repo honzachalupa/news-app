@@ -1,12 +1,26 @@
 @import 'css-reset-and-normalize-sass/scss/flavored-reset-and-normalize';
 @import './styles/reset';
-
-$background-color: #fff;
+@import './styles/constants';
 
 body {
     max-width: 800px;
     height: 100vh;
-    background-color: $background-color;
     font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     margin: 0 auto;
+
+    &[data-theme="light"] {
+        background-color: $background-color-light;
+
+        * {
+            color: $foreground-color-light;
+        }
+    }
+
+    &[data-theme="dark"] {
+        background-color: $background-color-dark;
+
+        * {
+            color: $foreground-color-dark;
+        }
+    }
 }
