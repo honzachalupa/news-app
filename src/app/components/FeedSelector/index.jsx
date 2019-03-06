@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 import { _b, _d, Context } from '@honzachalupa/helpers';
+import { timeoutFetch } from 'Helpers/app';
+import { getEndpointUrl } from 'Helpers/api';
 import enumerator from '../../enumerator';
 import './style';
 import { autobind } from 'core-decorators';
@@ -10,6 +13,7 @@ class FeedSelector extends Component {
 
     state = {
         availableFeedsGrouped: [],
+        unreadCounts: {},
         feedContainerHeight: 0,
         resizer: _b.onWindowResize(this.handleWindowResize)
     };
@@ -20,6 +24,10 @@ class FeedSelector extends Component {
         _showLoading('Stahují se dostupné zdroje.');
 
         this.getGroupedFeeds();
+
+        this.getUnreadCount();
+
+        setInterval(() => this.getUnreadCount(), 60000);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -85,7 +93,42 @@ class FeedSelector extends Component {
     }
 
     cleanFeedName(name) {
-        return name.replace(/ idnes.cz/i, '').replace('.cz', '');
+        return name.replace(/\sidnes/i, '').replace('.cz', '');
+    }
+
+    getUnreadCount() {
+        if (navigator.onLine) {
+            const { availableFeeds } = this.context;
+
+            const lastReadDatesRaw = localStorage.getItem('lastReadDates');
+            const lastReadDates = lastReadDatesRaw ? JSON.parse(lastReadDatesRaw) : {};
+
+            const unreadCounts = {};
+            availableFeeds.forEach(async feed => {
+                const articles = await this.getArticles(feed.groupId, feed.id);
+
+                if (Object.keys(lastReadDates).includes(feed.id)) {
+                    let count = 0;
+                    articles.forEach(article => {
+                        if (moment(article.date).diff(moment(lastReadDates[feed.id])) > 0) {
+                            count += 1;
+                        }
+                    });
+
+                    unreadCounts[feed.id] = count;
+                } else {
+                    unreadCounts[feed.id] = '9+';
+                }
+
+                this.setState({
+                    unreadCounts
+                });
+            });
+        }
+    }
+
+    async getArticles(apiGroup, feedId) {
+        return timeoutFetch(fetch(getEndpointUrl(apiGroup, feedId)), 10000).then(async response => response.json());
     }
 
     @autobind
@@ -102,7 +145,7 @@ class FeedSelector extends Component {
     }
 
     render() {
-        const { availableFeedsGrouped, feedContainerHeight } = this.state;
+        const { availableFeedsGrouped, unreadCounts, feedContainerHeight } = this.state;
 
         return (
             <div>
@@ -121,6 +164,10 @@ class FeedSelector extends Component {
                                                 <span className="name">
                                                     {this.cleanFeedName(feed.name)}
                                                 </span>
+                                            )}
+
+                                            {parseInt(unreadCounts[feed.id]) > 0 && (
+                                                <p className="unread-count">{unreadCounts[feed.id]}</p>
                                             )}
                                         </button>
                                     </li>

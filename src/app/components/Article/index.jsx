@@ -1,12 +1,25 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import './style';
 import Header from './blocks/Header';
 import Text from './blocks/Text';
 import Gallery from './blocks/Gallery';
+import Footer from './blocks/Footer';
 
 export default class Article extends Component {
+    componentDidMount() {
+        const { feedId } = this.props;
+
+        const lastReadDatesRaw = localStorage.getItem('lastReadDates');
+        const lastReadDates = lastReadDatesRaw ? JSON.parse(lastReadDatesRaw) : {};
+
+        lastReadDates[feedId] = moment();
+
+        localStorage.setItem('lastReadDates', JSON.stringify(lastReadDates));
+    }
+
     render() {
-        const { images, videos, title, date, paragraphs, url, feedName } = this.props;
+        const { images, videos, title, date, paragraphs, url, feedId, feedName } = this.props;
 
         return (
             <article>
@@ -14,10 +27,7 @@ export default class Article extends Component {
 
                 <Text paragraphs={paragraphs} />
                 <Gallery images={images} videos={videos} />
-
-                <footer className="footer">
-                    <a className="source-button" href={url}>Původní článek</a>
-                </footer>
+                <Footer url={url} feedId={feedId} />
             </article>
         );
     }

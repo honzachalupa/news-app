@@ -94,7 +94,6 @@ $padding: 12px;
 
         [data-component="GalleryItem"] {
             width: 100%;
-            min-height: 60vw;
             margin-top: 10px;
 
             .image {
@@ -110,12 +109,18 @@ $padding: 12px;
         }
     }
 
-    .footer {
+    [data-component="Footer"] {
         width: 100%;
         font-size: 12px;
         text-align: center;
         padding: 40px;
         float: left;
+
+        .icon {
+            width: 100%;
+            display: block;
+            padding: 10vw;
+        }
 
         .source-button {
             font-size: 13px;
@@ -123,6 +128,8 @@ $padding: 12px;
             text-decoration: none;
             border-radius: 10px;
             padding: 12px 25px;
+            margin-bottom: 20px;
+            display: inline-block;
         }
     }
 }
@@ -153,7 +160,13 @@ $padding: 12px;
             }
         }
 
-        .footer {
+        [data-component="Footer"] {
+            .icon {
+                &.inverted {
+                    filter: invert(100%) grayscale(100%);
+                }
+            }
+
             .source-button {
                 background-color: $button-background-color-light;
                 color: $accent-color;
@@ -188,7 +201,17 @@ $padding: 12px;
             }
         }
 
-        .footer {
+        [data-component="Footer"] {
+            .icon {
+                &.inverted {
+                    filter: grayscale(100%);
+                }
+
+                &:not(.inverted) {
+                    filter: invert(100%) grayscale(100%);
+                }
+            }
+
             .source-button {
                 background-color: $button-background-color-dark;
                 color: $accent-color;

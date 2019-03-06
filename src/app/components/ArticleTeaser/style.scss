@@ -1,0 +1,78 @@
+@import './../../styles/constants.scss';
+
+$padding: 12px;
+
+[data-component="ArticleTeaser"] {
+    width: calc(100% - 30px);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    left: 15px;
+
+    [data-component="Header"] {
+        width: 100%;
+        float: left;
+        position: relative;
+
+        [data-component="HeaderImage"] {
+            width: 100%;
+            height: 30vh;
+            background-position: center;
+            background-size: cover;
+            filter: brightness(0.5);
+        }
+
+        .position-helper {
+            padding: $padding;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .source {
+            width: auto;
+            color: white;
+            background-color: $accent-color;
+            font-size: 12px;
+            font-weight: 100;
+            padding: 3px 5px;
+            margin-bottom: 5px;
+            float: left;
+        }
+
+        .title {
+            width: 100%;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 120%;
+            float: left;
+        }
+
+        .date {
+            width: 100%;
+            color: $accent-color;
+            font-size: 11px;
+            margin-top: 6px;
+            float: left;
+        }
+    }
+}
+
+[data-theme="light"] {
+    [data-component="ArticleTeaser"] {
+        [data-component="Header"] {
+            .title {
+                color: $foreground-color-dark;
+            }
+        }
+    }
+}
+
+[data-theme="dark"] {
+    [data-component="ArticleTeaser"] {
+        [data-component="Header"] {
+            .title {
+                color: $foreground-color-dark;
+            }
+        }
+    }
+}

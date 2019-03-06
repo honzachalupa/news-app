@@ -1,5 +1,7 @@
 [data-component="Page_Home"] {
-    .date {
+    overflow-x: hidden;
+
+    & > .date {
         color: gray;
         font-size: 13px;
         font-weight: 600;
@@ -13,5 +15,13 @@
 
     .headline {
         padding-top: 0 !important;
+    }
+
+    .latest-articles {
+        width: calc(100% + 30px);
+        height: 30vh;
+        margin-top: 25px;
+        position: relative;
+        left: -15px;
     }
 }

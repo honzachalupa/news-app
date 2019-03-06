@@ -9,7 +9,7 @@
             padding: 15px 0 15px 0;
 
             &:last-of-type {
-                border-bottom: none;
+                border-bottom: none !important;
             }
 
             & > button {
@@ -51,6 +51,7 @@
                         align-items: center;
                         flex-direction: column;
                         overflow: hidden;
+                        position: relative;
 
                         .icon {
                             width: 70%;
@@ -61,6 +62,23 @@
                             line-height: 120%;
                             margin-top: 10px;
                             padding: 0 5px;
+                        }
+
+                        .unread-count {
+                            width: 22px;
+                            height: 22px;
+                            font-size: 11px;
+                            text-align: center;
+                            border-radius: 50%;
+                            padding-top: 5px;
+                            position: absolute;
+                            right: 5px;
+                            bottom: 5px;
+                            transition: all 500ms;
+
+                            &:empty {
+                                opacity: 0;
+                            }
                         }
                     }
                 }
@@ -103,6 +121,11 @@
                                     filter: invert(100%) grayscale(100%);
                                 }
                             }
+
+                            .unread-count {
+                                color: $foreground-color-light;
+                                background-color: $button-background-color-light;
+                            }
                         }
                     }
                 }
@@ -137,6 +160,11 @@
 
                             .icon:not(.inverted) {
                                 filter: invert(100%) grayscale(100%);
+                            }
+
+                            .unread-count {
+                                color: $foreground-color-dark;
+                                background-color: $button-background-color-dark;
                             }
                         }
                     }

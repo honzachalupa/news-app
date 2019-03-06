@@ -19,8 +19,22 @@ export async function getArticleById(id) {
     });
 }
 
-export function getEndpointUrl(apiGroup, feedId) {
-    return feedId ?
-        `${apiUrl}/api/${apiGroup}/${feedId}` :
-        `${apiUrl}/api/${apiGroup}/`;
+export function getEndpointUrl(apiGroup, feedId, options = {}) {
+    if (apiGroup && feedId) {
+        return `${apiUrl}/api/${apiGroup}/${feedId}?${getOptions(options)}`;
+    } else if (apiGroup) {
+        return `${apiUrl}/api/${apiGroup}?${getOptions(options)}`;
+    } else {
+        return `${apiUrl}/api/articles?${getOptions(options)}`;
+    }
+}
+
+function getOptions(options) {
+    const optionsArray = [];
+
+    Object.keys(options).forEach(key => {
+        optionsArray.push(`${key}=${options[key]}`);
+    });
+
+    return optionsArray.join('&');
 }

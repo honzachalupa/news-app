@@ -15,12 +15,12 @@ export default class Date extends Component {
             } else if (minutesIntoPast < 60) {
                 dateFormatted = `před ${minutesIntoPast} minutami`;
             } else {
-                dateFormatted = `dnes v ${moment(date).format('H:mm')}`;
+                dateFormatted = `dnes ${moment(date).format('H:mm')}`;
             }
         } else if (daysIntoPast === 1) {
-            dateFormatted = `včera v ${moment(date).format('H:mm')}`;
+            dateFormatted = `včera ${moment(date).format('H:mm')}`;
         } else if (daysIntoPast === 2) {
-            dateFormatted = `předvčírem v ${moment(date).format('H:mm')}`;
+            dateFormatted = `předvčírem ${moment(date).format('H:mm')}`;
         } else {
             dateFormatted = moment(date).format('DD.MM.YYYY');
         }
