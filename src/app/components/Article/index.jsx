@@ -8,6 +8,12 @@ import Footer from './blocks/Footer';
 
 export default class Article extends Component {
     componentDidMount() {
+        if (navigator.onLine) {
+            this.setLastReadDates();
+        }
+    }
+
+    setLastReadDates() {
         const { feedId } = this.props;
 
         const lastReadDatesRaw = localStorage.getItem('lastReadDates');

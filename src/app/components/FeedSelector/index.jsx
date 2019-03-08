@@ -24,10 +24,9 @@ class FeedSelector extends Component {
         _showLoading('Stahují se dostupné zdroje.');
 
         this.getGroupedFeeds();
-
         this.getUnreadCount();
 
-        setInterval(() => this.getUnreadCount(), 60000);
+        setInterval(() => this.getUnreadCount(), 5000);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -96,6 +95,12 @@ class FeedSelector extends Component {
         return name.replace(/\sidnes/i, '').replace('.cz', '');
     }
 
+    async asyncForEach(array, callback) {
+        for (let i = 0; i < array.length; i += 1) {
+            await callback(array[i], i, array); // eslint-disable-line no-await-in-loop
+        }
+    }
+
     getUnreadCount() {
         if (navigator.onLine) {
             const { availableFeeds } = this.context;
@@ -104,7 +109,7 @@ class FeedSelector extends Component {
             const lastReadDates = lastReadDatesRaw ? JSON.parse(lastReadDatesRaw) : {};
 
             const unreadCounts = {};
-            availableFeeds.forEach(async feed => {
+            this.asyncForEach(availableFeeds, async feed => {
                 const articles = await this.getArticles(feed.groupId, feed.id);
 
                 if (Object.keys(lastReadDates).includes(feed.id)) {
@@ -115,14 +120,20 @@ class FeedSelector extends Component {
                         }
                     });
 
+                    console.log(count);
+
                     unreadCounts[feed.id] = count;
                 } else {
                     unreadCounts[feed.id] = '9+';
                 }
+            });
 
-                this.setState({
-                    unreadCounts
-                });
+            this.setState({
+                unreadCounts
+            });
+        } else {
+            this.setState({
+                unreadCounts: 0
             });
         }
     }

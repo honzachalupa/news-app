@@ -1,9 +1,11 @@
 import { showModal, timeoutFetch } from 'Helpers/app';
 import { apiUrl } from 'app-config';
 
+const apiRoot = `${apiUrl}/news-engine/api`;
+
 export async function getAvailableFeeds() {
     return timeoutFetch(
-        fetch(`${apiUrl}/api/feeds`),
+        fetch(`${apiRoot}/feeds`),
         10000
     ).then(response => response.json()).catch(() => {
         showModal('Vyskytla se chyba při načítání zdrojů.');
@@ -12,7 +14,7 @@ export async function getAvailableFeeds() {
 
 export async function getArticleById(id) {
     return timeoutFetch(
-        fetch(`${apiUrl}/api/article/${id}`),
+        fetch(`${apiRoot}/article/${id}`),
         10000
     ).then(response => response.json()).catch(() => {
         showModal('Vyskytla se chyba při načítání článku.');
@@ -20,21 +22,21 @@ export async function getArticleById(id) {
 }
 
 export function getEndpointUrl(apiGroup, feedId, options = {}) {
-    if (apiGroup && feedId) {
-        return `${apiUrl}/api/${apiGroup}/${feedId}?${getOptions(options)}`;
-    } else if (apiGroup) {
-        return `${apiUrl}/api/${apiGroup}?${getOptions(options)}`;
-    } else {
-        return `${apiUrl}/api/articles?${getOptions(options)}`;
-    }
+    const params = getUrlParams(options);
+
+    return apiGroup && feedId ?
+        `${apiRoot}/articles/${apiGroup}/${feedId}${params}` :
+        apiGroup ?
+            `${apiRoot}/articles/${apiGroup}${params}` :
+            `${apiRoot}/articles${params}`;
 }
 
-function getOptions(options) {
+function getUrlParams(options) {
     const optionsArray = [];
 
     Object.keys(options).forEach(key => {
         optionsArray.push(`${key}=${options[key]}`);
     });
 
-    return optionsArray.join('&');
+    return optionsArray.length ? `?${optionsArray.join('&')}` : '';
 }
