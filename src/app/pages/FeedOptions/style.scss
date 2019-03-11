@@ -1,6 +1,6 @@
 @import './../../styles/constants.scss';
 
-[data-component="FeedOptions"] {
+[data-component="Page_FeedOptions"] {
     padding: 12px 0;
 
     .feeds {
@@ -64,7 +64,7 @@
 }
 
 [data-theme="light"] {
-    [data-component="FeedOptions"] {
+    [data-component="Page_FeedOptions"] {
         .feeds {
             .group {
                 box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -86,7 +86,7 @@
 }
 
 [data-theme="dark"] {
-    [data-component="FeedOptions"] {
+    [data-component="Page_FeedOptions"] {
         .feeds {
             .group {
                 border: 2px dotted $button-background-color-dark;

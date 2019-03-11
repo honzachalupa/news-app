@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import './style';
-import BackIcon from 'Icons/back';
+import BackIcon from 'Icons/accented/back';
 
 class Layout_Main extends Component {
     handleRedirection(url) {

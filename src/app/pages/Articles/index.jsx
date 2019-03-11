@@ -2,13 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { _d, Context } from '@honzachalupa/helpers';
-import { timeoutFetch } from 'Helpers/app';
-import { getEndpointUrl } from 'Helpers/api';
+import { timeoutFetch, getUrlParameters } from 'Helpers/app';
+import { getEndpointUrl, getArticleById } from 'Helpers/api';
 import './style';
-import BackIcon from 'Icons/back';
-import StarIcon from 'Icons/star';
-import StarFilledIcon from 'Icons/star-filled';
-import ReloadIcon from 'Icons/reload';
+import BackIcon from 'Icons/accented/grid';
+import HeartIcon from 'Icons/accented/heart';
+import HeartFilledIcon from 'Icons/accented/heart-filled';
 import Layout from 'Layouts/Blank';
 import LoadingOverlay from 'Components/LoadingOverlay';
 import Article from 'Components/Article';
@@ -20,7 +19,8 @@ class Page_Articles extends Component {
 
     state = {
         articles: [],
-        selectedArticleID: null,
+        initialArticleId: 0,
+        selectedArticleId: null,
         isSaved: false,
         errorMessage: null
     }
@@ -31,7 +31,7 @@ class Page_Articles extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const articleChanged = prevState.selectedArticleID !== this.state.selectedArticleID;
+        const articleChanged = prevState.selectedArticleId !== this.state.selectedArticleId;
 
         if (articleChanged) {
             this.checkSaveState();
@@ -39,17 +39,16 @@ class Page_Articles extends Component {
     }
 
     checkSaveState() {
-        const { selectedArticleID } = this.state;
+        const { selectedArticleId } = this.state;
 
-        let savedArticlesIDs = localStorage.getItem('savedArticlesIDs');
+        const savedArticlesIDsRaw = localStorage.getItem('savedArticlesIDs');
 
-        if (savedArticlesIDs && selectedArticleID) {
-            savedArticlesIDs = JSON.parse(savedArticlesIDs);
-
-            const matchIndex = savedArticlesIDs.findIndex(id => id === selectedArticleID);
+        if (savedArticlesIDsRaw && selectedArticleId) {
+            const savedArticlesIDs = JSON.parse(savedArticlesIDsRaw);
+            const isSaved = savedArticlesIDs.includes(selectedArticleId);
 
             this.setState({
-                isSaved: matchIndex > 0
+                isSaved
             });
         }
     }
@@ -65,7 +64,8 @@ class Page_Articles extends Component {
 
             this.setState({
                 articles,
-                selectedArticleID: articles[0].id
+                selectedArticleId: articles[0].id,
+                initialArticleId: Math.max(this.getInitialArticleId(articles), 0)
             });
 
             // _hideLoading();
@@ -83,58 +83,71 @@ class Page_Articles extends Component {
         });
     }
 
+    getInitialArticleId(articles) {
+        const { id } = getUrlParameters();
+
+        return articles.findIndex(article => article.id === id);
+    }
+
+    async asyncForEach(array, callback) {
+        for (let i = 0; i < array.length; i += 1) {
+            await callback(array[i], i, array); // eslint-disable-line no-await-in-loop
+        }
+    }
+
+    async saveArticles(savedArticlesIDs) {
+        const articlesToSave = [];
+
+        await this.asyncForEach(savedArticlesIDs, async id => {
+            const article = await getArticleById(id);
+
+            articlesToSave.push(article);
+        });
+
+        localStorage.setItem('savedArticlesIDs', JSON.stringify(savedArticlesIDs));
+        localStorage.setItem('savedArticles', JSON.stringify(articlesToSave));
+    }
+
     @autobind
-    handleSwipe(i) {
+    handleSwipe(index) {
         const { articles } = this.state;
 
         window.scrollTo(0, 0);
 
         this.setState({
-            selectedArticleID: articles[i].id
+            selectedArticleId: articles[index].id,
+            initialArticleId: null
         });
     }
 
     @autobind
     handleChangeSave() {
         const savedArticlesIDsRaw = localStorage.getItem('savedArticlesIDs');
+        let savedArticlesIDs;
 
         if (savedArticlesIDsRaw) {
-            let savedArticlesIDs = JSON.parse(savedArticlesIDsRaw);
+            const { selectedArticleId, isSaved } = this.state;
 
-            this.setState(prevState => {
-                const { selectedArticleID, isSaved: isSaved_prev } = prevState;
+            savedArticlesIDs = JSON.parse(savedArticlesIDsRaw) || [];
 
-                const isSaved = !isSaved_prev;
+            if (!savedArticlesIDs.includes(selectedArticleId)) {
+                savedArticlesIDs.push(selectedArticleId);
+            } else {
+                const matchIndex = savedArticlesIDs.findIndex(id => id === selectedArticleId);
 
-                if (!savedArticlesIDs) {
-                    savedArticlesIDs = [];
-                }
+                savedArticlesIDs.splice(matchIndex, 1);
+            }
 
-                const matchIndex = savedArticlesIDs.findIndex(id => id === selectedArticleID);
-
-                console.log(matchIndex, selectedArticleID, savedArticlesIDs);
-
-                if (matchIndex > -1) {
-                    savedArticlesIDs.splice(matchIndex - 1, 1);
-                } else {
-                    savedArticlesIDs.push(selectedArticleID);
-                }
-
-                localStorage.setItem('savedArticlesIDs', JSON.stringify(savedArticlesIDs));
-
-                return {
-                    isSaved
-                };
+            this.setState({
+                isSaved: !isSaved
             });
         } else {
-            const { selectedArticleID } = this.state;
+            const { selectedArticleId } = this.state;
 
-            localStorage.setItem('savedArticlesIDs', JSON.stringify([selectedArticleID]));
+            savedArticlesIDs = [selectedArticleId];
         }
-    }
 
-    handleRefresh() {
-        window.location.reload(true);
+        this.saveArticles(savedArticlesIDs);
     }
 
     handleRedirection(url) {
@@ -142,7 +155,7 @@ class Page_Articles extends Component {
     }
 
     render() {
-        const { articles, isSaved, errorMessage } = this.state;
+        const { articles, initialArticleId, isSaved, errorMessage } = this.state;
 
         return (
             <section>
@@ -158,18 +171,14 @@ class Page_Articles extends Component {
 
                                 <div className="aligned-right">
                                     <button className="button save" type="button" onClick={this.handleChangeSave}>
-                                        <img className="icon" src={isSaved ? StarFilledIcon : StarIcon} alt="" />
-                                    </button>
-
-                                    <button className="button reload" type="button" onClick={this.handleRefresh}>
-                                        <img className="icon" src={ReloadIcon} alt="" />
+                                        <img className="icon" src={isSaved ? HeartFilledIcon : HeartIcon} alt="" />
                                     </button>
                                 </div>
                             </header>
 
-                            <SwipeableViews resistance animateHeight onChangeIndex={this.handleSwipe}>
+                            <SwipeableViews index={initialArticleId} resistance animateHeight onChangeIndex={this.handleSwipe}>
                                 {articles.map(article => (
-                                    <Article key={article.title} {...article} />
+                                    <Article key={article.id} {...article} />
                                 ))}
                             </SwipeableViews>
                         </Fragment>

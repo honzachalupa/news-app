@@ -26,7 +26,7 @@ class FeedSelector extends Component {
         this.getGroupedFeeds();
         this.getUnreadCount();
 
-        setInterval(() => this.getUnreadCount(), 5000);
+        setInterval(() => this.getUnreadCount(), 60000);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -101,45 +101,44 @@ class FeedSelector extends Component {
         }
     }
 
-    getUnreadCount() {
-        if (navigator.onLine) {
-            const { availableFeeds } = this.context;
+    async getUnreadCount() {
+        const { availableFeeds } = this.context;
 
-            const lastReadDatesRaw = localStorage.getItem('lastReadDates');
-            const lastReadDates = lastReadDatesRaw ? JSON.parse(lastReadDatesRaw) : {};
+        const maxValue_number = 9;
+        const maxValue_string = `${maxValue_number}+`;
 
-            const unreadCounts = {};
-            this.asyncForEach(availableFeeds, async feed => {
-                const articles = await this.getArticles(feed.groupId, feed.id);
+        const lastReadDatesRaw = localStorage.getItem('lastReadDates');
+        const lastReadDates = lastReadDatesRaw ? JSON.parse(lastReadDatesRaw) : {};
 
-                if (Object.keys(lastReadDates).includes(feed.id)) {
-                    let count = 0;
-                    articles.forEach(article => {
-                        if (moment(article.date).diff(moment(lastReadDates[feed.id])) > 0) {
-                            count += 1;
-                        }
-                    });
+        const unreadCounts = {};
+        await this.asyncForEach(availableFeeds, async feed => {
+            const articles = await this.getArticles(feed.groupId, feed.id);
 
-                    console.log(count);
+            if (Object.keys(lastReadDates).includes(feed.id)) {
+                let count = 0;
+                articles.forEach(article => {
+                    if (moment(article.date).diff(moment(lastReadDates[feed.id])) > 0 && count < maxValue_number) {
+                        count += 1;
+                    }
+                });
 
-                    unreadCounts[feed.id] = count;
-                } else {
-                    unreadCounts[feed.id] = '9+';
-                }
-            });
+                unreadCounts[feed.id] = count === maxValue_number ? maxValue_string : count;
+            } else {
+                unreadCounts[feed.id] = maxValue_string;
+            }
+        });
 
-            this.setState({
-                unreadCounts
-            });
-        } else {
-            this.setState({
-                unreadCounts: 0
-            });
-        }
+        this.setState({
+            unreadCounts
+        });
     }
 
     async getArticles(apiGroup, feedId) {
-        return timeoutFetch(fetch(getEndpointUrl(apiGroup, feedId)), 10000).then(async response => response.json());
+        return timeoutFetch(
+            fetch(
+                getEndpointUrl(apiGroup, feedId)
+            ), 10000
+        ).then(async response => response.json());
     }
 
     @autobind
@@ -167,7 +166,7 @@ class FeedSelector extends Component {
 
                             <ul className="grid">
                                 {availableFeedsGrouped[groupId].map(feed => (
-                                    <li key={feed.id} className="feed" data-component="" style={{ height: feedContainerHeight }} ref={control => this.feedContainer = control}>
+                                    <li key={feed.id} className="feed" data-component="" style={{ height: feedContainerHeight }} ref={el => this.feedContainer = el}>
                                         <button onClick={() => this.handleRedirection(`clanky/${groupId}/${feed.id}`)} type="button">
                                             {this.getIcon(feed.image)}
 
@@ -177,7 +176,7 @@ class FeedSelector extends Component {
                                                 </span>
                                             )}
 
-                                            {parseInt(unreadCounts[feed.id]) > 0 && (
+                                            {!!unreadCounts[feed.id] && (
                                                 <p className="unread-count">{unreadCounts[feed.id]}</p>
                                             )}
                                         </button>

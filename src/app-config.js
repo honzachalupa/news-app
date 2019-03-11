@@ -5,7 +5,7 @@ module.exports = {
     accentColor: '#ff033e',
     developerName: 'Jan Chalupa',
     developerUrl: 'https://www.honzachalupa.cz/',
-    // apiUrl: 'https://news-engine.honzachalupa.cz',
-    apiUrl: 'http://localhost:5000',
+    apiUrl: 'https://news-engine.honzachalupa.cz',
+    // apiUrl: 'http://localhost:5000',
     caching: false
 };

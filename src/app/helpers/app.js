@@ -20,3 +20,18 @@ export async function showModal(message, title = 'Chyba') {
         message
     });
 }
+
+export function getUrlParameters() {
+    const { search } = window.location;
+
+    const parametersString = search.replace(/^\?/, '');
+
+    const parameters = {};
+    parametersString.split('&').forEach(node => {
+        const splitted = node.split('=');
+
+        parameters[splitted[0]] = splitted[1];
+    });
+
+    return parameters;
+}

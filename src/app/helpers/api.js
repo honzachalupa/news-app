@@ -12,6 +12,15 @@ export async function getAvailableFeeds() {
     });
 }
 
+export async function getAllArticles() {
+    return timeoutFetch(
+        fetch(`${apiRoot}/articles`),
+        10000
+    ).then(response => response.json()).catch(() => {
+        showModal('Vyskytla se chyba při načítání článků.');
+    });
+}
+
 export async function getArticleById(id) {
     return timeoutFetch(
         fetch(`${apiRoot}/article/${id}`),

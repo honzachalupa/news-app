@@ -9,7 +9,7 @@
         padding-bottom: 5px;
         position: relative;
         top: calc(env(safe-area-inset-top) + 15px);
-        left: calc(env(safe-area-inset-left) + 12px);
+        left: calc(env(safe-area-inset-left) + 15px);
         display: block;
     }
 
@@ -19,7 +19,7 @@
 
     .latest-articles {
         width: calc(100% + 30px);
-        height: 30vh;
+        height: 40vh;
         margin-top: 25px;
         position: relative;
         left: -15px;

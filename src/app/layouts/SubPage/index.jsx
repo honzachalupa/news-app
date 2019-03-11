@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Context } from '@honzachalupa/helpers';
 import './style';
-import BackIcon from 'Icons/back';
+import BackIcon from 'Icons/accented/back';
+import OfflineStatusBar from 'Components/OfflineStatusBar';
 
 class Layout_SubPage extends Component {
     static contextType = Context;
@@ -37,6 +38,8 @@ class Layout_SubPage extends Component {
                 </header>
 
                 {content}
+
+                <OfflineStatusBar />
             </div>
         );
     }

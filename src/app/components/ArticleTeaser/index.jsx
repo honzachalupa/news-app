@@ -9,10 +9,10 @@ class ArticleTeaser extends Component {
     }
 
     render() {
-        const { images, title, date, groupId, feedId, feedName } = this.props;
+        const { id, images, title, date, groupId, feedId, feedName } = this.props;
 
         return (
-            <article onClick={() => this.handleRedirection(`clanky/${groupId}/${feedId}`)}>
+            <article onClick={() => this.handleRedirection(`clanky/${groupId}/${feedId}?id=${id}`)}>
                 <Header images={images} title={title} feedName={feedName} date={date} />
             </article>
         );

@@ -74,10 +74,18 @@
                             position: absolute;
                             right: 5px;
                             bottom: 5px;
-                            transition: all 500ms;
+                            animation-name: fade-in;
+                            animation-duration: 1s;
+                            animation-fill-mode: forwards;
 
-                            &:empty {
-                                opacity: 0;
+                            @keyframes fade-in {
+                                from {
+                                    opacity: 0;
+                                }
+
+                                to {
+                                    opacity: 1;
+                                }
                             }
                         }
                     }

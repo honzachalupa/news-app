@@ -1,9 +1,10 @@
 /* globals __BASENAME__, __PLATFORM__ */
 
 import '@babel/polyfill';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
+import EventListener from 'react-event-listener';
 import { autobind } from 'core-decorators';
 import { _a, _d, Context } from '@honzachalupa/helpers';
 import { getAvailableFeeds } from 'Helpers/api';
@@ -13,18 +14,21 @@ import LoadingOverlay from 'Components/LoadingOverlay';
 import Page_Home from 'Pages/Home';
 import Page_Articles from 'Pages/Articles';
 import Page_FeedOptions from 'Pages/FeedOptions';
+import Page_SavedArticle from 'Pages/SavedArticle';
 import Page_SavedArticles from 'Pages/SavedArticles';
 import Page_Settings from 'Pages/Settings';
 import Page_NotFound from 'Pages/NotFound';
 
 class App extends Component {
     state = {
+        articles: [],
         availableFeeds: [],
         isLoading: false,
         loadingMessage: null,
         settings: {
             isDarkThemeOn: false
         },
+        isOffline: false,
         _showMessageBox: this.showMessageBox,
         _hideMessageBox: this.hideMessageBox,
         _showLoading: this.showLoading,
@@ -33,14 +37,23 @@ class App extends Component {
     }
 
     async componentDidMount() {
+        if (config.caching) {
+            _a.initServiceWorker('/sw.js', __BASENAME__);
+        }
+
+        this.checkNetworkStatus();
+
         this.setState({
             availableFeeds: await getAvailableFeeds(),
             settings: this.getSettings()
         });
+    }
 
-        if (config.caching) {
-            _a.initServiceWorker('/sw.js', __BASENAME__);
-        }
+    @autobind
+    checkNetworkStatus() {
+        this.setState({
+            isOffline: !navigator.onLine
+        });
     }
 
     getSettings() {
@@ -91,13 +104,6 @@ class App extends Component {
         });
     }
 
-    /**
-     * Performs an update of the global (App-level) context. Updates only selected item.
-     *
-     * @param {any} key
-     * @param {any} value
-     * @memberof App
-     */
     @autobind
     updateContextProperty(key, value) {
         this.setState({
@@ -107,27 +113,35 @@ class App extends Component {
 
     render() {
         const { isLoading, availableFeeds } = this.state;
+        const Router = __PLATFORM__ === 'electron' ? HashRouter : BrowserRouter;
 
         this.setTheme();
 
-        const Router = __PLATFORM__ === 'electron' ? HashRouter : BrowserRouter;
-
         return (!isLoading && _d.isValid(availableFeeds) ? (
-            <Context.Provider value={this.state}>
-                <Router basename={__BASENAME__}>
-                    <Switch>
-                        <Route component={Page_Home} path="/" exact />
-                        <Route component={Page_Home} path="/index.html" />
-                        <Route component={Page_Home} path="/zdroje" exact />
-                        <Route component={Page_Articles} path="/clanky/:apiGroup/:feedId" exact />
-                        <Route component={Page_Articles} path="/clanky/:apiGroup" exact />
-                        <Route component={Page_FeedOptions} path="/zdroje/moznosti" exact />
-                        <Route component={Page_SavedArticles} path="/ulozene-clanky" exact />
-                        <Route component={Page_Settings} path="/nastaveni" exact />
-                        <Route component={Page_NotFound} exact />
-                    </Switch>
-                </Router>
-            </Context.Provider>
+            <Fragment>
+                <EventListener
+                    target="window"
+                    onOnline={this.checkNetworkStatus}
+                    onOffline={this.checkNetworkStatus}
+                />
+
+                <Context.Provider value={this.state}>
+                    <Router basename={__BASENAME__}>
+                        <Switch>
+                            <Route component={Page_Home} path="/" exact />
+                            <Route component={Page_Home} path="/index.html" />
+                            <Route component={Page_Home} path="/zdroje" exact />
+                            <Route component={Page_Articles} path="/clanky/:apiGroup/:feedId" />
+                            <Route component={Page_Articles} path="/clanky/:apiGroup" />
+                            <Route component={Page_SavedArticle} path="/clanek/:id" />
+                            <Route component={Page_FeedOptions} path="/zdroje/moznosti" exact />
+                            <Route component={Page_SavedArticles} path="/ulozene-clanky" exact />
+                            <Route component={Page_Settings} path="/nastaveni" exact />
+                            <Route component={Page_NotFound} exact />
+                        </Switch>
+                    </Router>
+                </Context.Provider>
+            </Fragment>
         ) : (
             <LoadingOverlay context={this.state} />
         ));

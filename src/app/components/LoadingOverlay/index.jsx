@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './style';
-import LoadingCircleImage from 'Icons/loading-circle';
+import LoadingCircleImage from 'Icons/accented/loading-circle';
 import { Context } from '@honzachalupa/helpers';
 import FullScreenMessage from 'Components/FullScreenMessage';
 

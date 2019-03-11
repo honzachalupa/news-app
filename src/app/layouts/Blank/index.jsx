@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import OfflineStatusBar from 'Components/OfflineStatusBar';
 
 export default class Layout_Blank extends Component {
     render() {
@@ -7,6 +8,8 @@ export default class Layout_Blank extends Component {
         return (
             <div>
                 {content}
+
+                <OfflineStatusBar />
             </div>
         );
     }
