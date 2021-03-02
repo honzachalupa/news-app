@@ -19,6 +19,7 @@
     "hash-anything": "^1.1.2",
     "moment": "^2.23.0",
     "promise-polyfill": "^8.1.0",
+    "pwacompat": "^2.0.8",
     "rc-swipeout": "^2.0.11",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

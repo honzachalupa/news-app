@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Switch from 'react-ios-switch';
-import { Context } from '@honzachalupa/helpers';
+import { _a, Context } from '@honzachalupa/helpers';
 import './style';
 import Layout from 'Layouts/SubPage';
 
@@ -38,6 +38,12 @@ export default class Page_Settings extends Component {
         localStorage.setItem('settings', JSON.stringify(settings));
     }
 
+    handleResetCache() {
+        localStorage.clear();
+
+        _a.removeCachedData();
+    }
+
     render() {
         const { page, settings } = this.state;
 
@@ -48,6 +54,10 @@ export default class Page_Settings extends Component {
                         <div className="control">
                             <p className="label">Tmavý vzhled</p>
                             <Switch checked={settings.isDarkThemeOn} onChange={() => this.handleToggle('isDarkThemeOn')} />
+                        </div>
+
+                        <div className="control">
+                            <button className="reset-cache" onClick={this.handleResetCache} type="button">Smazat cache</button>
                         </div>
                     </div>
                 </Layout>

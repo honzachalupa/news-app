@@ -1,7 +1,7 @@
 import { showModal, timeoutFetch } from 'Helpers/app';
 import { apiUrl } from 'app-config';
 
-const apiRoot = `${apiUrl}/news-engine/api`;
+const apiRoot = `${apiUrl}/api`;
 
 export async function getAvailableFeeds() {
     return timeoutFetch(

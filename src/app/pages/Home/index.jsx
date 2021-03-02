@@ -31,16 +31,11 @@ export default class Page_Home extends Component {
                 onClick: () => this.handleRedirection('/nastaveni')
             }]
         },
-        articles: [],
-        lastIndex: Number(localStorage.getItem('articleTeaser_lastIndex')) || 0
+        articles: []
     }
 
     componentDidMount() {
         this.getArticles();
-    }
-
-    componentWillUnmount() {
-        localStorage.setItem('articleTeaser_lastIndex', this.state.lastIndex);
     }
 
     async getArticles() {
@@ -59,9 +54,9 @@ export default class Page_Home extends Component {
 
     @autobind
     handleSwipe(index) {
-        this.setState({
-            lastIndex: index
-        });
+        const { _updateContextProperty } = this.context;
+
+        _updateContextProperty('teaserLastIndex', index);
     }
 
     handleRedirection(url) {
@@ -69,8 +64,8 @@ export default class Page_Home extends Component {
     }
 
     render() {
-        const { isOffline } = this.context;
-        const { page, articles, lastIndex } = this.state;
+        const { teaserLastIndex, isOffline } = this.context;
+        const { page, articles } = this.state;
 
         return (
             <section>
@@ -80,7 +75,7 @@ export default class Page_Home extends Component {
                     {!isOffline ? (
                         <Fragment>
                             <div className="latest-articles">
-                                <SwipeableViews index={lastIndex} resistance onChangeIndex={this.handleSwipe}>
+                                <SwipeableViews index={teaserLastIndex} resistance onChangeIndex={this.handleSwipe}>
                                     {articles.filter(article => _d.isValid(article.images)).map(article => (
                                         <ArticleTeaser key={article.title} {...article} />
                                     ))}

@@ -1,6 +1,7 @@
 /* globals __BASENAME__, __PLATFORM__ */
 
 import '@babel/polyfill';
+import 'pwacompat';
 import React, { Component, Fragment } from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter, HashRouter, Route, Switch } from 'react-router-dom';
@@ -21,7 +22,6 @@ import Page_NotFound from 'Pages/NotFound';
 
 class App extends Component {
     state = {
-        articles: [],
         availableFeeds: [],
         isLoading: false,
         loadingMessage: null,
@@ -29,6 +29,7 @@ class App extends Component {
             isDarkThemeOn: false
         },
         isOffline: false,
+        teaserLastIndex: 0,
         _showMessageBox: this.showMessageBox,
         _hideMessageBox: this.hideMessageBox,
         _showLoading: this.showLoading,
