@@ -1,63 +1,92 @@
-import { Text } from 'native-base';
-import React, { useEffect, useState } from 'react';
-import { Linking, SectionList, TouchableOpacity, View } from 'react-native';
-import { IArticle, IFeed, IFeedDefinition } from '../interfaces';
-import { getFeeds, getFeedsDefinitions } from './helpers/api';
+import { Context } from '@honzachalupa/helpers';
+import { useTheme } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { SectionList, Text, TouchableOpacity, View } from 'react-native';
+import { IContext } from '../App';
+import { getArticles, getFeeds } from '../helpers/api';
+import { IArticle, IFeed } from '../interfaces';
 
-export default () => {
+export default ({ navigation }: any) => {
+    const { updateContextProperty } = useContext(Context) as IContext;
+    const theme = useTheme();
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [definitions, setDefinitions] = useState<IFeedDefinition[]>([]);
-    const [feeds, setFeeds] = useState<{ [key: string]: IFeed }>({});
+    const [feeds, setFeeds] = useState<IFeed[]>([]);
+    const [articles, setArticles] = useState<{ [key: string]: IArticle[] }>({});
     const [listData, setListData] = useState<any>([]);
 
-    const formatData = (definitions: IFeedDefinition[], feeds: { [key: string]: IFeed }) => {
-        setListData(definitions.map((definition: IFeedDefinition) => ({
+    const formatData = (feeds: IFeed[], articles: { [key: string]: IArticle[] }) => {
+        setListData(feeds.map((definition: IFeed) => ({
             title: definition.name,
-            data: feeds[definition.id].articles.splice(0, 5).map((article: IArticle) => article)
+            data: articles[definition.sourceId]
         })));
+    };
+
+    const getUnreadArticlesCount = (articles: { [key: string]: IArticle[] }) => {
+        let sum = 0;
+
+        Object.values(articles).forEach((articles: any) =>
+            sum += articles.length
+        );
+
+        return sum;
     };
 
     const handleRefresh = () => {
         setIsLoading(true);
 
-        getFeedsDefinitions(setDefinitions);
+        getFeeds(setFeeds);
+    };
 
-        getFeeds(data => {
-            setFeeds(data);
-            setIsLoading(false);
+    const handleOpenDetail = (article: IArticle) => {
+        navigation.navigate('ArticleDetail', {
+            articleId: article.id,
+            feed: feeds.find((feed: IFeed) => feed.sourceId === article.sourceId)
         });
     };
 
     useEffect(() => {
-        getFeedsDefinitions(setDefinitions);
-
-        getFeeds(data => {
-            setFeeds(data);
-        });
+        getFeeds(setFeeds);
     }, []);
 
     useEffect(() => {
-        if (definitions.length > 0 && Object.keys(feeds).length > 0) {
-            formatData(definitions, feeds);
+        Promise.all(
+            feeds.map(feed => {
+            getArticles(feed.sourceId, articles => {
+                setArticles(prevState => ({
+                    ...prevState,
+                    [feed.sourceId]: articles
+                }));
+            });
+        })).then(() =>
+            setIsLoading(false)
+        )
+    }, [feeds]);
+
+    useEffect(() => {
+        updateContextProperty('unreadArticlesCount', getUnreadArticlesCount(articles));
+
+        if (Object.keys(articles).length > 0) {
+            formatData(feeds, articles);
         }
-    }, [definitions, feeds]);
+    }, [articles]);
 
     return (
         <View>
             {listData.length > 0 ? (
                 <SectionList
-                    sections={listData}
-                    renderSectionHeader={({ section: { title } }: any) => (
-                        <View style={{ backgroundColor: '#f2f2f2', paddingLeft: 12, paddingRight: 12 }}>
-                            <Text key={title} style={{ fontSize: 20, marginTop: 20, marginBottom: 10 }}>{title}</Text>
+                    sections={listData.filter((x: any) => x.data)}
+                    renderSectionHeader={({ section: { title } }) => (
+                        <View style={{ backgroundColor: theme.colors.background, paddingLeft: 12, paddingRight: 12 }}>
+                            <Text key={title} style={{ color: theme.colors.primary, fontSize: 20, marginTop: 20, marginBottom: 10 }}>{title}</Text>
                         </View>
                     )}
                     renderItem={({ item: article }: { item: IArticle }) => (
                         <View key={article.id} style={{ paddingLeft: 12, paddingRight: 12 }}>
-                            <TouchableOpacity onPress={() => Linking.openURL(article.url)}>
-                                <Text style={{ fontWeight: '600', marginTop: 10 }}>{article.title}</Text>
+                            <TouchableOpacity onPress={() => handleOpenDetail(article)}>
+                                <Text style={{ color: theme.colors.text, fontWeight: '600', marginTop: 10 }}>{article.title}</Text>
 
-                                <Text style={{ marginTop: 5 }}>{article.contentPreview}</Text>
+                                <Text style={{ color: theme.colors.text, marginTop: 5 }}>{article.contentPreview}</Text>
                             </TouchableOpacity>
                         </View>
                     )}

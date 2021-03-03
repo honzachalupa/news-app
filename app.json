@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "news-app",
+    "name": "Zpravodajství",
     "slug": "news-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "userInterfaceStyle": "automatic"
     },
     "android": {
       "adaptiveIcon": {

@@ -1,10 +1,9 @@
-import { ENewsProviders, ENewsSourceLabels, ENewsSources } from './enumerators';
-
-export interface IFeedDefinition {
+export interface IFeed {
     id: string;
-    name: ENewsSourceLabels;
-    url: ENewsSources;
-    provider: ENewsProviders;
+    name: string;
+    url: string;
+    sourceId: string;
+    providerId: string;
 }
 
 export interface IArticle {
@@ -13,13 +12,7 @@ export interface IArticle {
     contentPreview: string;
     content: string;
     url: string;
+    sourceId: string;
+    providerId: string;
     createdDate: any; // TODO: Add Timestamp type.
-}
-
-export interface IFeed {
-    id: string;
-    name: string;
-    url: string;
-    articles: IArticle[];
-    updatedDate: any; // TODO: Add Timestamp type.
 }
