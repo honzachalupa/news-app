@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add @types/react-native-ios-kit
+  /usr/local/bin/node /usr/local/bin/yarn add react-native-svg @types/react-native-svg
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/apache-maven-3.6.2/bin:/Applications/VMware Fusion.app/Contents/Public:/Library/Apple/usr/bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.npmjs.org/@types%2freact-native-ios-kit: Not found
+  Error: https://registry.npmjs.org/@types%2freact-native-svg: Not found
       at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66987:18)
       at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140748:22)
       at Request.emit (events.js:314:20)
@@ -42,6 +42,8 @@ npm manifest:
       "@react-navigation/bottom-tabs": "^5.11.8",
       "@react-navigation/native": "^5.9.3",
       "@react-navigation/stack": "^5.14.3",
+      "@types/react-native-snap-carousel": "^3.8.2",
+      "@types/react-native-svg-uri": "^1.2.3",
       "@types/react-native-vector-icons": "^6.4.6",
       "expo": "^40.0.1",
       "expo-status-bar": "~1.0.3",
@@ -57,6 +59,8 @@ npm manifest:
       "react-native-render-html": "^5.1.0",
       "react-native-safe-area-context": "^3.1.9",
       "react-native-screens": "^2.18.1",
+      "react-native-snap-carousel": "^3.9.1",
+      "react-native-svg-uri": "^1.2.3",
       "react-native-vector-icons": "^8.1.0",
       "react-native-web": "~0.11",
       "react-native-webview": "^11.2.3"
@@ -1944,6 +1948,22 @@ Lockfile:
     integrity sha512-3UuR4MoWf5spNgrG6cwsmT9DdRghcR4IDFOzNZ6+wcmacxkFykcb5ji0nNVm9ckBT4BCxvCrJJbM4+EYsEEVIg==
     dependencies:
       "@types/react" "^16"
+  
+  "@types/react-native-snap-carousel@^3.8.2":
+    version "3.8.2"
+    resolved "https://registry.yarnpkg.com/@types/react-native-snap-carousel/-/react-native-snap-carousel-3.8.2.tgz#31fb91530198183c658db0d23935ca79850419f5"
+    integrity sha512-ItvLo19gQstxcir6wIXJxwohxdYj9t/lXv+MXfqhwMSYaR+Xa3vOP7b6TYQCe9GqDPH3sEgEg/uH6CLV+fhcWA==
+    dependencies:
+      "@types/react" "*"
+      "@types/react-native" "*"
+  
+  "@types/react-native-svg-uri@^1.2.3":
+    version "1.2.3"
+    resolved "https://registry.yarnpkg.com/@types/react-native-svg-uri/-/react-native-svg-uri-1.2.3.tgz#9b2fa6c76d6c7a6bf5fe608e7edc434b1a2d5c5a"
+    integrity sha512-8EDCT3Vm+SgUsDR/2dRxNDwKWZ6nRausqh0uKk/pYWuKdkICTcaQlWhjAjDRZUFhhl85TGRivX+OlVoB/M9xLg==
+    dependencies:
+      "@types/react" "*"
+      "@types/react-native" "*"
   
   "@types/react-native-vector-icons@^6.4.6":
     version "6.4.6"
@@ -5770,7 +5790,7 @@ Lockfile:
     dependencies:
       asap "~2.0.6"
   
-  prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+  prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
     integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -5828,6 +5848,14 @@ Lockfile:
     version "1.2.1"
     resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
     integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
+  
+  react-addons-shallow-compare@15.6.2:
+    version "15.6.2"
+    resolved "https://registry.yarnpkg.com/react-addons-shallow-compare/-/react-addons-shallow-compare-15.6.2.tgz#198a00b91fc37623db64a28fd17b596ba362702f"
+    integrity sha1-GYoAuR/DdiPbZKKP0XtZa6NicC8=
+    dependencies:
+      fbjs "^0.8.4"
+      object-assign "^4.1.0"
   
   react-devtools-core@^4.6.0:
     version "4.10.1"
@@ -5940,6 +5968,21 @@ Lockfile:
     version "2.18.1"
     resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.18.1.tgz#47b9991c6f762d00d0ed3233e5283d523e859885"
     integrity sha512-r5WZLpmx2hHjC1RgMdPq5YpSU9tEhBpUaZ5M1SUtNIONyiLqQVxabhRCINdebIk4depJiIl7yw2Q85zJyeX6fw==
+  
+  react-native-snap-carousel@^3.9.1:
+    version "3.9.1"
+    resolved "https://registry.yarnpkg.com/react-native-snap-carousel/-/react-native-snap-carousel-3.9.1.tgz#6fd9bd8839546c2c6043a41d2035afbc6fe0443e"
+    integrity sha512-xWEGusacIgK1YaDXLi7Gao2+ISLoGPVEBR8fcMf4tOOJQufutlNwkoLu0l6B8Qgsrre0nTxoVZikRgGRDWlLaQ==
+    dependencies:
+      prop-types "^15.6.1"
+      react-addons-shallow-compare "15.6.2"
+  
+  react-native-svg-uri@^1.2.3:
+    version "1.2.3"
+    resolved "https://registry.yarnpkg.com/react-native-svg-uri/-/react-native-svg-uri-1.2.3.tgz#2f67f30564068a0fee68a751845332a5185a1aab"
+    integrity sha1-L2fzBWQGig/uaKdRhFMypRhaGqs=
+    dependencies:
+      xmldom "^0.1.22"
   
   react-native-vector-icons@6.1.0:
     version "6.1.0"
@@ -7326,7 +7369,7 @@ Lockfile:
     dependencies:
       sax "^1.2.1"
   
-  xmldom@0.1.x, xmldom@~0.1.31:
+  xmldom@0.1.x, xmldom@^0.1.22, xmldom@~0.1.31:
     version "0.1.31"
     resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.31.tgz#b76c9a1bd9f0a9737e5a72dc37231cf38375e2ff"
     integrity sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==

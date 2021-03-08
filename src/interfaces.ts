@@ -4,6 +4,11 @@ export interface IFeed {
     url: string;
     sourceId: string;
     providerId: string;
+    branding: {
+        logo: string;
+        accentColor: string;
+        backgroundColor: string;
+    }
 }
 
 export interface IArticle {

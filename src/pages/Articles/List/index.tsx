@@ -1,19 +1,19 @@
 import { Context } from '@honzachalupa/helpers';
-import { useTheme } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useContext } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { Dimensions, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Carousel from 'react-native-snap-carousel';
 import { IContext } from '../../../App';
-import { IArticle } from '../../../interfaces';
-import ListItem from './ListItem';
-import getStyle from './style';
+import { IArticle, IFeed } from '../../../interfaces';
+import ArticleListItem from './ArticleListItem';
+import FeedListItem from './FeedListItem';
+import getStyles from './styles';
 
 const ArticlesListPage = ({ navigation }: any) => {
-    const { articles } = useContext(Context) as IContext;
+    const { feeds, articles } = useContext(Context) as IContext;
 
-    const theme = useTheme();
-    const style = getStyle(theme);
+    const styles = getStyles();
 
     const handleOpenDetail = (articleId: IArticle['id']) => {
         navigation.navigate('ArticleDetail', {
@@ -21,20 +21,75 @@ const ArticlesListPage = ({ navigation }: any) => {
         });
     };
 
+    const todaysDate = moment().locale('cs-CZ').format('dddd d. MMMM');
+
+    const groupFeeds = (feeds: IFeed[]) => {
+        const feedsGroups: IFeed[][] = [];
+
+        for (let i = 0; i < feeds.length; i += 4) {
+            const group = [feeds[0]];
+
+            if (feeds[i + 1]) {
+                group.push(feeds[i + 1]);
+            }
+
+            if (feeds[i + 2]) {
+                group.push(feeds[i + 2]);
+            }
+
+            if (feeds[i + 3]) {
+                group.push(feeds[i + 3]);
+            }
+
+            feedsGroups.push(group);
+        }
+
+        return feedsGroups;
+    };
+
+    console.log(groupFeeds([...feeds, ...feeds, ...feeds]));
+
     return (
         <SafeAreaView>
             <View style={{ padding: 20 }}>
-                <Text style={style.date}>{moment().format('dddd d. MMMM')}</Text>
-                <Text style={style.headline}>Nejnovější zprávy</Text>
+                <Text style={styles.date}>{todaysDate}</Text>
+                <Text style={styles.headline}>Nejnovější zprávy</Text>
             </View>
 
-            <FlatList
+            <Carousel
                 data={articles}
-                renderItem={({ item: article }: { item: IArticle }) => (
-                    <ListItem key={article.id} article={article} onClick={handleOpenDetail} />
-                )}
                 horizontal
+                // autoplay
+                // autoplayDelay={5000}
+                // autoplayInterval={8000}
+                inactiveSlideScale={1}
                 showsHorizontalScrollIndicator={false}
+                sliderWidth={Dimensions.get('window').width}
+                itemWidth={Dimensions.get('window').width - 60}
+                activeSlideAlignment="start"
+                renderItem={({ item: article }: { item: IArticle }) => (
+                    <ArticleListItem key={article.id} article={article} onClick={handleOpenDetail} />
+                )}
+            />
+
+            <Text style={styles.subheadline}>Zdroje</Text>
+
+            <Carousel
+                data={groupFeeds([...feeds, ...feeds, ...feeds])}
+                horizontal
+                inactiveSlideScale={1}
+                inactiveSlideOpacity={1}
+                showsHorizontalScrollIndicator={false}
+                sliderWidth={Dimensions.get('window').width}
+                itemWidth={300}
+                activeSlideAlignment="start"
+                renderItem={({ item: feedsGroup }: { item: IFeed[] }) => (
+                    <View key={feedsGroup[0].id} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {feedsGroup.map(group => (
+                            <FeedListItem feed={group} onClick={() => { }} />
+                        ))}
+                    </View>
+                )}
             />
         </SafeAreaView>
     );
