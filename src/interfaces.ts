@@ -10,7 +10,8 @@ export interface IArticle {
     id: string;
     title: string;
     contentPreview: string;
-    content: string;
+    content: string[];
+    images: string[];
     url: string;
     sourceId: string;
     providerId: string;
