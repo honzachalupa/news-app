@@ -18,6 +18,10 @@ export interface IArticle {
     content: string[];
     images: string[];
     url: string;
+    readingTime: number;
+    category: string;
+    tags: string[];
+    author: string;
     sourceId: string;
     providerId: string;
     createdDate: any; // TODO: Add Timestamp type.

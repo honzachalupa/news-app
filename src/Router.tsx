@@ -8,7 +8,7 @@ import { useColorScheme } from 'react-native-appearance';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from './App';
 import ArticleDetailPage from './pages/Articles/Detail';
-import ArticlesListPage from './pages/Articles/List';
+import ArticlesListPage from './pages/Homepage';
 
 const Router = () => {
     const { unreadArticlesCount } = useContext(Context) as IContext;

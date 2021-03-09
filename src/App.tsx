@@ -8,7 +8,11 @@ import Router from './Router';
 export interface IContext {
     feeds: IFeed[],
     articles: IArticle[],
+    readArticlesIDs: IArticle['id'][];
     unreadArticlesCount: number;
+    isRefreshing: boolean;
+    handleRefresh: () => void;
+    markArticleAsRead: (articleId: IArticle['id']) => void;
     updateContextProperty: (key: string, value: unknown) => void;
 }
 
@@ -16,45 +20,64 @@ const App = () => {
     const [context, setContext] = useState<IContext>({
         feeds: [],
         articles: [],
-        unreadArticlesCount: 1,
-        updateContextProperty: () => { }
+        readArticlesIDs: [],
+        unreadArticlesCount: 0,
+        isRefreshing: false,
+        handleRefresh: () => {},
+        markArticleAsRead: () => {},
+        updateContextProperty: () => {}
     });
 
+    const setContextValue = (key: string, value: unknown) => {
+        setContext(prevState => ({
+            ...prevState,
+            [key]: value
+        }));
+    };
+
+    const getUnreadArticlesCount = (articles: IArticle[], readArticlesIDs: IArticle['id'][]) =>
+        articles.filter(({ id }) => !context.readArticlesIDs.includes(id)).length;
+
+    const getData = () => {
+        setContextValue('isRefreshing', true);
+
+        const feedsPromise = getFeeds(feeds =>
+            setContextValue('feeds', feeds)
+        );
+
+        const articlesPromises = getArticles(articles => {
+            setContextValue('articles', articles);
+            setContextValue('unreadArticlesCount', getUnreadArticlesCount(articles, context.readArticlesIDs));
+        });
+
+        Promise.all([feedsPromise, articlesPromises]).then(() =>
+            setContextValue('isRefreshing', false)
+        );
+    };
+
     const contextFunctions = {
+        handleRefresh: () => {
+            getData();
+        },
+        markArticleAsRead: (articleId: IArticle['id']) => {
+            setContext(prevState => ({
+                ...prevState,
+                readArticlesIDs: [...prevState.readArticlesIDs, articleId]
+            }));
+        },
         updateContextProperty: (key: string, value: unknown) => setContext((prevState: IContext) => ({
             ...prevState,
             [key]: value
         }))
     };
 
-    /* const getUnreadArticlesCount = (articles: { [key: string]: IArticle[] }) => {
-        let sum = 0;
-
-        Object.values(articles).forEach((articles: any) =>
-            sum += articles.length
-        );
-
-        return sum;
-
-        // updateContextProperty('unreadArticlesCount', getUnreadArticlesCount(articles));
-    }; */
+    useEffect(() => {
+        getData();
+    }, []);
 
     useEffect(() => {
-        getFeeds(feeds => {
-            setContext(prevState => ({
-                ...prevState,
-                feeds
-            }));
-        });
-
-        getArticles(articles => {
-            setContext(prevState => ({
-                ...prevState,
-                articles,
-                isLoading: false
-            }));
-        });
-    }, []);
+        setContextValue('unreadArticlesCount', getUnreadArticlesCount(context.articles, context.readArticlesIDs));
+    }, [context.articles, context.readArticlesIDs]);
 
     return (
         <Context.Provider value={{ ...context, ...contextFunctions }}>

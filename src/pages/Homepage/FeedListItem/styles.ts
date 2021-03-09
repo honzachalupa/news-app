@@ -6,8 +6,8 @@ export default () => {
 
     return StyleSheet.create({
         card: {
-            width: 140,
-            height: 140,
+            width: 130,
+            height: 130,
             backgroundColor: theme.colors.card,
             borderRadius: 15,
             marginLeft: 10,
@@ -15,16 +15,16 @@ export default () => {
             overflow: 'hidden'
         },
         logo: {
-            width: 100,
-            height: 100,
+            width: 90,
+            height: 90,
             marginTop: 10,
             marginLeft: 20,
             marginRight: 20
         },
         feedName: {
             fontSize: 14,
-            textAlign: 'center',
-            marginBottom: 5
+            fontWeight: '600',
+            textAlign: 'center'
         },
     });
 };

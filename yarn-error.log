@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add react-native-svg @types/react-native-svg
+  /usr/local/bin/node /usr/local/bin/yarn add @types/react-native-blur-overlay
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/apache-maven-3.6.2/bin:/Applications/VMware Fusion.app/Contents/Public:/Library/Apple/usr/bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.npmjs.org/@types%2freact-native-svg: Not found
+  Error: https://registry.npmjs.org/@types%2freact-native-blur-overlay: Not found
       at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66987:18)
       at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140748:22)
       at Request.emit (events.js:314:20)
@@ -43,7 +43,6 @@ npm manifest:
       "@react-navigation/native": "^5.9.3",
       "@react-navigation/stack": "^5.14.3",
       "@types/react-native-snap-carousel": "^3.8.2",
-      "@types/react-native-svg-uri": "^1.2.3",
       "@types/react-native-vector-icons": "^6.4.6",
       "expo": "^40.0.1",
       "expo-status-bar": "~1.0.3",
@@ -51,16 +50,17 @@ npm manifest:
       "native-base": "~2.11",
       "react": "16.13.1",
       "react-dom": "16.13.1",
-      "react-native": "0.63.4",
+      "react-native": "^0.63.4",
       "react-native-appearance": "^0.3.4",
+      "react-native-blur-overlay": "^1.0.7",
       "react-native-gesture-handler": "^1.10.3",
       "react-native-ios-kit": "^0.0.22",
+      "react-native-linear-gradient": "^2.5.6",
       "react-native-reanimated": "^1.13.2",
       "react-native-render-html": "^5.1.0",
       "react-native-safe-area-context": "^3.1.9",
       "react-native-screens": "^2.18.1",
       "react-native-snap-carousel": "^3.9.1",
-      "react-native-svg-uri": "^1.2.3",
       "react-native-vector-icons": "^8.1.0",
       "react-native-web": "~0.11",
       "react-native-webview": "^11.2.3"
@@ -1953,14 +1953,6 @@ Lockfile:
     version "3.8.2"
     resolved "https://registry.yarnpkg.com/@types/react-native-snap-carousel/-/react-native-snap-carousel-3.8.2.tgz#31fb91530198183c658db0d23935ca79850419f5"
     integrity sha512-ItvLo19gQstxcir6wIXJxwohxdYj9t/lXv+MXfqhwMSYaR+Xa3vOP7b6TYQCe9GqDPH3sEgEg/uH6CLV+fhcWA==
-    dependencies:
-      "@types/react" "*"
-      "@types/react-native" "*"
-  
-  "@types/react-native-svg-uri@^1.2.3":
-    version "1.2.3"
-    resolved "https://registry.yarnpkg.com/@types/react-native-svg-uri/-/react-native-svg-uri-1.2.3.tgz#9b2fa6c76d6c7a6bf5fe608e7edc434b1a2d5c5a"
-    integrity sha512-8EDCT3Vm+SgUsDR/2dRxNDwKWZ6nRausqh0uKk/pYWuKdkICTcaQlWhjAjDRZUFhhl85TGRivX+OlVoB/M9xLg==
     dependencies:
       "@types/react" "*"
       "@types/react-native" "*"
@@ -5894,6 +5886,13 @@ Lockfile:
       invariant "^2.2.4"
       use-subscription "^1.0.0"
   
+  react-native-blur-overlay@^1.0.7:
+    version "1.0.7"
+    resolved "https://registry.yarnpkg.com/react-native-blur-overlay/-/react-native-blur-overlay-1.0.7.tgz#43bcf57efae731fef7a77eafa7b95b9050a9f5fa"
+    integrity sha512-2RuyMoy1ZZzY+3Li2wBwAfn6Z46oNG7/zgVCTF77v2/ttmKzEJivUpcNvysYE1vzrwIdnuz4GZu9kC4FQ4qyEg==
+    dependencies:
+      tiny-emitter "^2.0.2"
+  
   react-native-drawer@2.5.1:
     version "2.5.1"
     resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"
@@ -5942,6 +5941,11 @@ Lockfile:
       prop-types "^15.6.2"
       react-native-iphone-x-helper "^1.0.3"
   
+  react-native-linear-gradient@^2.5.6:
+    version "2.5.6"
+    resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
+    integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
+  
   react-native-reanimated@^1.13.2:
     version "1.13.2"
     resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.2.tgz#1ae5457b24b4913d173a5a064bb28eae7783d293"
@@ -5976,13 +5980,6 @@ Lockfile:
     dependencies:
       prop-types "^15.6.1"
       react-addons-shallow-compare "15.6.2"
-  
-  react-native-svg-uri@^1.2.3:
-    version "1.2.3"
-    resolved "https://registry.yarnpkg.com/react-native-svg-uri/-/react-native-svg-uri-1.2.3.tgz#2f67f30564068a0fee68a751845332a5185a1aab"
-    integrity sha1-L2fzBWQGig/uaKdRhFMypRhaGqs=
-    dependencies:
-      xmldom "^0.1.22"
   
   react-native-vector-icons@6.1.0:
     version "6.1.0"
@@ -6031,7 +6028,7 @@ Lockfile:
       escape-string-regexp "2.0.0"
       invariant "2.2.4"
   
-  react-native@0.63.4:
+  react-native@^0.63.4:
     version "0.63.4"
     resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.63.4.tgz#2210fdd404c94a5fa6b423c6de86f8e48810ec36"
     integrity sha512-I4kM8kYO2mWEYUFITMcpRulcy4/jd+j9T6PbIzR0FuMcz/xwd+JwHoLPa1HmCesvR1RDOw9o4D+OFLwuXXfmGw==
@@ -6859,6 +6856,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/timm/-/timm-1.7.1.tgz#96bab60c7d45b5a10a8a4d0f0117c6b7e5aff76f"
     integrity sha512-IjZc9KIotudix8bMaBW6QvMuq64BrJWFs1+4V0lXwWGQZwH+LnX87doAYhem4caOEusRP9/g6jVDQmZ8XOk1nw==
   
+  tiny-emitter@^2.0.2:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
+    integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
+  
   tiny-queue@^0.2.1:
     version "0.2.1"
     resolved "https://registry.yarnpkg.com/tiny-queue/-/tiny-queue-0.2.1.tgz#25a67f2c6e253b2ca941977b5ef7442ef97a6046"
@@ -7369,7 +7371,7 @@ Lockfile:
     dependencies:
       sax "^1.2.1"
   
-  xmldom@0.1.x, xmldom@^0.1.22, xmldom@~0.1.31:
+  xmldom@0.1.x, xmldom@~0.1.31:
     version "0.1.31"
     resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.31.tgz#b76c9a1bd9f0a9737e5a72dc37231cf38375e2ff"
     integrity sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==
