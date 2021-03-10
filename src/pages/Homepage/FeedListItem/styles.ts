@@ -25,6 +25,6 @@ export default () => {
             fontSize: 14,
             fontWeight: '600',
             textAlign: 'center'
-        },
+        }
     });
 };

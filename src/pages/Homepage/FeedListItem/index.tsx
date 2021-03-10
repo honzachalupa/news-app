@@ -5,14 +5,14 @@ import getStyles from './styles';
 
 interface IProps {
     feed: IFeed;
-    onClick: (feedId: IFeed['id']) => void;
+    onClick: (feedId: IFeed) => void;
 }
 
 const FeedListItem = ({ feed, onClick }: IProps) => {
     const styles = getStyles();
 
     return (
-        <TouchableWithoutFeedback onPress={() => onClick(feed.id)}>
+        <TouchableWithoutFeedback onPress={() => onClick(feed)}>
             <View style={{ ...styles.card, backgroundColor: feed.branding.backgroundColor }}>
                 <Image style={styles.logo} resizeMode="contain" source={{ uri: feed.branding.logo }} />
 

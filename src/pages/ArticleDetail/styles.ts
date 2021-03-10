@@ -23,6 +23,16 @@ export default () => {
             top: 0,
             zIndex: 1
         },
+        saveButton: {
+            backgroundColor: theme.colors.card,
+            borderRadius: 20,
+            padding: 7,
+            overflow: 'hidden',
+            position: 'absolute',
+            top: 50,
+            right: 20,
+            zIndex: 9
+        },
         textContainer: {
             width: '100%',
             height: Dimensions.get('window').width,

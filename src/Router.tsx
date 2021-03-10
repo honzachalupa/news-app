@@ -7,8 +7,10 @@ import { Platform } from 'react-native';
 import { useColorScheme } from 'react-native-appearance';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from './App';
-import ArticleDetailPage from './pages/Articles/Detail';
-import ArticlesListPage from './pages/Homepage';
+import ArticleDetailPage from './pages/ArticleDetail';
+import FeedArticlesListPage from './pages/FeedArticlesList';
+import Homepage from './pages/Homepage';
+import SavedArticlesListPage from './pages/SavedArticlesList';
 
 const Router = () => {
     const { unreadArticlesCount } = useContext(Context) as IContext;
@@ -80,7 +82,7 @@ const Router = () => {
                         >
                             <Tab.Screen
                                 name="Articles"
-                                component={ArticlesListPage}
+                                component={Homepage}
                                 options={{
                                     title: 'Vše',
                                     tabBarBadge: unreadArticlesCount,
@@ -92,7 +94,7 @@ const Router = () => {
 
                             <Tab.Screen
                                 name="ArticlesSaved"
-                                component={ArticlesListPage}
+                                component={SavedArticlesListPage}
                                 options={{
                                     title: 'Uložené'
                                 }}
@@ -104,6 +106,17 @@ const Router = () => {
                 <Stack.Screen
                     name="ArticleDetail"
                     component={ArticleDetailPage}
+                    options={{
+                        title: '',
+                        headerTransparent: true,
+                        headerBackTitle: ' ',
+                        headerTintColor: 'transparent'
+                    }}
+                />
+
+                <Stack.Screen
+                    name="FeedArticlesList"
+                    component={FeedArticlesListPage}
                     options={{
                         title: '',
                         headerTransparent: true,

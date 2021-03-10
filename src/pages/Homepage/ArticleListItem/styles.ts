@@ -27,7 +27,7 @@ export default () => {
             height: '100%',
             position: 'relative'
         },
-        readStatus: {
+        statusNode: {
             backgroundColor: 'white',
             borderRadius: 12,
             overflow: 'hidden',
@@ -41,6 +41,13 @@ export default () => {
             top: 10,
             right: 15,
             zIndex: 99
+        },
+        saveStatusValue: {
+            color: '#90EE90',
+            fontSize: 14,
+            fontWeight: '600',
+            textTransform: 'uppercase',
+            marginLeft: 5
         },
         readStatusValue: {
             color: theme.colors.primary,

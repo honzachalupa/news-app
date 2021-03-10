@@ -1,5 +1,4 @@
 import { Context } from '@honzachalupa/helpers';
-import moment from 'moment';
 import React, { useContext } from 'react';
 import { Dimensions, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +9,7 @@ import ArticleListItem from './ArticleListItem';
 import FeedListItem from './FeedListItem';
 import getStyles from './styles';
 
-const ArticlesListPage = ({ navigation }: any) => {
+const FeedArticlesListPage = ({ navigation }: any) => {
     const { feeds, articles, isRefreshing, handleRefresh } = useContext(Context) as IContext;
 
     const styles = getStyles();
@@ -21,7 +20,13 @@ const ArticlesListPage = ({ navigation }: any) => {
         });
     };
 
-    const todaysDate = moment().locale('cs-CZ').format('dddd d. MMMM');
+    const handleOpenFeedArticlesList = (feed: IFeed) => {
+        navigation.navigate('FeedArticlesList', {
+            feed
+        });
+    };
+
+    const todaysDate = ''; // moment().locale('cz').format('dddd d. MMMM');
 
     const groupFeeds = (feeds: IFeed[]) => {
         const feedsGroups: IFeed[][] = [];
@@ -92,7 +97,7 @@ const ArticlesListPage = ({ navigation }: any) => {
                     renderItem={({ item: feedsGroup }: { item: IFeed[] }) => (
                         <View key={feedsGroup[0].id} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                             {feedsGroup.map(group => (
-                                <FeedListItem feed={group} onClick={() => { }} />
+                                <FeedListItem feed={group} onClick={handleOpenFeedArticlesList} />
                             ))}
                         </View>
                     )}
@@ -102,4 +107,4 @@ const ArticlesListPage = ({ navigation }: any) => {
     );
 };
 
-export default ArticlesListPage;
+export default FeedArticlesListPage;

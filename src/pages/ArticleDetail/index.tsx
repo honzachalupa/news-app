@@ -6,17 +6,19 @@ import { Image, Linking, ScrollView, Text, View } from 'react-native';
 import { Button } from 'react-native-ios-kit';
 import WebView from 'react-native-render-html';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { IContext } from '../../../App';
-import { IArticle, IFeed } from '../../../interfaces';
+import { IContext } from '../../App';
+import { IArticle, IFeed } from '../../interfaces';
 import getStyles from './styles';
 
 const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params: { article: IArticle } } }) => {
     const theme = useTheme();
     const styles = getStyles();
 
-    const { feeds, markArticleAsRead } = useContext(Context) as IContext;
+    const { feeds, savedArticles, handleSaveArticle, handleUnsaveArticle, markArticleAsRead } = useContext(Context) as IContext;
 
     const [feed, setFeed] = useState<IFeed>();
+
+    const isSaved = savedArticles.map(({ id }) => id).includes(article.id);
 
     useEffect(() => {
         setFeed(feeds.find(({ sourceId }) => sourceId === article.sourceId));
@@ -28,8 +30,26 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
             {article.images.length > 0 && (
                 <View style={styles.imageContainer}>
                     <Image source={{ uri: article.images[0] }} style={styles.image} />
-                    <Image source={require('./../../../assets/gradient.png')} style={styles.gradient} />
+                    <Image source={require('./../../assets/gradient.png')} style={styles.gradient} />
                 </View>
+            )}
+
+            {isSaved ? (
+                <Ionicons
+                    name="ios-bookmark"
+                    size={25}
+                    color="#90EE90"
+                    style={styles.saveButton}
+                    onPress={() => handleUnsaveArticle(article.id)}
+                />
+            ) : (
+                <Ionicons
+                    name="ios-bookmark-outline"
+                    size={25}
+                    color="#90EE90"
+                    style={styles.saveButton}
+                    onPress={() => handleSaveArticle(article)}
+                />
             )}
 
             <View style={styles.textContainer}>

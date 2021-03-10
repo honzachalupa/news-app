@@ -13,11 +13,13 @@ interface IProps {
 }
 
 const ArticleListItem = ({ article, onClick }: IProps) => {
-    const { feeds, readArticlesIDs } = useContext(Context) as IContext;
-
     const theme = useTheme();
+
+    const { feeds, savedArticles, readArticlesIDs } = useContext(Context) as IContext;
+
     const styles = getStyles();
     const isRead = readArticlesIDs.includes(article.id);
+    const isSaved = savedArticles.map(({ id }) => id).includes(article.id);
     const feed = feeds.find(({ sourceId }) => sourceId === article.sourceId);
 
     return (
@@ -25,8 +27,18 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
             <View style={styles.card}>
                 {article.images.length > 0 && (
                     <View style={styles.imageContainer}>
-                        {isRead && (
-                            <View style={styles.readStatus}>
+                        {isSaved ? (
+                            <View style={styles.statusNode}>
+                                <Ionicons
+                                    name="ios-bookmark"
+                                    size={14}
+                                    color="#90EE90"
+                                />
+
+                                <Text style={styles.saveStatusValue}>Uloženo</Text>
+                            </View>
+                        ) : isRead ? (
+                            <View style={styles.statusNode}>
                                 <Ionicons
                                     name="ios-checkmark-done-outline"
                                     size={14}
@@ -35,19 +47,17 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
 
                                 <Text style={styles.readStatusValue}>Přečteno</Text>
                             </View>
-                        )}
+                        ) : null}
 
-                        <Image source={{ uri: article.images[0] }} style={styles.image} />
+                        <Image source={{ uri: article.images[0] }} style={{ ...styles.image, opacity: isRead ? 0.5 : 1 }} />
                         <Image source={require('./../../../assets/gradient.png')} style={styles.gradient} />
                     </View>
                 )}
 
-                <View style={styles.textContainer}>
-                    {article.category ? (
-                        <Text style={{ ...styles.feedName, backgroundColor: feed?.branding.accentColor }}>{feed?.name} - {article.category}</Text>
-                    ) : (
-                        <Text style={{ ...styles.feedName, backgroundColor: feed?.branding.accentColor }}>{feed?.name}</Text>
-                    )}
+                <View style={{ ...styles.textContainer, opacity: isRead ? 0.5 : 1 }}>
+                    <Text style={{ ...styles.feedName, backgroundColor: feed?.branding.accentColor, color: feed?.branding.backgroundColor }}>
+                        {article.category ? `${feed?.name} - ${article.category}` : feed?.name}
+                    </Text>
 
                     <Text style={styles.articleTitle}>{article.title}</Text>
                 </View>

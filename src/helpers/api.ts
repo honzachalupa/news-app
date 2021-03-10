@@ -9,7 +9,7 @@ export const getFeeds = (callback: (data: IFeed[]) => void) =>
 
 export const getArticle = (articleId: IArticle['id'], callback: (data: IArticle) => void) =>
     fetch(`${config.apiUrl}/get_newsArticle`, {
-        method: 'POST',
+        method: 'GET',
         body: JSON.stringify({ articleId })
     })
         .then(response => response.json())
