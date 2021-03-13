@@ -1,26 +1,19 @@
 import { useTheme } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 export default () => {
     const theme = useTheme();
 
+    const cardWidthHeight = Dimensions.get('window').width - 75;
+
     return StyleSheet.create({
         card: {
-            width: 350,
-            height: 350,
+            width: cardWidthHeight,
+            height: cardWidthHeight,
             backgroundColor: 'rgb(18, 18, 18)',
             borderRadius: 15,
             marginLeft: 20,
             overflow: 'hidden'
-        },
-        card_read: {
-            width: 350,
-            height: 350,
-            backgroundColor: 'rgb(18, 18, 18)',
-            borderRadius: 15,
-            marginLeft: 20,
-            overflow: 'hidden',
-            opacity: 0.5
         },
         imageContainer: {
             width: '100%',
@@ -93,6 +86,11 @@ export default () => {
             paddingLeft: 10,
             paddingRight: 10,
             marginBottom: 12
+        },
+        date: {
+            color: 'white',
+            opacity: 0.7,
+            marginBottom: 8
         },
         articleTitle: {
             color: 'white',

@@ -1,17 +1,19 @@
 import { useTheme } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 export default () => {
     const theme = useTheme();
 
+    const cardWidthHeight = (Dimensions.get('window').width / 3) - 15;
+
     return StyleSheet.create({
         card: {
-            width: 130,
-            height: 130,
+            width: cardWidthHeight,
+            height: cardWidthHeight,
             backgroundColor: theme.colors.card,
             borderRadius: 15,
-            marginLeft: 10,
-            marginBottom: 10,
+            marginLeft: 15,
+            marginBottom: 15,
             overflow: 'hidden'
         },
         logo: {

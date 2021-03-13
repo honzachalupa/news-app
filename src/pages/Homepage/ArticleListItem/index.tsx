@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../../App';
+import { formatDateLabel, timestampToDate } from '../../../helpers/formatting';
 import { IArticle } from '../../../interfaces';
 import getStyles from './styles';
 
@@ -58,6 +59,8 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
                     <Text style={{ ...styles.feedName, backgroundColor: feed?.branding.accentColor, color: feed?.branding.backgroundColor }}>
                         {article.category ? `${feed?.name} - ${article.category}` : feed?.name}
                     </Text>
+
+                    <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
 
                     <Text style={styles.articleTitle}>{article.title}</Text>
                 </View>

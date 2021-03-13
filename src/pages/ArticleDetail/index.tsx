@@ -2,11 +2,13 @@ import { Context } from '@honzachalupa/helpers';
 import { useTheme } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, Linking, ScrollView, Text, View } from 'react-native';
+import { Image, Linking, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import ImageView from 'react-native-image-viewing';
 import { Button } from 'react-native-ios-kit';
 import WebView from 'react-native-render-html';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../App';
+import { formatDateLabel, timestampToDate } from '../../helpers/formatting';
 import { IArticle, IFeed } from '../../interfaces';
 import getStyles from './styles';
 
@@ -15,10 +17,11 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
     const styles = getStyles();
 
     const { feeds, savedArticles, handleSaveArticle, handleUnsaveArticle, markArticleAsRead } = useContext(Context) as IContext;
-
     const [feed, setFeed] = useState<IFeed>();
+    const [isGalleryShown, setIsGalleryShown] = useState<boolean>(false);
 
     const isSaved = savedArticles.map(({ id }) => id).includes(article.id);
+    const galleryImages = article.images.slice(1, article.images.length);
 
     useEffect(() => {
         setFeed(feeds.find(({ sourceId }) => sourceId === article.sourceId));
@@ -26,10 +29,13 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
     }, []);
 
     return feed && article ? (
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ width: '100%' }}>
+            <StatusBar hidden />
+
             {article.images.length > 0 && (
-                <View style={styles.imageContainer}>
-                    <Image source={{ uri: article.images[0] }} style={styles.image} />
+
+                <View style={styles.headerImageContainer}>
+                    <Image source={{ uri: article.images[0] }} style={styles.headerImage} />
                     <Image source={require('./../../assets/gradient.png')} style={styles.gradient} />
                 </View>
             )}
@@ -52,17 +58,19 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                 />
             )}
 
-            <View style={styles.textContainer}>
-                {article.category ? (
-                    <Text style={styles.feedName}>{feed?.name} - {article.category}</Text>
-                ) : (
-                    <Text style={styles.feedName}>{feed?.name}</Text>
-                )}
+            <TouchableWithoutFeedback onPress={() => galleryImages.length > 0 ? setIsGalleryShown(true) : {}}>
+                <View style={styles.textContainer}>
+                    {article.category ? (
+                        <Text style={styles.feedName}>{feed?.name} - {article.category}</Text>
+                    ) : (
+                        <Text style={styles.feedName}>{feed?.name}</Text>
+                    )}
 
-                <Text style={styles.date}>{moment().startOf('day').add(article.createdDate.seconds, 'seconds').format('D.M.YYYY H:mm')}</Text>
+                    <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
 
-                <Text style={styles.articleTitle}>{article.title}</Text>
-            </View>
+                    <Text style={styles.articleTitle}>{article.title}</Text>
+                </View>
+            </TouchableWithoutFeedback>
 
             <View style={styles.articleContentContainer}>
                 <View style={styles.infoNodesContainer}>
@@ -91,6 +99,21 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                             <Text style={styles.infoNodeValue}>{moment().startOf('day').add(article.readingTime, 'minutes').format('H:mm')}</Text>
                         </View>
                     )}
+
+                    {galleryImages.length > 0 && (
+                        <TouchableWithoutFeedback onPress={() => setIsGalleryShown(true)}>
+                        <View style={styles.infoNode}>
+                            <Ionicons
+                                name="ios-image"
+                                size={24}
+                                color={theme.colors.text}
+                                style={styles.infoNodeIcon}
+                            />
+
+                            <Text style={styles.infoNodeValue}>{galleryImages.length}</Text>
+                        </View>
+                        </TouchableWithoutFeedback>
+                    )}
                 </View>
 
                 {article.content.map((paragraph: string) => (
@@ -99,6 +122,13 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                             `<span style="color: ${theme.colors.text}; font-size: 20px; line-height: 40%; margin-bottom: 20px; opacity: 0.7">${paragraph}</span>`
                     }} />
                 ))}
+
+                <ImageView
+                    images={galleryImages.map(uri => ({ uri }))}
+                    imageIndex={0}
+                    visible={isGalleryShown}
+                    onRequestClose={() => setIsGalleryShown(false)}
+                />
             </View>
 
             <Button onPress={() => Linking.openURL(article.url)} inline rounded inverted centered style={{ marginBottom: 80 }}>

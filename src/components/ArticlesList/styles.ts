@@ -16,8 +16,33 @@ export default () => {
             fontSize: 28,
             fontWeight: '700',
             marginTop: 20,
-            marginBottom: 20,
             marginLeft: 20
+        },
+        searchButton: {
+            width: 40,
+            height: 40,
+            backgroundColor: theme.colors.card,
+            padding: 10,
+            borderRadius: 22,
+            overflow: 'hidden',
+            opacity: 0.6,
+            position: 'absolute',
+            top: 60,
+            right: 20
+        },
+        searchInput: {
+            backgroundColor: theme.colors.card,
+            color: theme.colors.text,
+            fontSize: 17,
+            borderRadius: 10,
+            padding: 12,
+            paddingTop: 8,
+            paddingBottom: 7,
+            margin: 20,
+            marginBottom: 0
+        },
+        articlesList: {
+            marginTop: 20
         },
         card: {
             backgroundColor: theme.colors.card,
@@ -38,19 +63,18 @@ export default () => {
         textContainer: {
             width: textWidth,
             height: imageWidthHeight,
-            padding: 15
+            padding: 15,
+            paddingTop: 10
+        },
+        date: {
+            color: 'white',
+            opacity: 0.7,
+            marginBottom: 5
         },
         articleTitle: {
-            fontSize: 20,
-            fontWeight: '700',
-        },
-        articleContent: {
-            color: theme.colors.text,
             fontSize: 18,
-            lineHeight: 25,
-            marginBottom: 20,
-            opacity: 0.7,
-            overflow: 'hidden'
+            fontWeight: '700',
+            lineHeight: 20
         }
     });
 };

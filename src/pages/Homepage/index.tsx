@@ -1,18 +1,26 @@
 import { Context } from '@honzachalupa/helpers';
-import React, { useContext } from 'react';
+import { useTheme } from '@react-navigation/native';
+import moment from 'moment';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Dimensions, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Carousel from 'react-native-snap-carousel';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../App';
+import { filterFeedsAndArticles } from '../../helpers/data';
 import { IArticle, IFeed } from '../../interfaces';
 import ArticleListItem from './ArticleListItem';
 import FeedListItem from './FeedListItem';
 import getStyles from './styles';
 
-const FeedArticlesListPage = ({ navigation }: any) => {
-    const { feeds, articles, isRefreshing, handleRefresh } = useContext(Context) as IContext;
+const HomePage = ({ navigation }: any) => {
+    const flatListRef = useRef<any>();
 
+    const { isRefreshing, isOnline, settingsIsAutoPlayOn, handleRefresh } = useContext(Context) as IContext;
+
+    const theme = useTheme();
     const styles = getStyles();
+    const { feedsFiltered, articlesFiltered } = filterFeedsAndArticles();
 
     const handleOpenDetail = (article: IArticle) => {
         navigation.navigate('ArticleDetail', {
@@ -26,7 +34,11 @@ const FeedArticlesListPage = ({ navigation }: any) => {
         });
     };
 
-    const todaysDate = ''; // moment().locale('cz').format('dddd d. MMMM');
+    const handleOpenSettings = () => {
+        navigation.navigate('Settings');
+    };
+
+    const todaysDate = moment().format('dddd d. MMMM');
 
     const groupFeeds = (feeds: IFeed[]) => {
         const feedsGroups: IFeed[][] = [];
@@ -52,27 +64,58 @@ const FeedArticlesListPage = ({ navigation }: any) => {
         return feedsGroups;
     };
 
+    const resetCarouselIndex = () => {
+        setTimeout(() => flatListRef.current.snapToItem(0), 1000);
+    }
+
+    useEffect(() => {
+        if (settingsIsAutoPlayOn) {
+            flatListRef.current.startAutoplay();
+        } else {
+            flatListRef.current.stopAutoplay();
+        }
+    }, [settingsIsAutoPlayOn]);
+
     return (
         <SafeAreaView style={{ marginBottom: -35 }}>
             <ScrollView
                 refreshControl={
                     <RefreshControl
                         refreshing={isRefreshing}
-                        onRefresh={handleRefresh}
+                        onRefresh={() => { resetCarouselIndex(); handleRefresh(); }}
                     />
                 }
+                style={{ height: '100%' }}
             >
                 <View style={{ padding: 20 }}>
                     <Text style={styles.date}>{todaysDate}</Text>
                     <Text style={styles.headline}>Nejnovější zprávy</Text>
+
+                    {!isOnline && (
+                        <Ionicons
+                            name="ios-cloud-offline-outline"
+                            size={25}
+                            color="red"
+                            style={styles.networkStatus}
+                        />
+                    )}
+
+                    <Ionicons
+                        name="ios-cog-outline"
+                        size={30}
+                        color={theme.colors.text}
+                        style={styles.settingsButton}
+                        onPress={handleOpenSettings}
+                    />
                 </View>
 
                 <Carousel
-                    data={articles}
+                    ref={flatListRef}
+                    data={articlesFiltered}
                     horizontal
-                    // autoplay
-                    // autoplayDelay={5000}
-                    // autoplayInterval={8000}
+                    autoplay={settingsIsAutoPlayOn}
+                    autoplayDelay={5000}
+                    autoplayInterval={8000}
                     inactiveSlideScale={1}
                     showsHorizontalScrollIndicator={false}
                     sliderWidth={Dimensions.get('window').width}
@@ -86,25 +129,26 @@ const FeedArticlesListPage = ({ navigation }: any) => {
                 <Text style={styles.subheadline}>Zdroje</Text>
 
                 <Carousel
-                    data={groupFeeds(feeds)}
+                    data={groupFeeds(feedsFiltered)}
                     horizontal
                     inactiveSlideScale={1}
                     inactiveSlideOpacity={1}
                     showsHorizontalScrollIndicator={false}
                     sliderWidth={Dimensions.get('window').width}
-                    itemWidth={280}
+                    itemWidth={(Dimensions.get('window').width / 3 * 2)}
                     activeSlideAlignment="start"
                     renderItem={({ item: feedsGroup }: { item: IFeed[] }) => (
                         <View key={feedsGroup[0].id} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                            {feedsGroup.map(group => (
-                                <FeedListItem feed={group} onClick={handleOpenFeedArticlesList} />
+                            {feedsGroup.map(feed => (
+                                <FeedListItem key={feed.id} feed={feed} onClick={handleOpenFeedArticlesList} />
                             ))}
                         </View>
                     )}
+                    containerCustomStyle={styles.feedsGrid}
                 />
             </ScrollView>
         </SafeAreaView>
     );
 };
 
-export default FeedArticlesListPage;
+export default HomePage;

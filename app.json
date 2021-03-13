@@ -2,9 +2,9 @@
     "expo": {
         "name": "Zpravodajství",
         "slug": "news-app",
-        "version": "1.0.0",
+        "version": "1.2.0",
         "orientation": "portrait",
-        "icon": "./src/assets/icon.png",
+        "icon": "./src/assets/icon-wo-alpha.png",
         "splash": {
             "image": "./src/assets/splash.png",
             "resizeMode": "contain",
@@ -18,17 +18,17 @@
         ],
         "ios": {
             "bundleIdentifier": "com.janchalupa.newsapp",
-            "buildNumber": "1.0.0",
+            "buildNumber": "1.2.0",
             "userInterfaceStyle": "automatic"
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./src/assets/adaptive-icon.png",
+                "foregroundImage": "./src/assets/icon.png",
                 "backgroundColor": "#FFFFFF"
             }
         },
         "web": {
-            "favicon": "./src/assets/favicon.png"
+            "favicon": "./src/assets/icon.png"
         }
     }
 }

@@ -5,6 +5,24 @@ export default () => {
     const theme = useTheme();
 
     return StyleSheet.create({
+        networkStatus: {
+            width: 40,
+            height: 40,
+            padding: 10,
+            opacity: 0.6,
+            position: 'absolute',
+            top: 24,
+            right: 60
+        },
+        settingsButton: {
+            width: 40,
+            height: 40,
+            padding: 10,
+            opacity: 0.6,
+            position: 'absolute',
+            top: 20,
+            right: 20
+        },
         date: {
             color: theme.colors.text,
             fontSize: 15,
@@ -25,6 +43,9 @@ export default () => {
             marginTop: 20,
             marginBottom: 10,
             marginLeft: 20
+        },
+        feedsGrid: {
+            paddingLeft: 5
         }
     });
 };

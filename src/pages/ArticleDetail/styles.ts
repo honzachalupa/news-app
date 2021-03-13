@@ -5,12 +5,12 @@ export default () => {
     const theme = useTheme();
 
     return StyleSheet.create({
-        imageContainer: {
+        headerImageContainer: {
             width: '100%',
             height: Dimensions.get('window').width,
             position: 'relative'
         },
-        image: {
+        headerImage: {
             width: '100%',
             height: '100%',
             position: 'absolute',
@@ -118,6 +118,12 @@ export default () => {
             fontWeight: '600',
             marginTop: 4,
             marginLeft: 5
+        },
+        galleryImage: {
+            width: Dimensions.get('window').width - 40,
+            aspectRatio: 16 / 10,
+            marginBottom: 20,
+            borderRadius: 15
         }
     });
 };

@@ -1,10 +1,18 @@
 import { Context } from '@honzachalupa/helpers';
-import AsyncStorage from '@react-native-community/async-storage';
+import moment, { Moment } from 'moment';
+import 'moment/locale/cs';
 import React, { useEffect, useState } from 'react';
 import { AppearanceProvider } from 'react-native-appearance';
 import { getArticles, getFeeds } from './helpers/api';
+import { getContextFunctions } from './helpers/contextFunctions';
+import { getUnreadArticlesCount } from './helpers/data';
+import { useAppState } from './helpers/lifecycle';
+import { useNetworkStatus } from './helpers/network';
+import { loadContext, saveContext } from './helpers/storage';
 import { IArticle, IFeed } from './interfaces';
 import Router from './Router';
+
+moment().locale('cs')
 
 export interface IContext {
     feeds: IFeed[];
@@ -12,7 +20,12 @@ export interface IContext {
     savedArticles: IArticle[];
     readArticlesIDs: IArticle['id'][];
     unreadArticlesCount: number;
+    lastRefreshTime: Moment | null;
     isRefreshing: boolean;
+    isOnline: boolean | null;
+    settingsIsAutoPlayOn: boolean;
+    settingsSelectedFeeds: IFeed['id'][];
+    settingsBlacklist: string[];
     handleRefresh: () => void;
     handleSaveArticle: (article: IArticle) => void;
     handleUnsaveArticle: (article: IArticle['id']) => void;
@@ -20,19 +33,22 @@ export interface IContext {
     updateContextProperty: (key: string, value: unknown) => void;
 }
 
-interface ISavedState {
-    savedArticles: IContext['savedArticles'];
-    readArticlesIDs: IContext['readArticlesIDs'];
-}
-
 const App = () => {
+    const appState = useAppState();
+    const isOnline = useNetworkStatus();
+
     const [context, setContext] = useState<IContext>({
         feeds: [],
         articles: [],
         savedArticles: [],
         readArticlesIDs: [],
         unreadArticlesCount: 0,
+        lastRefreshTime: null,
         isRefreshing: false,
+        isOnline,
+        settingsIsAutoPlayOn: false,
+        settingsSelectedFeeds: [],
+        settingsBlacklist: [],
         handleRefresh: () => { },
         handleSaveArticle: () => { },
         handleUnsaveArticle: () => { },
@@ -47,98 +63,57 @@ const App = () => {
         }));
     };
 
-    const getUnreadArticlesCount = (articles: IArticle[], readArticlesIDs: IArticle['id'][]) =>
-        articles.filter(({ id }) => !context.readArticlesIDs.includes(id)).length;
-
     const getData = () => {
-        setContextValue('isRefreshing', true);
+        if (context.isOnline) {
+            setContextValue('isRefreshing', true);
 
-        const feedsPromise = getFeeds(feeds =>
-            setContextValue('feeds', feeds)
-        );
+            const feedsPromise = getFeeds(feeds =>
+                setContextValue('feeds', feeds)
+            );
 
-        const articlesPromises = getArticles(articles => {
-            setContextValue('articles', articles);
-            setContextValue('unreadArticlesCount', getUnreadArticlesCount(articles, context.readArticlesIDs));
-        });
-
-        Promise.all([feedsPromise, articlesPromises]).then(() =>
-            setContextValue('isRefreshing', false)
-        );
-    };
-
-    const saveState = async () => {
-        try {
-            await AsyncStorage.setItem('state', JSON.stringify({
-                savedArticles: context.savedArticles,
-                readArticlesIDs: context.readArticlesIDs
-            } as ISavedState));
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const loadState = async () => {
-        try {
-            await AsyncStorage.getItem('state').then(value => {
-                if (value) {
-                    const { savedArticles, readArticlesIDs }: ISavedState = JSON.parse(value);
-
-                    setContext(prevState => ({
-                        ...prevState,
-                        savedArticles,
-                        readArticlesIDs
-                    }));
-                }
+            const articlesPromises = getArticles(articles => {
+                setContextValue('articles', articles);
+                setContextValue('unreadArticlesCount', getUnreadArticlesCount(articles, context.readArticlesIDs));
             });
-        } catch (error) {
-            console.error(error);
+
+            Promise.all([feedsPromise, articlesPromises]).then(() => {
+                setContextValue('isRefreshing', false);
+                setContextValue('lastRefreshTime', moment());
+            });
         }
     };
 
-    const contextFunctions = {
-        handleRefresh: () => {
+    const handleActivation = () => {
+        if (context.lastRefreshTime && moment().diff(context.lastRefreshTime, 'minutes') > 5) {
             getData();
-        },
-        handleSaveArticle: (article: IArticle) => {
-            setContext(prevState => ({
-                ...prevState,
-                savedArticles: [...prevState.savedArticles, article]
-            }));
-        },
-        handleUnsaveArticle: (articleId: IArticle['id']) => {
-            setContext(prevState => ({
-                ...prevState,
-                savedArticles: prevState.savedArticles.filter(({ id }) => id !== articleId)
-            }));
-        },
-        markArticleAsRead: (articleId: IArticle['id']) => {
-            setContext(prevState => ({
-                ...prevState,
-                readArticlesIDs: [...prevState.readArticlesIDs, articleId]
-            }));
-        },
-        updateContextProperty: (key: string, value: unknown) => setContext((prevState: IContext) => ({
-            ...prevState,
-            [key]: value
-        }))
+        }
     };
 
     useEffect(() => {
-        loadState();
+        loadContext(setContext);
         getData();
     }, []);
 
     useEffect(() => {
-        saveState();
+        saveContext(context);
     }, [context]);
+
+    useEffect(() => {
+        if (appState === 'active') {
+            handleActivation();
+        }
+    }, [appState]);
+
+    useEffect(() => {
+        setContextValue('isOnline', isOnline);
+    }, [isOnline]);
 
     useEffect(() => {
         setContextValue('unreadArticlesCount', getUnreadArticlesCount(context.articles, context.readArticlesIDs));
     }, [context.articles, context.readArticlesIDs]);
 
     return (
-        <Context.Provider value={{ ...context, ...contextFunctions }}>
+        <Context.Provider value={{ ...context, ...getContextFunctions(context, setContext, getData) }}>
             <AppearanceProvider>
                 <Router />
             </AppearanceProvider>
