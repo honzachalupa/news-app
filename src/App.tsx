@@ -30,7 +30,7 @@ export interface IContext {
     handleSaveArticle: (article: IArticle) => void;
     handleUnsaveArticle: (article: IArticle['id']) => void;
     markArticleAsRead: (articleId: IArticle['id']) => void;
-    updateContextProperty: (key: string, value: unknown) => void;
+    setContextProperty: (key: string, value: unknown) => void;
 }
 
 const App = () => {
@@ -53,32 +53,31 @@ const App = () => {
         handleSaveArticle: () => { },
         handleUnsaveArticle: () => { },
         markArticleAsRead: () => { },
-        updateContextProperty: () => { }
+        setContextProperty: () => { }
     });
 
-    const setContextValue = (key: string, value: unknown) => {
+    const setContextProperty = (key: string, value: unknown) =>
         setContext(prevState => ({
             ...prevState,
             [key]: value
         }));
-    };
 
     const getData = () => {
         if (context.isOnline) {
-            setContextValue('isRefreshing', true);
+            setContextProperty('isRefreshing', true);
 
-            const feedsPromise = getFeeds(feeds =>
-                setContextValue('feeds', feeds)
-            );
+            const feedsPromise = getFeeds(feeds => {
+                setContextProperty('feeds', feeds);
+            });
 
             const articlesPromises = getArticles(articles => {
-                setContextValue('articles', articles);
-                setContextValue('unreadArticlesCount', getUnreadArticlesCount(articles, context.readArticlesIDs));
+                setContextProperty('articles', articles);
+                setContextProperty('unreadArticlesCount', getUnreadArticlesCount(articles, context.readArticlesIDs));
             });
 
             Promise.all([feedsPromise, articlesPromises]).then(() => {
-                setContextValue('isRefreshing', false);
-                setContextValue('lastRefreshTime', moment());
+                setContextProperty('isRefreshing', false);
+                setContextProperty('lastRefreshTime', moment());
             });
         }
     };
@@ -105,11 +104,11 @@ const App = () => {
     }, [appState]);
 
     useEffect(() => {
-        setContextValue('isOnline', isOnline);
+        setContextProperty('isOnline', isOnline);
     }, [isOnline]);
 
     useEffect(() => {
-        setContextValue('unreadArticlesCount', getUnreadArticlesCount(context.articles, context.readArticlesIDs));
+        setContextProperty('unreadArticlesCount', getUnreadArticlesCount(context.articles, context.readArticlesIDs));
     }, [context.articles, context.readArticlesIDs]);
 
     return (

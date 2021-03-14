@@ -5,6 +5,7 @@ export default () => {
     const theme = useTheme();
 
     const cardWidthHeight = (Dimensions.get('window').width / 3) - 15;
+    const imageWidthHeight = cardWidthHeight - 35;
 
     return StyleSheet.create({
         card: {
@@ -17,13 +18,14 @@ export default () => {
             overflow: 'hidden'
         },
         logo: {
-            width: 90,
-            height: 90,
+            width: imageWidthHeight,
+            height: imageWidthHeight,
             marginTop: 10,
             marginLeft: 20,
             marginRight: 20
         },
         feedName: {
+            height: 18,
             fontSize: 14,
             fontWeight: '600',
             textAlign: 'center'

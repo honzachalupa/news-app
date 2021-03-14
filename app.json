@@ -4,10 +4,10 @@
         "slug": "news-app",
         "version": "1.2.0",
         "orientation": "portrait",
-        "icon": "./src/assets/icon-wo-alpha.png",
+        "icon": "./src/assets/icon.png",
         "splash": {
             "image": "./src/assets/splash.png",
-            "resizeMode": "contain",
+            "resizeMode": "cover",
             "backgroundColor": "#ffffff"
         },
         "updates": {

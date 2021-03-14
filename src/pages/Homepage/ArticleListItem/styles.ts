@@ -21,7 +21,7 @@ export default () => {
             position: 'relative'
         },
         statusNode: {
-            backgroundColor: 'white',
+            backgroundColor: theme.colors.card,
             borderRadius: 12,
             overflow: 'hidden',
             paddingTop: 5,
@@ -36,7 +36,7 @@ export default () => {
             zIndex: 99
         },
         saveStatusValue: {
-            color: '#90EE90',
+            color: theme.colors.primary,
             fontSize: 14,
             fontWeight: '600',
             textTransform: 'uppercase',

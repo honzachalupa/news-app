@@ -46,6 +46,12 @@ export default () => {
         },
         feedsGrid: {
             paddingLeft: 5
+        },
+        warningMessage: {
+            color: theme.colors.text,
+            fontSize: 20,
+            textAlign: 'center',
+            margin: 60
         }
     });
 };

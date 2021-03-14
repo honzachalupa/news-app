@@ -33,7 +33,7 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
                                 <Ionicons
                                     name="ios-bookmark"
                                     size={14}
-                                    color="#90EE90"
+                                    color={theme.colors.primary}
                                 />
 
                                 <Text style={styles.saveStatusValue}>Uloženo</Text>
@@ -50,12 +50,12 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
                             </View>
                         ) : null}
 
-                        <Image source={{ uri: article.images[0] }} style={{ ...styles.image, opacity: isRead ? 0.5 : 1 }} />
+                        <Image source={{ uri: article.images[0] }} style={styles.image} />
                         <Image source={require('./../../../assets/gradient.png')} style={styles.gradient} />
                     </View>
                 )}
 
-                <View style={{ ...styles.textContainer, opacity: isRead ? 0.5 : 1 }}>
+                <View style={styles.textContainer}>
                     <Text style={{ ...styles.feedName, backgroundColor: feed?.branding.accentColor, color: feed?.branding.backgroundColor }}>
                         {article.category ? `${feed?.name} - ${article.category}` : feed?.name}
                     </Text>

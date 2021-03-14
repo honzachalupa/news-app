@@ -25,7 +25,7 @@ export const getContextFunctions = (context: IContext, setContext: any, getData:
             readArticlesIDs: [...prevState.readArticlesIDs, articleId]
         }));
     },
-    updateContextProperty: (key: string, value: unknown) => setContext((prevState: IContext) => ({
+    setContextProperty: (key: string, value: unknown) => setContext((prevState: IContext) => ({
         ...prevState,
         [key]: value
     }))

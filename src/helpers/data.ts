@@ -12,13 +12,15 @@ export const filterFeedsAndArticles = (ignoreSource?: boolean) => {
     const feedsFiltered = feeds.filter(({ id }) => settingsSelectedFeeds.includes(id));
 
     let articlesFiltered =
-        articles.filter(({ title, content, tags }) =>
-            settingsBlacklist.filter(blacklistedValue =>
-                title.toLowerCase().includes(blacklistedValue.toLowerCase()) ||
-                content.join('_').toLowerCase().includes(blacklistedValue.toLowerCase()) ||
-                tags.join('_').toLowerCase().includes(blacklistedValue.toLowerCase())
-            ).length === 0
-        );
+        settingsBlacklist.length > 0 ?
+            articles.filter(({ title, content, tags }) =>
+                settingsBlacklist.filter(blacklistedValue =>
+                    title.toLowerCase().includes(blacklistedValue.toLowerCase()) ||
+                    content.join('_').toLowerCase().includes(blacklistedValue.toLowerCase()) ||
+                    tags.join('_').toLowerCase().includes(blacklistedValue.toLowerCase())
+                ).length === 0
+            ) :
+            articles;
 
     if (!ignoreSource) {
         articlesFiltered = articlesFiltered.filter(({ sourceId }) => feedsFiltered.map(({ sourceId }) => sourceId).includes(sourceId));

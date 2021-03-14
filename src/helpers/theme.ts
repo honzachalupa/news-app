@@ -3,7 +3,7 @@ import { useColorScheme } from 'react-native-appearance';
 
 export const useCustomTheme = () => {
     const colorScheme = useColorScheme();
-    const signatureRed = '#FF0006';
+    const signatureRed = '#fd425e';
 
     const MyLightTheme = {
         ...DefaultTheme,

@@ -112,7 +112,8 @@ const Router = () => {
                     name="Settings"
                     component={SettingsPage}
                     options={{
-                        title: 'Nastavení'
+                        title: 'Nastavení',
+                        headerBackTitle: 'Zpět',
                     }}
                 />
             </Stack.Navigator>

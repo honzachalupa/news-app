@@ -1,15 +1,12 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { IContext } from '../App';
 
-interface ISavedState {
-    savedArticles: IContext['savedArticles'];
-    readArticlesIDs: IContext['readArticlesIDs'];
-    settingsSelectedFeeds: IContext['settingsSelectedFeeds'];
-    settingsBlacklist: IContext['settingsBlacklist'];
+export enum EStorageKeys {
+    STATE = 'STATE'
 }
 
 export const saveContext = async (context: IContext) => {
-    await AsyncStorage.setItem('state', JSON.stringify({
+    const newContext: Partial<IContext> = {
         feeds: context.feeds,
         articles: context.articles,
         savedArticles: context.savedArticles,
@@ -17,11 +14,13 @@ export const saveContext = async (context: IContext) => {
         lastRefreshTime: context.lastRefreshTime,
         settingsSelectedFeeds: context.settingsSelectedFeeds,
         settingsBlacklist: context.settingsBlacklist
-    } as ISavedState));
+    };
+
+    await AsyncStorage.setItem(EStorageKeys.STATE, JSON.stringify(newContext));
 };
 
 export const loadContext = async (callback: any) => {
-    await AsyncStorage.getItem('state').then(value => {
+    await AsyncStorage.getItem(EStorageKeys.STATE).then(value => {
         if (value) {
             callback((prevState: IContext) => ({
                 ...prevState,

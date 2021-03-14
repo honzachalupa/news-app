@@ -44,7 +44,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                 <Ionicons
                     name="ios-bookmark"
                     size={25}
-                    color="#90EE90"
+                    color={theme.colors.primary}
                     style={styles.saveButton}
                     onPress={() => handleUnsaveArticle(article.id)}
                 />
@@ -52,7 +52,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                 <Ionicons
                     name="ios-bookmark-outline"
                     size={25}
-                    color="#90EE90"
+                    color={theme.colors.primary}
                     style={styles.saveButton}
                     onPress={() => handleSaveArticle(article)}
                 />

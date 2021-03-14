@@ -15,11 +15,9 @@ import getStyles from './styles';
 
 const HomePage = ({ navigation }: any) => {
     const flatListRef = useRef<any>();
-
-    const { isRefreshing, isOnline, settingsIsAutoPlayOn, handleRefresh } = useContext(Context) as IContext;
-
     const theme = useTheme();
     const styles = getStyles();
+    const { isRefreshing, isOnline, settingsIsAutoPlayOn, handleRefresh } = useContext(Context) as IContext;
     const { feedsFiltered, articlesFiltered } = filterFeedsAndArticles();
 
     const handleOpenDetail = (article: IArticle) => {
@@ -37,8 +35,6 @@ const HomePage = ({ navigation }: any) => {
     const handleOpenSettings = () => {
         navigation.navigate('Settings');
     };
-
-    const todaysDate = moment().format('dddd d. MMMM');
 
     const groupFeeds = (feeds: IFeed[]) => {
         const feedsGroups: IFeed[][] = [];
@@ -69,15 +65,17 @@ const HomePage = ({ navigation }: any) => {
     }
 
     useEffect(() => {
-        if (settingsIsAutoPlayOn) {
-            flatListRef.current.startAutoplay();
-        } else {
-            flatListRef.current.stopAutoplay();
+        if (flatListRef && flatListRef.current) {
+            if (settingsIsAutoPlayOn) {
+                flatListRef.current.startAutoplay();
+            } else {
+                flatListRef.current.stopAutoplay();
+            }
         }
     }, [settingsIsAutoPlayOn]);
 
     return (
-        <SafeAreaView style={{ marginBottom: -35 }}>
+        <SafeAreaView edges={['right', 'top', 'left']}>
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -88,7 +86,7 @@ const HomePage = ({ navigation }: any) => {
                 style={{ height: '100%' }}
             >
                 <View style={{ padding: 20 }}>
-                    <Text style={styles.date}>{todaysDate}</Text>
+                    <Text style={styles.date}>{moment().format('dddd D. MMMM')}</Text>
                     <Text style={styles.headline}>Nejnovější zprávy</Text>
 
                     {!isOnline && (
@@ -109,43 +107,49 @@ const HomePage = ({ navigation }: any) => {
                     />
                 </View>
 
-                <Carousel
-                    ref={flatListRef}
-                    data={articlesFiltered}
-                    horizontal
-                    autoplay={settingsIsAutoPlayOn}
-                    autoplayDelay={5000}
-                    autoplayInterval={8000}
-                    inactiveSlideScale={1}
-                    showsHorizontalScrollIndicator={false}
-                    sliderWidth={Dimensions.get('window').width}
-                    itemWidth={Dimensions.get('window').width - 55}
-                    activeSlideAlignment="start"
-                    renderItem={({ item: article }: { item: IArticle }) => (
-                        <ArticleListItem key={article.id} article={article} onClick={handleOpenDetail} />
-                    )}
-                />
+                {feedsFiltered.length > 0 ? (
+                    <View>
+                        <Carousel
+                            ref={flatListRef}
+                            data={articlesFiltered}
+                            horizontal
+                            autoplay={settingsIsAutoPlayOn}
+                            autoplayDelay={5000}
+                            autoplayInterval={8000}
+                            inactiveSlideScale={1}
+                            showsHorizontalScrollIndicator={false}
+                            sliderWidth={Dimensions.get('window').width}
+                            itemWidth={Dimensions.get('window').width - 55}
+                            activeSlideAlignment="start"
+                            renderItem={({ item: article }: { item: IArticle }) => (
+                                <ArticleListItem key={article.id} article={article} onClick={handleOpenDetail} />
+                            )}
+                        />
 
-                <Text style={styles.subheadline}>Zdroje</Text>
+                        <Text style={styles.subheadline}>Zdroje</Text>
 
-                <Carousel
-                    data={groupFeeds(feedsFiltered)}
-                    horizontal
-                    inactiveSlideScale={1}
-                    inactiveSlideOpacity={1}
-                    showsHorizontalScrollIndicator={false}
-                    sliderWidth={Dimensions.get('window').width}
-                    itemWidth={(Dimensions.get('window').width / 3 * 2)}
-                    activeSlideAlignment="start"
-                    renderItem={({ item: feedsGroup }: { item: IFeed[] }) => (
-                        <View key={feedsGroup[0].id} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                            {feedsGroup.map(feed => (
-                                <FeedListItem key={feed.id} feed={feed} onClick={handleOpenFeedArticlesList} />
-                            ))}
-                        </View>
-                    )}
-                    containerCustomStyle={styles.feedsGrid}
-                />
+                        <Carousel
+                            data={groupFeeds(feedsFiltered)}
+                            horizontal
+                            inactiveSlideScale={1}
+                            inactiveSlideOpacity={1}
+                            showsHorizontalScrollIndicator={false}
+                            sliderWidth={Dimensions.get('window').width}
+                            itemWidth={(Dimensions.get('window').width / 3 * 2)}
+                            activeSlideAlignment="start"
+                            renderItem={({ item: feedsGroup }: { item: IFeed[] }) => (
+                                <View key={feedsGroup[0].id} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                                    {feedsGroup.map(feed => (
+                                        <FeedListItem key={feed.id} feed={feed} onClick={handleOpenFeedArticlesList} />
+                                    ))}
+                                </View>
+                            )}
+                            containerCustomStyle={styles.feedsGrid}
+                        />
+                    </View>
+                ) : (
+                    <Text style={styles.warningMessage}>Vyberte si prosím v nastavení zdroje, které vás zajímají.</Text>
+                )}
             </ScrollView>
         </SafeAreaView>
     );
