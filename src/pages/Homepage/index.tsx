@@ -61,7 +61,9 @@ const HomePage = ({ navigation }: any) => {
     };
 
     const resetCarouselIndex = () => {
-        setTimeout(() => flatListRef.current.snapToItem(0), 1000);
+        if (flatListRef && flatListRef.current) {
+            flatListRef.current.snapToItem(0);
+        }
     }
 
     useEffect(() => {
@@ -80,10 +82,10 @@ const HomePage = ({ navigation }: any) => {
                 refreshControl={
                     <RefreshControl
                         refreshing={isRefreshing}
-                        onRefresh={() => { resetCarouselIndex(); handleRefresh(); }}
+                        onRefresh={() => handleRefresh(resetCarouselIndex)}
                     />
                 }
-                style={{ height: '100%' }}
+                style={styles.container}
             >
                 <View style={{ padding: 20 }}>
                     <Text style={styles.date}>{moment().format('dddd D. MMMM')}</Text>

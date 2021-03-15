@@ -119,6 +119,12 @@ export default () => {
             marginTop: 4,
             marginLeft: 5
         },
+        video: {
+            width: '100%',
+            aspectRatio: 16 / 10,
+            marginBottom: 20,
+            borderRadius: 15
+        },
         galleryImage: {
             width: Dimensions.get('window').width - 40,
             aspectRatio: 16 / 10,

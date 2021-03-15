@@ -1,10 +1,10 @@
 import { IContext } from "../App";
 import { IArticle } from "../interfaces";
 
-export const getContextFunctions = (context: IContext, setContext: any, getData: () => void) => ({
-    handleRefresh: () => {
+export const getContextFunctions = (context: IContext, setContext: any, getData: (callback?: () => void) => void) => ({
+    handleRefresh: (callback?: () => void) => {
         if (context.isOnline) {
-            getData();
+            getData(callback);
         }
     },
     handleSaveArticle: (article: IArticle) => {

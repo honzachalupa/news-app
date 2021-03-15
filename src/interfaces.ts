@@ -17,6 +17,7 @@ export interface IArticle {
     contentPreview: string;
     content: string[];
     images: string[];
+    videos: string[];
     url: string;
     readingTime: number;
     category: string;

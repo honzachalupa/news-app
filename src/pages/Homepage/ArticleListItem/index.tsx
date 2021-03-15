@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../../App';
+import BlurView from '../../../components/BlurView';
 import { formatDateLabel, timestampToDate } from '../../../helpers/formatting';
 import { IArticle } from '../../../interfaces';
 import getStyles from './styles';
@@ -23,13 +24,13 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
     const isSaved = savedArticles.map(({ id }) => id).includes(article.id);
     const feed = feeds.find(({ sourceId }) => sourceId === article.sourceId);
 
-    return (
+    return feed ? (
         <TouchableWithoutFeedback onPress={() => onClick(article)}>
             <View style={styles.card}>
                 {article.images.length > 0 && (
                     <View style={styles.imageContainer}>
                         {isSaved ? (
-                            <View style={styles.statusNode}>
+                            <BlurView style={styles.statusNode}>
                                 <Ionicons
                                     name="ios-bookmark"
                                     size={14}
@@ -37,17 +38,17 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
                                 />
 
                                 <Text style={styles.saveStatusValue}>Uloženo</Text>
-                            </View>
+                            </BlurView>
                         ) : isRead ? (
-                            <View style={styles.statusNode}>
-                                <Ionicons
-                                    name="ios-checkmark-done-outline"
-                                    size={14}
-                                    color={theme.colors.primary}
-                                />
+                                <BlurView style={styles.statusNode}>
+                                    <Ionicons
+                                        name="ios-checkmark-done-outline"
+                                        size={14}
+                                        color={theme.colors.primary}
+                                    />
 
-                                <Text style={styles.readStatusValue}>Přečteno</Text>
-                            </View>
+                                    <Text style={styles.readStatusValue}>Přečteno</Text>
+                                </BlurView>
                         ) : null}
 
                         <Image source={{ uri: article.images[0] }} style={styles.image} />
@@ -56,8 +57,8 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
                 )}
 
                 <View style={styles.textContainer}>
-                    <Text style={{ ...styles.feedName, backgroundColor: feed?.branding.accentColor, color: feed?.branding.backgroundColor }}>
-                        {article.category ? `${feed?.name} - ${article.category}` : feed?.name}
+                    <Text style={{ ...styles.feedName, backgroundColor: feed.branding.accentColor, color: feed.branding.backgroundColor }}>
+                        {article.category ? `${feed.name} - ${article.category}` : feed.name}
                     </Text>
 
                     <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
@@ -66,7 +67,7 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
                 </View>
             </View>
         </TouchableWithoutFeedback>
-    );
+    ) : null;
 };
 
 export default ArticleListItem;

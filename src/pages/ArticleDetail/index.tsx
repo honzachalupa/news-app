@@ -1,5 +1,6 @@
 import { Context } from '@honzachalupa/helpers';
 import { useTheme } from '@react-navigation/native';
+import { Video } from 'expo-av';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import { Image, Linking, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
@@ -8,6 +9,7 @@ import { Button } from 'react-native-ios-kit';
 import WebView from 'react-native-render-html';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../App';
+import BlurView from '../../components/BlurView';
 import { formatDateLabel, timestampToDate } from '../../helpers/formatting';
 import { IArticle, IFeed } from '../../interfaces';
 import getStyles from './styles';
@@ -33,7 +35,6 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
             <StatusBar hidden />
 
             {article.images.length > 0 && (
-
                 <View style={styles.headerImageContainer}>
                     <Image source={{ uri: article.images[0] }} style={styles.headerImage} />
                     <Image source={require('./../../assets/gradient.png')} style={styles.gradient} />
@@ -41,29 +42,31 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
             )}
 
             {isSaved ? (
-                <Ionicons
-                    name="ios-bookmark"
-                    size={25}
-                    color={theme.colors.primary}
-                    style={styles.saveButton}
-                    onPress={() => handleUnsaveArticle(article.id)}
-                />
+                <BlurView style={styles.saveButton}>
+                    <Ionicons
+                        name="ios-bookmark"
+                        size={25}
+                        color={theme.colors.primary}
+                        onPress={() => handleUnsaveArticle(article.id)}
+                    />
+                </BlurView>
             ) : (
-                <Ionicons
-                    name="ios-bookmark-outline"
-                    size={25}
-                    color={theme.colors.primary}
-                    style={styles.saveButton}
-                    onPress={() => handleSaveArticle(article)}
-                />
+                <BlurView style={styles.saveButton}>
+                    <Ionicons
+                        name="ios-bookmark-outline"
+                        size={25}
+                        color={theme.colors.primary}
+                        onPress={() => handleSaveArticle(article)}
+                    />
+                </BlurView>
             )}
 
             <TouchableWithoutFeedback onPress={() => galleryImages.length > 0 ? setIsGalleryShown(true) : {}}>
                 <View style={styles.textContainer}>
                     {article.category ? (
-                        <Text style={styles.feedName}>{feed?.name} - {article.category}</Text>
+                        <Text style={{ ...styles.feedName, backgroundColor: feed.branding.accentColor, color: feed.branding.backgroundColor }}>{feed?.name} - {article.category}</Text>
                     ) : (
-                        <Text style={styles.feedName}>{feed?.name}</Text>
+                        <Text style={{ ...styles.feedName, backgroundColor: feed.branding.accentColor, color: feed.branding.backgroundColor }}>{feed?.name}</Text>
                     )}
 
                     <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
@@ -102,25 +105,40 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
 
                     {galleryImages.length > 0 && (
                         <TouchableWithoutFeedback onPress={() => setIsGalleryShown(true)}>
-                        <View style={styles.infoNode}>
-                            <Ionicons
-                                name="ios-image"
-                                size={24}
-                                color={theme.colors.text}
-                                style={styles.infoNodeIcon}
-                            />
+                            <View style={styles.infoNode}>
+                                <Ionicons
+                                    name="ios-image"
+                                    size={24}
+                                    color={theme.colors.text}
+                                    style={styles.infoNodeIcon}
+                                />
 
-                            <Text style={styles.infoNodeValue}>{galleryImages.length}</Text>
-                        </View>
+                                <Text style={styles.infoNodeValue}>{galleryImages.length}</Text>
+                            </View>
                         </TouchableWithoutFeedback>
                     )}
                 </View>
 
-                {article.content.map((paragraph: string) => (
-                    <WebView key={paragraph} source={{
-                        html:
-                            `<span style="color: ${theme.colors.text}; font-size: 20px; line-height: 40%; margin-bottom: 20px; opacity: 0.7">${paragraph}</span>`
-                    }} />
+                {article.content.map((paragraph: string, i: number) => (
+                    <View key={paragraph}>
+                        {i === 1 && article.videos.length > 0 && (
+                            article.videos.map(uri => (
+                                <Video
+                                    key={uri}
+                                    source={{ uri }}
+                                    resizeMode="cover"
+                                    shouldPlay={false}
+                                    useNativeControls
+                                    style={styles.video}
+                                />
+                            ))
+                        )}
+
+                        <WebView key={paragraph} source={{
+                            html:
+                                `<span style="color: ${theme.colors.text}; font-size: 20px; line-height: 40%; margin-bottom: 20px; opacity: 0.9">${paragraph}</span>`
+                        }} />
+                    </View>
                 ))}
 
                 <ImageView

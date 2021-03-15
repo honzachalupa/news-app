@@ -21,7 +21,6 @@ export default () => {
             position: 'relative'
         },
         statusNode: {
-            backgroundColor: theme.colors.card,
             borderRadius: 12,
             overflow: 'hidden',
             paddingTop: 5,

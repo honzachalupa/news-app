@@ -11,7 +11,6 @@ export default () => {
         card: {
             width: cardWidthHeight,
             height: cardWidthHeight,
-            backgroundColor: theme.colors.card,
             borderRadius: 15,
             marginLeft: 15,
             marginBottom: 15,

@@ -26,7 +26,7 @@ export interface IContext {
     settingsIsAutoPlayOn: boolean;
     settingsSelectedFeeds: IFeed['id'][];
     settingsBlacklist: string[];
-    handleRefresh: () => void;
+    handleRefresh: (callback?: () => void) => void;
     handleSaveArticle: (article: IArticle) => void;
     handleUnsaveArticle: (article: IArticle['id']) => void;
     markArticleAsRead: (articleId: IArticle['id']) => void;
@@ -62,7 +62,7 @@ const App = () => {
             [key]: value
         }));
 
-    const getData = () => {
+    const getData = (callback?: () => void) => {
         if (context.isOnline) {
             setContextProperty('isRefreshing', true);
 
@@ -78,6 +78,10 @@ const App = () => {
             Promise.all([feedsPromise, articlesPromises]).then(() => {
                 setContextProperty('isRefreshing', false);
                 setContextProperty('lastRefreshTime', moment());
+
+                if (callback) {
+                    callback();
+                }
             });
         }
     };
