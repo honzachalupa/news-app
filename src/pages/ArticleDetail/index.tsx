@@ -15,7 +15,7 @@ import { IArticle, IFeed } from '../../interfaces';
 import getStyles from './styles';
 
 const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params: { article: IArticle } } }) => {
-    const theme = useTheme();
+    const { colors } = useTheme();
     const styles = getStyles();
 
     const { feeds, savedArticles, handleSaveArticle, handleUnsaveArticle, markArticleAsRead } = useContext(Context) as IContext;
@@ -46,7 +46,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                     <Ionicons
                         name="ios-bookmark"
                         size={25}
-                        color={theme.colors.primary}
+                        color={colors.primary}
                         onPress={() => handleUnsaveArticle(article.id)}
                     />
                 </BlurView>
@@ -55,7 +55,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                     <Ionicons
                         name="ios-bookmark-outline"
                         size={25}
-                        color={theme.colors.primary}
+                        color={colors.primary}
                         onPress={() => handleSaveArticle(article)}
                     />
                 </BlurView>
@@ -82,7 +82,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                             <Ionicons
                                 name="ios-person-circle-outline"
                                 size={24}
-                                color={theme.colors.text}
+                                color={colors.text}
                                 style={styles.infoNodeIcon}
                             />
 
@@ -95,7 +95,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                             <Ionicons
                                 name="ios-stopwatch-outline"
                                 size={24}
-                                color={theme.colors.text}
+                                color={colors.text}
                                 style={styles.infoNodeIcon}
                             />
 
@@ -109,7 +109,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                                 <Ionicons
                                     name="ios-image"
                                     size={24}
-                                    color={theme.colors.text}
+                                    color={colors.text}
                                     style={styles.infoNodeIcon}
                                 />
 
@@ -136,7 +136,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
 
                         <WebView key={paragraph} source={{
                             html:
-                                `<span style="color: ${theme.colors.text}; font-size: 20px; line-height: 40%; margin-bottom: 20px; opacity: 0.9">${paragraph}</span>`
+                                `<span style="color: ${colors.text}; font-size: 20px; line-height: 40%; margin-bottom: 20px; opacity: 0.9">${paragraph}</span>`
                         }} />
                     </View>
                 ))}

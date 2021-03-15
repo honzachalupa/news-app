@@ -2,7 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import { Dimensions, StyleSheet } from 'react-native';
 
 export default () => {
-    const theme = useTheme();
+    const { colors } = useTheme();
 
     const cardWidthHeight = Dimensions.get('window').width - 75;
 
@@ -35,14 +35,14 @@ export default () => {
             zIndex: 99
         },
         saveStatusValue: {
-            color: theme.colors.primary,
+            color: colors.primary,
             fontSize: 14,
             fontWeight: '600',
             textTransform: 'uppercase',
             marginLeft: 5
         },
         readStatusValue: {
-            color: theme.colors.primary,
+            color: colors.primary,
             fontSize: 14,
             fontWeight: '600',
             textTransform: 'uppercase',

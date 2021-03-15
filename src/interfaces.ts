@@ -7,7 +7,6 @@ export interface IFeed {
     branding: {
         logo: string;
         accentColor: string;
-        backgroundColor: string;
     }
 }
 

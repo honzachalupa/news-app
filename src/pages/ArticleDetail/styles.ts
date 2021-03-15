@@ -2,7 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import { Dimensions, StyleSheet } from 'react-native';
 
 export default () => {
-    const theme = useTheme();
+    const { colors } = useTheme();
 
     return StyleSheet.create({
         headerImageContainer: {
@@ -24,7 +24,7 @@ export default () => {
             zIndex: 1
         },
         saveButton: {
-            backgroundColor: theme.colors.card,
+            backgroundColor: colors.card,
             borderRadius: 20,
             padding: 7,
             overflow: 'hidden',
@@ -65,7 +65,7 @@ export default () => {
             marginBottom: 8
         },
         feedName: {
-            backgroundColor: theme.colors.primary,
+            backgroundColor: colors.primary,
             color: 'white',
             fontSize: 14,
             textTransform: 'uppercase',
@@ -83,7 +83,7 @@ export default () => {
             fontWeight: '600'
         },
         articleContentContainer: {
-            backgroundColor: theme.colors.card,
+            backgroundColor: colors.card,
             padding: 20,
             borderRadius: 50,
             position: 'relative',
@@ -98,7 +98,7 @@ export default () => {
             marginBottom: 10
         },
         infoNode: {
-            backgroundColor: theme.colors.background,
+            backgroundColor: colors.background,
             borderRadius: 24,
             overflow: 'hidden',
             paddingTop: 10,
@@ -113,7 +113,7 @@ export default () => {
             opacity: 0.3
         },
         infoNodeValue: {
-            color: theme.colors.text,
+            color: colors.text,
             fontSize: 20,
             fontWeight: '600',
             marginTop: 4,

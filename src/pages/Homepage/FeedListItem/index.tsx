@@ -13,7 +13,7 @@ const FeedListItem = ({ feed, onClick }: IProps) => {
 
     return (
         <TouchableWithoutFeedback onPress={() => onClick(feed)}>
-            <View style={{ ...styles.card, backgroundColor: feed.branding.backgroundColor }}>
+            <View style={styles.card}>
                 <Image style={styles.logo} resizeMode="contain" source={{ uri: feed.branding.logo }} />
 
                 <Text style={{ ...styles.feedName, color: feed.branding.accentColor }}>{feed.name.replace('Idnes', '').replace('Lidovky', '').trim()}</Text>

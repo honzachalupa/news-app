@@ -8,10 +8,10 @@ interface IProps {
 }
 
 const BlurView = ({ children, style }: IProps) => {
-    const theme = useTheme();
+    const { dark: isDark } = useTheme();
 
     return (
-        <ExpoBlurView intensity={90} tint={theme.dark ? 'dark' : 'light'} style={style}>
+        <ExpoBlurView intensity={90} tint={isDark ? 'dark' : 'light'} style={style}>
             {children}
         </ExpoBlurView>
     );

@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const ArticlesList = ({ articles, feed, label, isRefreshDisabled }: IProps) => {
-    const theme = useTheme();
+    const { colors } = useTheme();
     const styles = getStyles();
     const navigation = useNavigation();
     const { isRefreshing, handleRefresh } = useContext(Context) as IContext;
@@ -49,12 +49,12 @@ const ArticlesList = ({ articles, feed, label, isRefreshDisabled }: IProps) => {
 
     return (
         <SafeAreaView>
-            <Text style={styles.feedName}>{feed?.name || label}</Text>
+            <Text style={{ ...styles.feedName, color: feed?.branding.accentColor }}>{feed?.name || label}</Text>
 
             <Ionicons
                 name={isSearchShown ? 'ios-close' : 'ios-search'}
                 size={20}
-                color={theme.colors.text}
+                color={colors.text}
                 style={styles.searchButton}
                 onPress={() => handleOpenSearch(!isSearchShown)}
             />
@@ -92,7 +92,7 @@ const ArticlesList = ({ articles, feed, label, isRefreshDisabled }: IProps) => {
                             <View style={styles.textContainer}>
                                 <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
 
-                                <Text style={{ ...styles.articleTitle, color: feed?.branding.accentColor || theme.colors.primary }}>{article.title}</Text>
+                                <Text style={styles.articleTitle}>{article.title}</Text>
 
                             </View>
                         </View>

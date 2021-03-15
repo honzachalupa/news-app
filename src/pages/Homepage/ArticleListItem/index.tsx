@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const ArticleListItem = ({ article, onClick }: IProps) => {
-    const theme = useTheme();
+    const { colors } = useTheme();
 
     const { feeds, savedArticles, readArticlesIDs } = useContext(Context) as IContext;
 
@@ -34,7 +34,7 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
                                 <Ionicons
                                     name="ios-bookmark"
                                     size={14}
-                                    color={theme.colors.primary}
+                                    color={colors.primary}
                                 />
 
                                 <Text style={styles.saveStatusValue}>Uloženo</Text>
@@ -44,7 +44,7 @@ const ArticleListItem = ({ article, onClick }: IProps) => {
                                     <Ionicons
                                         name="ios-checkmark-done-outline"
                                         size={14}
-                                        color={theme.colors.primary}
+                                        color={colors.primary}
                                     />
 
                                     <Text style={styles.readStatusValue}>Přečteno</Text>

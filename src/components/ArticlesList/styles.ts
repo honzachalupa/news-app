@@ -2,7 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import { Dimensions, StyleSheet } from 'react-native';
 
 export default () => {
-    const theme = useTheme();
+    const { colors } = useTheme();
 
     const screenWidth = Dimensions.get('window').width;
     const cardMargin = 20;
@@ -12,7 +12,6 @@ export default () => {
 
     return StyleSheet.create({
         feedName: {
-            color: theme.colors.text,
             fontSize: 28,
             fontWeight: '700',
             marginTop: 20,
@@ -21,7 +20,7 @@ export default () => {
         searchButton: {
             width: 40,
             height: 40,
-            backgroundColor: theme.colors.card,
+            backgroundColor: colors.card,
             padding: 10,
             borderRadius: 22,
             overflow: 'hidden',
@@ -31,8 +30,8 @@ export default () => {
             right: 20
         },
         searchInput: {
-            backgroundColor: theme.colors.card,
-            color: theme.colors.text,
+            backgroundColor: colors.card,
+            color: colors.text,
             fontSize: 17,
             borderRadius: 10,
             padding: 12,
@@ -45,7 +44,7 @@ export default () => {
             marginTop: 20
         },
         card: {
-            backgroundColor: theme.colors.card,
+            backgroundColor: colors.card,
             borderRadius: 15,
             marginLeft: cardMargin,
             marginRight: cardMargin,
@@ -67,14 +66,16 @@ export default () => {
             paddingTop: 10
         },
         date: {
-            color: 'white',
+            color: colors.text,
             opacity: 0.7,
             marginBottom: 5
         },
         articleTitle: {
+            color: colors.text,
             fontSize: 18,
             fontWeight: '700',
-            lineHeight: 20
+            lineHeight: 22,
+            marginTop: 10
         }
     });
 };

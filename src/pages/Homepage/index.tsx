@@ -15,7 +15,7 @@ import getStyles from './styles';
 
 const HomePage = ({ navigation }: any) => {
     const flatListRef = useRef<any>();
-    const theme = useTheme();
+    const { colors } = useTheme();
     const styles = getStyles();
     const { isRefreshing, isOnline, settingsIsAutoPlayOn, handleRefresh } = useContext(Context) as IContext;
     const { feedsFiltered, articlesFiltered } = filterFeedsAndArticles();
@@ -103,7 +103,7 @@ const HomePage = ({ navigation }: any) => {
                     <Ionicons
                         name="ios-cog-outline"
                         size={30}
-                        color={theme.colors.text}
+                        color={colors.text}
                         style={styles.settingsButton}
                         onPress={handleOpenSettings}
                     />
