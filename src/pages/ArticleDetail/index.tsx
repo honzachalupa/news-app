@@ -3,7 +3,7 @@ import { useTheme } from '@react-navigation/native';
 import { Video } from 'expo-av';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, Linking, ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, ScrollView, Share, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import { Button } from 'react-native-ios-kit';
 import WebView from 'react-native-render-html';
@@ -24,6 +24,13 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
 
     const isSaved = savedArticles.map(({ id }) => id).includes(article.id);
     const galleryImages = article.images.slice(1, article.images.length);
+
+    const handleShare = async () => {
+        await Share.share({
+            title: article.title,
+            url: article.url
+        });
+    };
 
     useEffect(() => {
         setFeed(feeds.find(({ sourceId }) => sourceId === article.sourceId));
@@ -121,7 +128,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
 
                 {article.content.map((paragraph: string, i: number) => (
                     <View key={paragraph}>
-                        {i === 1 && article.videos.length > 0 && (
+                        {i === 1 && article.videos && article.videos.length > 0 && (
                             article.videos.map(uri => (
                                 <Video
                                     key={uri}
@@ -149,8 +156,8 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                 />
             </View>
 
-            <Button onPress={() => Linking.openURL(article.url)} inline rounded inverted centered style={{ marginBottom: 80 }}>
-                Otevřít v prohlížeči
+            <Button onPress={handleShare} inline rounded inverted centered style={{ marginBottom: 80 }}>
+                Sdílet
             </Button>
         </ScrollView>
     ) : (

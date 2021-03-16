@@ -14,10 +14,11 @@ interface IProps {
     articles: IArticle[];
     feed?: IFeed;
     label?: string;
+    noDataMessage?: string;
     isRefreshDisabled?: boolean;
 }
 
-const ArticlesList = ({ articles, feed, label, isRefreshDisabled }: IProps) => {
+const ArticlesList = ({ articles, feed, label, noDataMessage, isRefreshDisabled }: IProps) => {
     const { colors } = useTheme();
     const styles = getStyles();
     const navigation = useNavigation();
@@ -49,7 +50,7 @@ const ArticlesList = ({ articles, feed, label, isRefreshDisabled }: IProps) => {
 
     return (
         <SafeAreaView>
-            <Text style={{ ...styles.feedName, color: feed?.branding.accentColor }}>{feed?.name || label}</Text>
+            <Text style={{ ...styles.feedName, color: feed?.branding.accentColor || colors.text }}>{feed?.name || label}</Text>
 
             <Ionicons
                 name={isSearchShown ? 'ios-close' : 'ios-search'}
@@ -70,36 +71,38 @@ const ArticlesList = ({ articles, feed, label, isRefreshDisabled }: IProps) => {
                 />
             )}
 
-            {(!!query && articlesFiltered.length === 0) && (
-                <Text>Žádné výsledky</Text>
-            )}
+            {articlesFiltered.length > 0 ? (
+                <FlatList
+                    data={articlesFiltered}
+                    refreshControl={
+                        !isRefreshDisabled ? (
+                            <RefreshControl
+                                refreshing={articles.length === 0 || isRefreshing}
+                                onRefresh={handleRefresh}
+                            />
+                        ) : undefined
+                    }
+                    renderItem={({ item: article }) => (
+                        <TouchableWithoutFeedback onPress={() => handleOpenDetail(article)}>
+                            <View style={styles.card}>
+                                <Image source={{ uri: article.images[0] }} style={styles.image} />
 
-            <FlatList
-                data={articlesFiltered}
-                refreshControl={
-                    !isRefreshDisabled ? (
-                        <RefreshControl
-                            refreshing={articles.length === 0 || isRefreshing}
-                            onRefresh={handleRefresh}
-                        />
-                    ) : undefined
-                }
-                renderItem={({ item: article }) => (
-                    <TouchableWithoutFeedback onPress={() => handleOpenDetail(article)}>
-                        <View style={styles.card}>
-                            <Image source={{ uri: article.images[0] }} style={styles.image} />
+                                <View style={styles.textContainer}>
+                                    <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
 
-                            <View style={styles.textContainer}>
-                                <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
+                                    <Text style={styles.articleTitle}>{article.title}</Text>
 
-                                <Text style={styles.articleTitle}>{article.title}</Text>
-
+                                </View>
                             </View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                )}
-                style={styles.articlesList}
-            />
+                        </TouchableWithoutFeedback>
+                    )}
+                    style={styles.articlesList}
+                />
+            ) : (!!query && articlesFiltered.length === 0) ? (
+                <Text>Žádné výsledky</Text>
+            ) : (
+                <Text>{noDataMessage}</Text>
+            )}
         </SafeAreaView>
     );
 }

@@ -139,6 +139,7 @@ const HomePage = ({ navigation }: any) => {
                             sliderWidth={Dimensions.get('window').width}
                             itemWidth={(Dimensions.get('window').width / 3 * 2)}
                             activeSlideAlignment="start"
+                            decelerationRate={0}
                             renderItem={({ item: feedsGroup }: { item: IFeed[] }) => (
                                 <View key={feedsGroup[0].id} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                                     {feedsGroup.map(feed => (

@@ -15,7 +15,7 @@ import SettingsPage from './pages/Settings';
 
 const Router = () => {
     const theme = useCustomTheme();
-    const { unreadArticlesCount } = useContext(Context) as IContext;
+    const { unreadArticlesCount, savedArticles } = useContext(Context) as IContext;
 
     const Stack = createStackNavigator();
     const Tab = createBottomTabNavigator();
@@ -79,7 +79,11 @@ const Router = () => {
                                 name="ArticlesSaved"
                                 component={SavedArticlesListPage}
                                 options={{
-                                    title: 'Uložené'
+                                    title: 'Uložené',
+                                    tabBarBadge: savedArticles.length,
+                                    tabBarBadgeStyle: Platform.OS === 'ios' ? {
+                                        paddingTop: 2
+                                    } : null
                                 }}
                             />
                         </Tab.Navigator>

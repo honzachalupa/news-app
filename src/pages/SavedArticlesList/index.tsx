@@ -7,7 +7,7 @@ const FeedArticlesListPage = () => {
     const { savedArticles } = useContext(Context) as IContext;
 
     return (
-        <ArticlesList articles={savedArticles} label="Uložené" isRefreshDisabled />
+        <ArticlesList articles={savedArticles} label="Uložené" noDataMessage="Žádná data" isRefreshDisabled />
     );
 }
 
