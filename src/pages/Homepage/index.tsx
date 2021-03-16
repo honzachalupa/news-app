@@ -7,14 +7,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Carousel from 'react-native-snap-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../App';
+import ArticleSummary, { EArticleSummaryViews } from '../../components/ArticleSummary';
 import { filterFeedsAndArticles } from '../../helpers/data';
 import { IArticle, IFeed } from '../../interfaces';
-import ArticleListItem from './ArticleListItem';
 import FeedListItem from './FeedListItem';
 import getStyles from './styles';
 
 const HomePage = ({ navigation }: any) => {
-    const flatListRef = useRef<any>();
+    const articlesCarousel = useRef<any>();
     const { colors } = useTheme();
     const styles = getStyles();
     const { isRefreshing, isOnline, settingsIsAutoPlayOn, handleRefresh } = useContext(Context) as IContext;
@@ -61,17 +61,17 @@ const HomePage = ({ navigation }: any) => {
     };
 
     const resetCarouselIndex = () => {
-        if (flatListRef && flatListRef.current) {
-            flatListRef.current.snapToItem(0);
+        if (articlesCarousel && articlesCarousel.current) {
+            articlesCarousel.current.snapToItem(0);
         }
     }
 
     useEffect(() => {
-        if (flatListRef && flatListRef.current) {
+        if (articlesCarousel && articlesCarousel.current) {
             if (settingsIsAutoPlayOn) {
-                flatListRef.current.startAutoplay();
+                articlesCarousel.current.startAutoplay();
             } else {
-                flatListRef.current.stopAutoplay();
+                articlesCarousel.current.stopAutoplay();
             }
         }
     }, [settingsIsAutoPlayOn]);
@@ -112,7 +112,7 @@ const HomePage = ({ navigation }: any) => {
                 {feedsFiltered.length > 0 ? (
                     <View>
                         <Carousel
-                            ref={flatListRef}
+                            ref={articlesCarousel}
                             data={articlesFiltered}
                             horizontal
                             autoplay={settingsIsAutoPlayOn}
@@ -124,7 +124,7 @@ const HomePage = ({ navigation }: any) => {
                             itemWidth={Dimensions.get('window').width - 55}
                             activeSlideAlignment="start"
                             renderItem={({ item: article }: { item: IArticle }) => (
-                                <ArticleListItem key={article.id} article={article} onClick={handleOpenDetail} />
+                                <ArticleSummary key={article.id} article={article} view={EArticleSummaryViews.LIST_ITEM} onClick={handleOpenDetail} />
                             )}
                         />
 

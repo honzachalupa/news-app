@@ -15,6 +15,10 @@ export default () => {
             marginLeft: 20,
             overflow: 'hidden'
         },
+        card_articleDetail: {
+            width: '100%',
+            height: Dimensions.get('window').width,
+        },
         imageContainer: {
             width: '100%',
             height: '100%',
@@ -33,6 +37,16 @@ export default () => {
             top: 10,
             right: 15,
             zIndex: 99
+        },
+        saveButton: {
+            backgroundColor: colors.card,
+            borderRadius: 20,
+            padding: 7,
+            overflow: 'hidden',
+            position: 'absolute',
+            top: 50,
+            right: 20,
+            zIndex: 9
         },
         saveStatusValue: {
             color: colors.primary,
@@ -70,8 +84,17 @@ export default () => {
             flexDirection: 'column',
             alignItems: 'flex-start',
             position: 'absolute',
-            bottom: 0,
-            zIndex: 2
+            bottom: 0
+        },
+        textContainer_articleDetail: {
+            width: '100%',
+            paddingLeft: 20,
+            paddingRight: 20,
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            position: 'absolute',
+            bottom: 60
         },
         feedName: {
             color: 'white',
