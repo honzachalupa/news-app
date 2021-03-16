@@ -110,7 +110,7 @@ const HomePage = ({ navigation }: any) => {
                 </View>
 
                 {feedsFiltered.length > 0 ? (
-                    <View>
+                    <View style={{ paddingTop: 300 }}>
                         <Carousel
                             ref={articlesCarousel}
                             data={articlesFiltered}

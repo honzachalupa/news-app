@@ -30,7 +30,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
     };
 
     useEffect(() => {
-        markArticleAsRead(article.id);
+        // markArticleAsRead(article.id);
     }, []);
 
     return (

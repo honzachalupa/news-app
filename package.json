@@ -38,10 +38,15 @@
     "react-native-screens": "~2.15.2",
     "react-native-settings-components": "^0.0.2",
     "react-native-settings-list": "^1.8.0",
+    "react-native-shared-element": "^0.7.0",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-touchable-scale": "^2.1.1",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
-    "react-native-webview": "11.0.0"
+    "react-native-webview": "11.0.0",
+    "react-navigation": "^4.3.7",
+    "react-navigation-shared-element": "3.0.0",
+    "react-navigation-stack": "^2.3.11"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

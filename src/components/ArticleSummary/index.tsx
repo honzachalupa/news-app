@@ -2,8 +2,9 @@ import { Context } from '@honzachalupa/helpers';
 import { useTheme } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 import React, { useContext } from 'react';
-import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SharedElement } from 'react-navigation-shared-element';
 import { IContext } from '../../App';
 import { formatDateLabel, timestampToDate } from '../../helpers/formatting';
 import { IArticle } from '../../interfaces';
@@ -91,23 +92,50 @@ const ArticleSummary = ({ article, view, onClick }: IProps) => {
                             <StateAction article={article} isSaved={isSaved} />
                         ) : null}
 
-                        <Image source={{ uri: article.images[0] }} style={styles.image} />
-                        <Image source={require('../../assets/gradient.png')} style={styles.gradient} />
+                        <SharedElement id={`item.${article.id}.image`} style={StyleSheet.absoluteFill}>
+                            <Image source={{ uri: article.images[0] }} style={styles.image} />
+                        </SharedElement>
+
+                        <SharedElement id={`item.${article.id}.gradient`} style={StyleSheet.absoluteFill}>
+                            <Image source={require('../../assets/gradient.png')} style={styles.gradient} />
+                        </SharedElement>
                     </View>
                 )}
 
-                <View style={view === EArticleSummaryViews.DETAIL_HEADER ? styles.textContainer_articleDetail : styles.textContainer}>
-                    <Text style={{ ...styles.feedName, backgroundColor: feed?.branding.accentColor }}>
-                        {article.category ? `${feed?.name} - ${article.category}` : feed?.name}
-                    </Text>
+                <SharedElement id={`item.${article.id}.content`}>
+                    <View style={view === EArticleSummaryViews.DETAIL_HEADER ? styles.textContainer_articleDetail : styles.textContainer}>
+                        <Text style={{ ...styles.feedName, backgroundColor: feed?.branding.accentColor }}>
+                            {article.category ? `${feed?.name} - ${article.category}` : feed?.name}
+                        </Text>
 
-                    <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
+                        <Text style={styles.date}>{formatDateLabel(timestampToDate(article.createdDate))}</Text>
 
-                    <Text style={styles.articleTitle}>{article.title}</Text>
-                </View>
+                        <Text style={styles.articleTitle}>{article.title}</Text>
+                    </View>
+                </SharedElement>
             </View>
         </TouchableWithoutFeedback>
     );
+};
+
+ArticleSummary.sharedElements = (route: any) => {
+    const { item } = route.params;
+
+    console.log(item);
+
+    return [{
+        id: `item.${item.id}.image`,
+        animation: 'move',
+        resize: 'clip'
+    }, {
+        id: `item.${item.id}.gradient`,
+        animation: 'move',
+        resize: 'clip'
+    }, {
+        id: `item.${item.id}.content`,
+        animation: 'move',
+        resize: 'clip'
+    }];
 };
 
 export default ArticleSummary;
