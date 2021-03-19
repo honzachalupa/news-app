@@ -3,9 +3,8 @@ import { useTheme } from '@react-navigation/native';
 import { Video } from 'expo-av';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, Share, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { ScrollView, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native';
 import ImageView from 'react-native-image-viewing';
-import { Button } from 'react-native-ios-kit';
 import WebView from 'react-native-render-html';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../App';
@@ -17,20 +16,15 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
     const { colors } = useTheme();
     const styles = getStyles();
 
-    const { savedArticles, markArticleAsRead } = useContext(Context) as IContext;
+    const { markArticleAsRead } = useContext(Context) as IContext;
     const [isGalleryShown, setIsGalleryShown] = useState<boolean>(false);
 
     const galleryImages = article.images.slice(1, article.images.length);
 
-    const handleShare = async () => {
-        await Share.share({
-            title: article.title,
-            url: article.url
-        });
-    };
-
     useEffect(() => {
-        markArticleAsRead(article.id);
+        setTimeout(() => {
+            markArticleAsRead(article.id);
+        }, 1000);
     }, []);
 
     return (
@@ -112,10 +106,6 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                     onRequestClose={() => setIsGalleryShown(false)}
                 />
             </View>
-
-            <Button onPress={handleShare} inline rounded inverted centered style={styles.shareButton}>
-                Sdílet
-            </Button>
         </ScrollView>
     );
 }

@@ -53,11 +53,6 @@ export default () => {
             aspectRatio: 16 / 10,
             marginBottom: 20,
             borderRadius: 15
-        },
-        shareButton: {
-            paddingLeft: 20,
-            paddingRight: 20,
-            marginBottom: 80
         }
     });
 };

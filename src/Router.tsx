@@ -34,6 +34,7 @@ const Router = () => {
         title: '',
         headerTransparent: true,
         headerBackTitle: ' ',
+        headerTintColor: 'transparent'
     };
 
     const tabBarBadgeOptions = (count: number) => ({

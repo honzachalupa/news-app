@@ -2,70 +2,16 @@ import { Context } from '@honzachalupa/helpers';
 import { useTheme } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../App';
 import { formatDateLabel, timestampToDate } from '../../helpers/formatting';
 import { IArticle } from '../../interfaces';
-import BlurView from '../BlurView';
+import { ShareAction, StateAction, StateLabel } from './Actions';
 import getStyles from './styles';
 
 export enum EArticleSummaryViews {
     LIST_ITEM = 'LIST_ITEM',
     DETAIL_HEADER = 'DETAIL_HEADER'
 }
-
-const StateLabel = ({ isSaved, isRead }: { isSaved: boolean, isRead: boolean }) => {
-    const { colors } = useTheme();
-    const styles = getStyles();
-
-    return isSaved ? (
-        <BlurView style={styles.statusNode}>
-            <Ionicons
-                name="ios-bookmark"
-                size={14}
-                color={colors.primary}
-            />
-
-            <Text style={styles.saveStatusValue}>Uloženo</Text>
-        </BlurView>
-    ) : isRead ? (
-        <BlurView style={styles.statusNode}>
-            <Ionicons
-                name="ios-checkmark-done-outline"
-                size={14}
-                color={colors.primary}
-            />
-
-            <Text style={styles.readStatusValue}>Přečteno</Text>
-        </BlurView>
-    ) : null;
-};
-
-const StateAction = ({ article, isSaved }: { article: IArticle, isSaved: boolean }) => {
-    const { colors } = useTheme();
-    const styles = getStyles();
-    const { handleSaveArticle, handleUnsaveArticle } = useContext(Context) as IContext;
-
-    return isSaved ? (
-        <BlurView style={styles.saveButton}>
-            <Ionicons
-                name="ios-bookmark"
-                size={25}
-                color={colors.primary}
-                onPress={() => handleUnsaveArticle(article.id)}
-            />
-        </BlurView>
-    ) : (
-        <BlurView style={styles.saveButton}>
-            <Ionicons
-                name="ios-bookmark-outline"
-                size={25}
-                color={colors.primary}
-                onPress={() => handleSaveArticle(article)}
-            />
-        </BlurView>
-    );
-};
 
 interface IProps {
     article: IArticle;
@@ -86,11 +32,16 @@ const ArticleSummary = ({ article, view, onClick }: IProps) => {
         <TouchableWithoutFeedback onPress={() => onClick(article)}>
             <View style={view === EArticleSummaryViews.DETAIL_HEADER ? styles.card_articleDetail : styles.card}>
                 <View style={styles.imageContainer}>
-                    {view === EArticleSummaryViews.LIST_ITEM ? (
-                        <StateLabel isRead={isRead} isSaved={isSaved} />
-                    ) : view === EArticleSummaryViews.DETAIL_HEADER ? (
-                        <StateAction article={article} isSaved={isSaved} />
-                    ) : null}
+                    <View style={styles.actionsContainer}>
+                        {view === EArticleSummaryViews.LIST_ITEM ? (
+                            <StateLabel isRead={isRead} isSaved={isSaved} />
+                        ) : view === EArticleSummaryViews.DETAIL_HEADER ? (
+                            <View style={styles.actionsGroup}>
+                                <StateAction article={article} isSaved={isSaved} />
+                                <ShareAction article={article} />
+                            </View>
+                        ) : null}
+                    </View>
 
                     {hasImage && (
                         <View style={styles.image}>

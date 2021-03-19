@@ -24,7 +24,21 @@ export default () => {
             height: '100%',
             position: 'relative'
         },
-        statusNode: {
+        actionsContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            position: 'absolute',
+            top: 20,
+            right: 20,
+            zIndex: 9
+        },
+        actionsGroup: {
+            display: 'flex',
+            flexDirection: 'row',
+            position: 'relative',
+            top: 30
+        },
+        statusLabel: {
             borderRadius: 12,
             overflow: 'hidden',
             paddingTop: 5,
@@ -34,19 +48,9 @@ export default () => {
             flex: 1,
             flexDirection: 'row',
             position: 'absolute',
-            top: 10,
-            right: 15,
+            top: 0,
+            right: 0,
             zIndex: 99
-        },
-        saveButton: {
-            backgroundColor: colors.card,
-            borderRadius: 20,
-            padding: 7,
-            overflow: 'hidden',
-            position: 'absolute',
-            top: 50,
-            right: 20,
-            zIndex: 9
         },
         saveStatusValue: {
             color: colors.primary,
@@ -61,6 +65,16 @@ export default () => {
             fontWeight: '600',
             textTransform: 'uppercase',
             marginLeft: 5
+        },
+        articleAction: {
+            backgroundColor: colors.card,
+            borderRadius: 20,
+            paddingTop: 9,
+            paddingBottom: 9,
+            paddingLeft: 10,
+            paddingRight: 10,
+            marginLeft: 10,
+            overflow: 'hidden'
         },
         image: {
             width: '100%',
