@@ -32,17 +32,18 @@ const Router = () => {
         return isFocused ? `ios-${icon}` : `ios-${icon}-outline`;
     };
 
+    const options = {
+        title: '',
+        headerTransparent: true,
+        headerBackTitle: ' ',
+    };
+
     return (
         <NavigationContainer theme={theme}>
             <Stack.Navigator initialRouteName="Home">
                 <Stack.Screen
                     name="Home"
-                    options={{
-                        title: '',
-                        headerTransparent: true,
-                        headerBackTitle: ' ',
-                        headerTintColor: 'transparent'
-                    }}
+                    options={options}
                 >
                     {() => (
                         <Tab.Navigator
@@ -93,23 +94,13 @@ const Router = () => {
                 <Stack.Screen
                     name="ArticleDetail"
                     component={ArticleDetailPage}
-                    options={{
-                        title: '',
-                        headerTransparent: true,
-                        headerBackTitle: ' ',
-                        headerTintColor: 'transparent'
-                    }}
+                    options={options}
                 />
 
                 <Stack.Screen
                     name="FeedArticlesList"
                     component={FeedArticlesListPage}
-                    options={{
-                        title: '',
-                        headerTransparent: true,
-                        headerBackTitle: ' ',
-                        headerTintColor: 'transparent'
-                    }}
+                    options={options}
                 />
 
                 <Stack.Screen
@@ -121,7 +112,7 @@ const Router = () => {
                     }}
                 />
             </Stack.Navigator>
-        </NavigationContainer>
+        </NavigationContainer >
     );
 };
 

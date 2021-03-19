@@ -11,7 +11,7 @@ export default () => {
     const textWidth = cardWidth - imageWidthHeight;
 
     return StyleSheet.create({
-        feedName: {
+        headline: {
             fontSize: 28,
             fontWeight: '700',
             marginTop: 20,

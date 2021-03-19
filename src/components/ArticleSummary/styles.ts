@@ -10,7 +10,7 @@ export default () => {
         card: {
             width: cardWidthHeight,
             height: cardWidthHeight,
-            backgroundColor: 'rgb(18, 18, 18)',
+            backgroundColor: colors.card,
             borderRadius: 15,
             marginLeft: 20,
             overflow: 'hidden'

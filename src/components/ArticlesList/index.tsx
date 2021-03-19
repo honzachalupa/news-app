@@ -50,7 +50,7 @@ const ArticlesList = ({ articles, feed, label, noDataMessage, isRefreshDisabled 
 
     return (
         <SafeAreaView>
-            <Text style={{ ...styles.feedName, color: feed?.branding.accentColor || colors.text }}>{feed?.name || label}</Text>
+            <Text style={{ ...styles.headline, color: feed?.branding.accentColor || colors.text }}>{feed?.name || label}</Text>
 
             <Ionicons
                 name={isSearchShown ? 'ios-close' : 'ios-search'}
@@ -98,7 +98,7 @@ const ArticlesList = ({ articles, feed, label, noDataMessage, isRefreshDisabled 
                     )}
                     style={styles.articlesList}
                 />
-            ) : (!!query && articlesFiltered.length === 0) ? (
+            ) : (query.length > 0 && articlesFiltered.length === 0) ? (
                 <Text>Žádné výsledky</Text>
             ) : (
                 <Text>{noDataMessage}</Text>
