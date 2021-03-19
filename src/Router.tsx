@@ -6,12 +6,22 @@ import React, { useContext } from 'react';
 import { Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from './App';
+import { getTabBarIcon } from './helpers/data';
 import { useCustomTheme } from './helpers/theme';
 import ArticleDetailPage from './pages/ArticleDetail';
 import FeedArticlesListPage from './pages/FeedArticlesList';
 import Homepage from './pages/Homepage';
 import SavedArticlesListPage from './pages/SavedArticlesList';
 import SettingsPage from './pages/Settings';
+
+export enum EPageIDs {
+    HOME_PAGE = 'HOME_PAGE',
+    ARTICLES_PAGE = 'ARTICLES_PAGE',
+    FEED_ARTICLES_PAGE = 'FEED_ARTICLES_PAGE',
+    SAVED_ARTICLES_PAGE = 'SAVED_ARTICLES_PAGE',
+    ARTICLE_DETAIL_PAGE = 'ARTICLE_DETAIL_PAGE',
+    SETTINGS_PAGE = 'SETTINGS_PAGE'
+}
 
 const Router = () => {
     const theme = useCustomTheme();
@@ -20,44 +30,43 @@ const Router = () => {
     const Stack = createStackNavigator();
     const Tab = createBottomTabNavigator();
 
-    const getIcon = (routeName: string, isFocused: boolean) => {
-        // Icons list: https://oblador.github.io/react-native-vector-icons/
-
-        const icon =
-            routeName === 'Articles' ?
-                'file-tray-full' :
-                routeName === 'ArticlesSaved' ?
-                    'bookmarks' : '';
-
-        return isFocused ? `ios-${icon}` : `ios-${icon}-outline`;
-    };
-
-    const options = {
+    const stackScreenOptions = {
         title: '',
         headerTransparent: true,
         headerBackTitle: ' ',
     };
 
+    const tabBarBadgeOptions = (count: number) => ({
+        tabBarBadge: count > 0 ? count : undefined,
+        tabBarBadgeStyle: {
+            backgroundColor: theme.colors.text,
+            color: theme.colors.card,
+            ...Platform.OS === 'ios' ? {
+                paddingTop: 2
+            } : null
+        }
+    });
+
     return (
         <NavigationContainer theme={theme}>
-            <Stack.Navigator initialRouteName="Home">
+            <Stack.Navigator initialRouteName={EPageIDs.HOME_PAGE}>
                 <Stack.Screen
-                    name="Home"
-                    options={options}
+                    name={EPageIDs.HOME_PAGE}
+                    options={stackScreenOptions}
                 >
                     {() => (
                         <Tab.Navigator
-                            initialRouteName="Articles"
+                            initialRouteName={EPageIDs.ARTICLES_PAGE}
                             tabBarOptions={{
                                 labelStyle: {
                                     fontSize: 13
                                 },
-                                activeTintColor: theme.colors.text,
+                                activeTintColor: theme.colors.primary
                             }}
                             screenOptions={({ route }) => ({
                                 tabBarIcon: ({ focused, color, size }) => (
                                     <Ionicons
-                                        name={getIcon(route.name, focused)}
+                                        name={getTabBarIcon(route.name, focused)}
                                         size={size}
                                         color={color}
                                     />
@@ -65,26 +74,20 @@ const Router = () => {
                             })}
                         >
                             <Tab.Screen
-                                name="Articles"
+                                name={EPageIDs.ARTICLES_PAGE}
                                 component={Homepage}
                                 options={{
                                     title: 'Vše',
-                                    tabBarBadge: unreadArticlesCount,
-                                    tabBarBadgeStyle: Platform.OS === 'ios' ? {
-                                        paddingTop: 2
-                                    } : null
+                                    ...tabBarBadgeOptions(unreadArticlesCount)
                                 }}
                             />
 
                             <Tab.Screen
-                                name="ArticlesSaved"
+                                name={EPageIDs.SAVED_ARTICLES_PAGE}
                                 component={SavedArticlesListPage}
                                 options={{
                                     title: 'Uložené',
-                                    tabBarBadge: savedArticles.length,
-                                    tabBarBadgeStyle: Platform.OS === 'ios' ? {
-                                        paddingTop: 2
-                                    } : null
+                                    ...tabBarBadgeOptions(savedArticles.length)
                                 }}
                             />
                         </Tab.Navigator>
@@ -92,19 +95,19 @@ const Router = () => {
                 </Stack.Screen>
 
                 <Stack.Screen
-                    name="ArticleDetail"
+                    name={EPageIDs.ARTICLE_DETAIL_PAGE}
                     component={ArticleDetailPage}
-                    options={options}
+                    options={stackScreenOptions}
                 />
 
                 <Stack.Screen
-                    name="FeedArticlesList"
+                    name={EPageIDs.FEED_ARTICLES_PAGE}
                     component={FeedArticlesListPage}
-                    options={options}
+                    options={stackScreenOptions}
                 />
 
                 <Stack.Screen
-                    name="Settings"
+                    name={EPageIDs.SETTINGS_PAGE}
                     component={SettingsPage}
                     options={{
                         title: 'Nastavení',

@@ -2,6 +2,19 @@ import { Context } from '@honzachalupa/helpers';
 import { useContext } from 'react';
 import { IContext } from '../App';
 import { IArticle } from '../interfaces';
+import { EPageIDs } from '../Router';
+
+export const getTabBarIcon = (routeName: string, isFocused: boolean) => {
+    // Icons list: https://oblador.github.io/react-native-vector-icons/
+
+    const icon =
+        routeName === EPageIDs.ARTICLES_PAGE ?
+            'file-tray-full' :
+            routeName === EPageIDs.SAVED_ARTICLES_PAGE ?
+                'bookmarks' : '';
+
+    return isFocused ? `ios-${icon}` : `ios-${icon}-outline`;
+};
 
 export const getUnreadArticlesCount = (articles: IArticle[], readArticlesIDs: IArticle['id'][]) =>
         articles.filter(({ id }) => !readArticlesIDs.includes(id)).length;

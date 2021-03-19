@@ -10,6 +10,7 @@ import { IContext } from '../../App';
 import ArticleSummary, { EArticleSummaryViews } from '../../components/ArticleSummary';
 import { filterFeedsAndArticles } from '../../helpers/data';
 import { IArticle, IFeed } from '../../interfaces';
+import { EPageIDs } from '../../Router';
 import FeedListItem from './FeedListItem';
 import getStyles from './styles';
 
@@ -21,19 +22,19 @@ const HomePage = ({ navigation }: any) => {
     const { feedsFiltered, articlesFiltered } = filterFeedsAndArticles();
 
     const handleOpenDetail = (article: IArticle) => {
-        navigation.navigate('ArticleDetail', {
+        navigation.navigate(EPageIDs.ARTICLE_DETAIL_PAGE, {
             article
         });
     };
 
     const handleOpenFeedArticlesList = (feed: IFeed) => {
-        navigation.navigate('FeedArticlesList', {
+        navigation.navigate(EPageIDs.FEED_ARTICLES_PAGE, {
             feed
         });
     };
 
     const handleOpenSettings = () => {
-        navigation.navigate('Settings');
+        navigation.navigate(EPageIDs.SETTINGS_PAGE);
     };
 
     const groupFeeds = (feeds: IFeed[]) => {

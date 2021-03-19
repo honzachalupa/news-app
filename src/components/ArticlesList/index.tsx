@@ -8,6 +8,7 @@ import { IContext } from '../../App';
 import { searchInArticles } from '../../helpers/data';
 import { formatDateLabel, timestampToDate } from '../../helpers/formatting';
 import { IArticle, IFeed } from '../../interfaces';
+import { EPageIDs } from '../../Router';
 import getStyles from './styles';
 
 interface IProps {
@@ -36,7 +37,7 @@ const ArticlesList = ({ articles, feed, label, noDataMessage, isRefreshDisabled 
     };
 
     const handleOpenDetail = (article: IArticle) =>
-        navigation.navigate('ArticleDetail', {
+        navigation.navigate(EPageIDs.ARTICLE_DETAIL_PAGE, {
             article
         });
 
