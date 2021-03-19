@@ -40,6 +40,10 @@ export default () => {
             margin: 20,
             marginBottom: 0
         },
+        activityIndicator: {
+            position: 'relative',
+            top: Dimensions.get('window').height / 3
+        },
         articlesList: {
             marginTop: 20
         },
@@ -76,6 +80,13 @@ export default () => {
             fontWeight: '700',
             lineHeight: 22,
             marginTop: 10
+        },
+        message: {
+            position: 'relative',
+            top: 80,
+            color: colors.text,
+            fontSize: 20,
+            textAlign: 'center'
         }
     });
 };

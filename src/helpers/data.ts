@@ -1,8 +1,8 @@
 import { Context } from '@honzachalupa/helpers';
 import { useContext } from 'react';
 import { IContext } from '../App';
+import { EPageIDs } from '../enumerators';
 import { IArticle } from '../interfaces';
-import { EPageIDs } from '../Router';
 
 export const getTabBarIcon = (routeName: string, isFocused: boolean) => {
     // Icons list: https://oblador.github.io/react-native-vector-icons/
@@ -26,10 +26,11 @@ export const filterFeedsAndArticles = (ignoreSource?: boolean) => {
 
     let articlesFiltered =
         settingsBlacklist.length > 0 ?
-            articles.filter(({ title, content, tags }) =>
+            articles.filter(({ title, content, category, tags }) =>
                 settingsBlacklist.filter(blacklistedValue =>
                     title.toLowerCase().includes(blacklistedValue.toLowerCase()) ||
                     content.join('_').toLowerCase().includes(blacklistedValue.toLowerCase()) ||
+                    category.toLowerCase().includes(blacklistedValue.toLowerCase()) ||
                     tags.join('_').toLowerCase().includes(blacklistedValue.toLowerCase())
                 ).length === 0
             ) :

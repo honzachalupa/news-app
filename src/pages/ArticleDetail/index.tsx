@@ -85,7 +85,6 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
                                     key={uri}
                                     source={{ uri }}
                                     resizeMode="cover"
-                                    shouldPlay={false}
                                     useNativeControls
                                     style={styles.video}
                                 />

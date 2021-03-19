@@ -8,9 +8,9 @@ import Carousel from 'react-native-snap-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../App';
 import ArticleSummary, { EArticleSummaryViews } from '../../components/ArticleSummary';
+import { EPageIDs } from '../../enumerators';
 import { filterFeedsAndArticles } from '../../helpers/data';
 import { IArticle, IFeed } from '../../interfaces';
-import { EPageIDs } from '../../Router';
 import FeedListItem from './FeedListItem';
 import getStyles from './styles';
 

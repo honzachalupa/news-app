@@ -1,29 +1,27 @@
 import { Context } from '@honzachalupa/helpers';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, Image, RefreshControl, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from '../../App';
+import { EPageIDs } from '../../enumerators';
 import { searchInArticles } from '../../helpers/data';
 import { formatDateLabel, timestampToDate } from '../../helpers/formatting';
 import { IArticle, IFeed } from '../../interfaces';
-import { EPageIDs } from '../../Router';
 import getStyles from './styles';
 
 interface IProps {
     articles: IArticle[];
     feed?: IFeed;
     label?: string;
-    noDataMessage?: string;
-    isRefreshDisabled?: boolean;
 }
 
-const ArticlesList = ({ articles, feed, label, noDataMessage, isRefreshDisabled }: IProps) => {
+const ArticlesList = ({ articles, feed, label }: IProps) => {
     const { colors } = useTheme();
     const styles = getStyles();
     const navigation = useNavigation();
-    const { isRefreshing, handleRefresh } = useContext(Context) as IContext;
+    const { isRefreshing } = useContext(Context) as IContext;
     const [query, setQuery] = useState<string>('');
     const [isSearchShown, setIsSearchShown] = useState<boolean>();
     const [articlesFiltered, setArticlesFiltered] = useState<IArticle[]>([]);
@@ -72,17 +70,11 @@ const ArticlesList = ({ articles, feed, label, noDataMessage, isRefreshDisabled 
                 />
             )}
 
-            {articlesFiltered.length > 0 ? (
+            {isRefreshing ? (
+                <ActivityIndicator size="large" style={styles.activityIndicator} />
+            ) : articlesFiltered.length > 0 ? (
                 <FlatList
                     data={articlesFiltered}
-                    refreshControl={
-                        !isRefreshDisabled ? (
-                            <RefreshControl
-                                refreshing={articles.length === 0 || isRefreshing}
-                                onRefresh={handleRefresh}
-                            />
-                        ) : undefined
-                    }
                     renderItem={({ item: article }) => (
                         <TouchableWithoutFeedback onPress={() => handleOpenDetail(article)}>
                             <View style={styles.card}>
@@ -99,10 +91,8 @@ const ArticlesList = ({ articles, feed, label, noDataMessage, isRefreshDisabled 
                     )}
                     style={styles.articlesList}
                 />
-            ) : (query.length > 0 && articlesFiltered.length === 0) ? (
-                <Text>Žádné výsledky</Text>
             ) : (
-                <Text>{noDataMessage}</Text>
+                <Text style={styles.message}>Nebyly nalezeny žádné články</Text>
             )}
         </SafeAreaView>
     );

@@ -6,6 +6,7 @@ import React, { useContext } from 'react';
 import { Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IContext } from './App';
+import { EPageIDs } from './enumerators';
 import { getTabBarIcon } from './helpers/data';
 import { useCustomTheme } from './helpers/theme';
 import ArticleDetailPage from './pages/ArticleDetail';
@@ -13,15 +14,6 @@ import FeedArticlesListPage from './pages/FeedArticlesList';
 import Homepage from './pages/Homepage';
 import SavedArticlesListPage from './pages/SavedArticlesList';
 import SettingsPage from './pages/Settings';
-
-export enum EPageIDs {
-    HOME_PAGE = 'HOME_PAGE',
-    ARTICLES_PAGE = 'ARTICLES_PAGE',
-    FEED_ARTICLES_PAGE = 'FEED_ARTICLES_PAGE',
-    SAVED_ARTICLES_PAGE = 'SAVED_ARTICLES_PAGE',
-    ARTICLE_DETAIL_PAGE = 'ARTICLE_DETAIL_PAGE',
-    SETTINGS_PAGE = 'SETTINGS_PAGE'
-}
 
 const Router = () => {
     const theme = useCustomTheme();
