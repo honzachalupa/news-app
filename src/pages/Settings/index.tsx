@@ -1,27 +1,27 @@
 import { Context } from '@honzachalupa/helpers';
+import { useTheme } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Text, TextInput } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SettingsCategoryHeader, SettingsSwitch } from 'react-native-settings-components';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SettingsButton, SettingsCategoryHeader, SettingsSwitch } from 'react-native-settings-components';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { IContext } from '../../App';
+import { EPageIDs, EThemes } from '../../enumerators';
 import { filterFeedsAndArticles } from '../../helpers/data';
-import { IFeed } from '../../interfaces';
 import getStyles from './styles';
 
-const SettingsPage = () => {
-    const { feeds, articles, settingsIsAutoPlayOn, settingsSelectedFeeds, settingsBlacklist, setContextProperty } = useContext(Context) as IContext;
-
+const SettingsPage = ({ navigation }: any) => {
+    const { feeds, articles, settingsTheme, settingsIsAutoPlayOn, settingsSelectedFeeds, settingsBlacklist, setContextProperty } = useContext(Context) as IContext;
+    const { colors } = useTheme()
     const styles = getStyles();
     const { articlesFiltered } = filterFeedsAndArticles(true);
     const articlesCountDiff = articles.length - articlesFiltered.length;
 
     const [settingsBlacklistString, setSettingsBlacklistChanged] = useState<string>(settingsBlacklist.join(', '));
 
-    const handleFeedSelectionChange = (selectedId: IFeed['id'], isSelected: boolean) => {
-        setContextProperty('settingsSelectedFeeds', isSelected ?
-            settingsSelectedFeeds.filter(id => id !== selectedId) :
-            [...settingsSelectedFeeds, selectedId]
-        );
+    const handleOpenSources = () => {
+        navigation.navigate(EPageIDs.SETTINGS_SOURCES_PAGE);
     };
 
     const handleBlacklistChange = (value: string) => {
@@ -38,55 +38,75 @@ const SettingsPage = () => {
 
     return (
         <ScrollView>
-            <KeyboardAvoidingView
-                keyboardVerticalOffset={150}
-                behavior="position"
-            >
-                <SettingsCategoryHeader title="Přehled článků" titleStyle={styles.sectionTitle} />
+            <SafeAreaView edges={['bottom']}>
+                <KeyboardAvoidingView
+                    keyboardVerticalOffset={150}
+                    behavior="position"
+                >
+                    <SettingsCategoryHeader title="Barevné téma" titleStyle={styles.sectionTitle} />
 
-                <SettingsSwitch
-                    title="Automatické posouvání"
-                    onValueChange={(value: boolean) => setContextProperty('settingsIsAutoPlayOn', value)}
-                    value={settingsIsAutoPlayOn}
-                    containerStyle={styles.switchContainer}
-                    titleStyle={styles.switchLabel}
-                />
+                    <SettingsSwitch
+                        title="Použít systémové"
+                        onValueChange={(value: boolean) => setContextProperty('settingsTheme', value ? EThemes.SYSTEM : EThemes.LIGHT)}
+                        value={settingsTheme === EThemes.SYSTEM}
+                        containerStyle={styles.itemContainer}
+                        titleStyle={styles.itemLabel}
+                    />
 
-                <SettingsCategoryHeader title="Zdroje" titleStyle={styles.sectionTitle} />
-
-                {feeds.map(({ id, name }) => {
-                    const isSelected = settingsSelectedFeeds.includes(id);
-
-                    return (
+                    {settingsTheme !== EThemes.SYSTEM && (
                         <SettingsSwitch
-                            key={id}
-                            title={name}
-                            onValueChange={(value: boolean) => handleFeedSelectionChange(id, !value)}
-                            value={isSelected}
-                            containerStyle={styles.switchContainer}
-                            titleStyle={styles.switchLabel}
+                            title={`Použít: ${settingsTheme === EThemes.DARK ? 'Tmavé' : 'Světlé'}`}
+                            onValueChange={(value: boolean) => setContextProperty('settingsTheme', value ? EThemes.DARK : EThemes.LIGHT)}
+                            value={settingsTheme === EThemes.DARK}
+                            containerStyle={styles.itemContainer}
+                            titleStyle={styles.itemLabel}
                         />
-                    );
-                })}
+                    )}
 
-                {settingsSelectedFeeds.length === 0 && (
-                    <Text style={{ ...styles.description, color: 'red' }}>Nevybrali jste žádný zdroj.</Text>
-                )}
+                    <SettingsCategoryHeader title="Přehled článků" titleStyle={styles.sectionTitle} />
 
-                <SettingsCategoryHeader title="Blacklist výrazů" titleStyle={styles.sectionTitle} />
+                    <SettingsSwitch
+                        title="Automatické listování"
+                        onValueChange={(value: boolean) => setContextProperty('settingsIsAutoPlayOn', value)}
+                        value={settingsIsAutoPlayOn}
+                        containerStyle={styles.itemContainer}
+                        titleStyle={styles.itemLabel}
+                    />
 
-                <TextInput
-                    value={settingsBlacklistString}
-                    onChangeText={text => handleBlacklistChange(text)}
-                    autoCorrect={false}
-                    autoCapitalize="none"
-                    clearButtonMode="while-editing"
-                    style={styles.textInput}
-                />
+                    <SettingsCategoryHeader title="Zdroje" titleStyle={styles.sectionTitle} />
 
-                <Text style={styles.description}>{`Články obsahující zadané výrazy budou skryty. ${articlesCountDiff > 0 ? `Nyní je skryto ${articlesCountDiff} článků, které obsahují zadané výrazy.` : ''}`}</Text>
-                <Text style={{ ...styles.description, color: 'darkorange' }}>Slova oddělujte čárkou. Velikost písmen je ignorována.</Text>
-            </KeyboardAvoidingView>
+                    <SettingsButton
+                        title="Vybrat"
+                        description={`Nyní je vybráno ${settingsSelectedFeeds.length} zdrojů.`}
+                        rightIcon={() => (
+                            <FontAwesome5
+                                name="chevron-right"
+                                size={24}
+                                color={colors.primary}
+                                style={styles.icon}
+                            />
+                        )}
+                        onPress={handleOpenSources}
+                        containerStyle={styles.itemContainer}
+                        titleStyle={styles.itemLabel}
+                        descriptionStyle={styles.itemDescription}
+                    />
+
+                    <SettingsCategoryHeader title="Blacklist výrazů" titleStyle={styles.sectionTitle} />
+
+                    <TextInput
+                        value={settingsBlacklistString}
+                        onChangeText={text => handleBlacklistChange(text)}
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        clearButtonMode="while-editing"
+                        style={styles.textInput}
+                    />
+
+                    <Text style={styles.description}>{`Články obsahující zadané výrazy budou skryty. ${articlesCountDiff > 0 ? `Nyní je skryto ${articlesCountDiff} článků, které obsahují zadané výrazy.` : ''}`}</Text>
+                    <Text style={{ ...styles.description, color: 'darkorange' }}>Slova oddělujte čárkou. Velikost písmen je ignorována.</Text>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
         </ScrollView>
     );
 }

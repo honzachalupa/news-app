@@ -14,10 +14,11 @@ import FeedArticlesListPage from './pages/FeedArticlesList';
 import Homepage from './pages/Homepage';
 import SavedArticlesListPage from './pages/SavedArticlesList';
 import SettingsPage from './pages/Settings';
+import SettingsSourcesPage from './pages/SettingsSources';
 
 const Router = () => {
     const theme = useCustomTheme();
-    const { unreadArticlesCount, savedArticles } = useContext(Context) as IContext;
+    const { savedArticles } = useContext(Context) as IContext;
 
     const Stack = createStackNavigator();
     const Tab = createBottomTabNavigator();
@@ -29,8 +30,8 @@ const Router = () => {
         headerTintColor: 'transparent'
     };
 
-    const tabBarBadgeOptions = (count: number) => ({
-        tabBarBadge: count > 0 ? count : undefined,
+    const tabBarBadgeOptions = (count?: number) => ({
+        tabBarBadge: count && count > 0 ? count : undefined,
         tabBarBadgeStyle: {
             backgroundColor: theme.colors.text,
             color: theme.colors.card,
@@ -71,7 +72,7 @@ const Router = () => {
                                 component={Homepage}
                                 options={{
                                     title: 'Vše',
-                                    ...tabBarBadgeOptions(unreadArticlesCount)
+                                    ...tabBarBadgeOptions()
                                 }}
                             />
 
@@ -104,6 +105,15 @@ const Router = () => {
                     component={SettingsPage}
                     options={{
                         title: 'Nastavení',
+                        headerBackTitle: 'Zpět',
+                    }}
+                />
+
+                <Stack.Screen
+                    name={EPageIDs.SETTINGS_SOURCES_PAGE}
+                    component={SettingsSourcesPage}
+                    options={{
+                        title: 'Zdroje',
                         headerBackTitle: 'Zpět',
                     }}
                 />

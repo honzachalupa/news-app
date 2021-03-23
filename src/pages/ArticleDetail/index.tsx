@@ -29,7 +29,7 @@ const ArticleDetailPage = ({ route: { params: { article } } }: { route: { params
 
     return (
         <ScrollView contentContainerStyle={{ width: '100%' }}>
-            <StatusBar hidden />
+            <StatusBar animated hidden />
 
             <ArticleSummary article={article} view={EArticleSummaryViews.DETAIL_HEADER} onClick={() => galleryImages.length > 0 ? setIsGalleryShown(true) : {}} />
 

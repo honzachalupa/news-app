@@ -3,6 +3,7 @@ import moment, { Moment } from 'moment';
 import 'moment/locale/cs';
 import React, { useEffect, useState } from 'react';
 import { AppearanceProvider } from 'react-native-appearance';
+import { EThemes } from './enumerators';
 import { getArticles, getFeeds } from './helpers/api';
 import { getContextFunctions } from './helpers/contextFunctions';
 import { getUnreadArticlesCount } from './helpers/data';
@@ -23,6 +24,7 @@ export interface IContext {
     lastRefreshTime: Moment | null;
     isRefreshing: boolean;
     isOnline: boolean | null;
+    settingsTheme: EThemes;
     settingsIsAutoPlayOn: boolean;
     settingsSelectedFeeds: IFeed['id'][];
     settingsBlacklist: string[];
@@ -46,6 +48,7 @@ const App = () => {
         lastRefreshTime: null,
         isRefreshing: false,
         isOnline,
+        settingsTheme: EThemes.SYSTEM,
         settingsIsAutoPlayOn: false,
         settingsSelectedFeeds: [],
         settingsBlacklist: [],

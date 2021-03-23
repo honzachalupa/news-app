@@ -31,3 +31,5 @@ export const formatDateLabel = (date: Moment) => {
             `Předevčírem ${getTimePreposition(time)} ${time}` :
             `${date.format('D.M.')} v ${time}`;
 };
+
+export const clearProviderName = (name: string) => name.replace('Idnes', '').replace('Lidovky', '').trim();

@@ -16,10 +16,6 @@ export default () => {
         itemLabel: {
             color: colors.text
         },
-        itemDescription: {
-            color: colors.text,
-            opacity: 0.5
-        },
         textInput: {
             backgroundColor: colors.card,
             color: colors.text,

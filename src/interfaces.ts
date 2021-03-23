@@ -3,7 +3,10 @@ export interface IFeed {
     name: string;
     url: string;
     sourceId: string;
-    providerId: string;
+    provider: {
+        id: string;
+        name: string;
+    };
     branding: {
         logo: string;
         accentColor: string;
@@ -13,7 +16,6 @@ export interface IFeed {
 export interface IArticle {
     id: string;
     title: string;
-    contentPreview: string;
     content: string[];
     images: string[];
     videos: string[];
@@ -24,5 +26,5 @@ export interface IArticle {
     author: string;
     sourceId: string;
     providerId: string;
-    createdDate: any; // TODO: Add Timestamp type.
+    createdDate: any;
 }
