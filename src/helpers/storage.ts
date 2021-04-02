@@ -12,6 +12,8 @@ export const saveContext = async (context: IContext) => {
         savedArticles: context.savedArticles,
         readArticlesIDs: context.readArticlesIDs,
         lastRefreshTime: context.lastRefreshTime,
+        settingsTheme: context.settingsTheme,
+        settingsIsAutoPlayOn: context.settingsIsAutoPlayOn,
         settingsSelectedFeeds: context.settingsSelectedFeeds,
         settingsBlacklist: context.settingsBlacklist
     };
