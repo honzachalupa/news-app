@@ -69,16 +69,16 @@ const App = () => {
         if (context.isOnline) {
             setContextProperty('isRefreshing', true);
 
-            const feedsPromise = getFeeds(feeds => {
+            const feedsRequest = getFeeds(feeds => {
                 setContextProperty('feeds', feeds);
             });
 
-            const articlesPromises = getArticles(articles => {
+            const articlesRequest = getArticles(articles => {
                 setContextProperty('articles', articles);
                 setContextProperty('unreadArticlesCount', getUnreadArticlesCount(articles, context.readArticlesIDs));
             });
 
-            Promise.all([feedsPromise, articlesPromises]).then(() => {
+            Promise.all([feedsRequest, articlesRequest]).then(() => {
                 setContextProperty('isRefreshing', false);
                 setContextProperty('lastRefreshTime', moment());
 
